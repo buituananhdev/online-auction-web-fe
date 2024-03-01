@@ -2,14 +2,13 @@ import { createApp } from 'vue'
 // import Vue from 'vue'
 import router from '@/router'
 import { pinia } from './stores'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 import App from './App.vue'
 import './assets/css/tailwind.css'
 import './assets/css/font.css'
-import '@vuepic/vue-datepicker/dist/main.css'
-import Notifications from '@kyvg/vue3-notification'
 import { authStore } from '@/stores/auth.store'
 import { authMiddleware } from '@/router/router.middleware'
-import VueDatePicker from '@vuepic/vue-datepicker'
 import authLayout from '@/layouts/authLayout.vue'
 import emptyLayout from '@/layouts/emptyLayout.vue'
 
@@ -22,8 +21,7 @@ const initApp = async () => {
     app.use(router)
     app.component('auth-layout', authLayout)
     app.component('empty-layout', emptyLayout)
-    app.component('vue-date-picker', VueDatePicker)
-    app.use(Notifications)
+    app.use(ElementPlus)
     app.mount('#app')
 }
 initApp()

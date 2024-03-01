@@ -98,8 +98,6 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from '@/stores/auth.store'
 import { loginApi, loginGGApi } from '@/services/auth.service'
-import { useNotification } from '@kyvg/vue3-notification'
-const notification = useNotification()
 const router = useRouter()
 const username = ref('')
 const password = ref('')
@@ -107,15 +105,15 @@ const googleLoginBtn = ref()
 const auth = authStore();
 onMounted(() => {
     console.log('onBeforeMount')
-    const gClientId = '539910609167-67i01tcoja47s71qshaeodhcc69d5u99.apps.googleusercontent.com'
-    window.google.accounts.id.initialize({
-        client_id: gClientId,
-        scope: 'user profile openid',
-        callback: handleCredentialResponse,
-        auto_select: true,
-    })
-    window.google.accounts.id.renderButton(googleLoginBtn.value, { theme: 'outline', size: 'large', width: '400' })
-    window.google.accounts.id.prompt()
+    // const gClientId = '539910609167-67i01tcoja47s71qshaeodhcc69d5u99.apps.googleusercontent.com'
+    // window.google.accounts.id.initialize({
+    //     client_id: gClientId,
+    //     scope: 'user profile openid',
+    //     callback: handleCredentialResponse,
+    //     auto_select: true,
+    // })
+    // window.google.accounts.id.renderButton(googleLoginBtn.value, { theme: 'outline', size: 'large', width: '400' })
+    // window.google.accounts.id.prompt()
 })
 const handleCredentialResponse = async (res) => {
     try {
@@ -128,11 +126,6 @@ const handleCredentialResponse = async (res) => {
         await auth.initAuthStore()
         router.push('/')
     } catch (error) {
-        notification.notify({
-            type: 'error',
-            title: 'Đăng nhập thất bại, vui lòng kiểm tra lại thông tin đăng nhập',
-            text: error.response.data.message,
-        })
     }
 }
 const submit = async () => {
@@ -146,11 +139,6 @@ const submit = async () => {
         await initAuthStore()
         router.push({ name: 'users' })
     } catch (error) {
-        notification.notify({
-            type: 'error',
-            title: 'Đăng nhập thất bại, vui lòng kiểm tra lại thông tin đăng nhập',
-            text: 'hihiii',
-        })
         console.log(error)
     }
 }

@@ -93,8 +93,6 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useNotification } from '@kyvg/vue3-notification'
-const notification = useNotification()
 const router = useRouter()
 const username = ref('')
 const password = ref('')
@@ -112,11 +110,6 @@ const submit = async () => {
         // After successful registration, you can redirect the user to the login page or any other page.
         router.push({ name: 'login' })
     } catch (error) {
-        notification.notify({
-            type: 'error',
-            title: 'Registration failed',
-            text: 'An error occurred during registration. Please try again.',
-        })
         console.error(error)
     }
 }
