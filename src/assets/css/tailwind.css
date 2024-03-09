@@ -3,3 +3,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.el-input__inner:focus {
+    --tw-ring-shadow: none
+}
