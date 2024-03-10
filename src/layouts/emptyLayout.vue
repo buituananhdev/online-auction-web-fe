@@ -1,6 +1,5 @@
 <template>
     <div v-if="!authStore.isLoggedIn" class="rounded">
-        <the-header />
         <slot></slot>
     </div>
 </template>

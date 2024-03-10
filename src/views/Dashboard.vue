@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-5xl">hehehehehe</h1>
+  <h1 class="text-3xl">hehehehehe</h1>
 
 </template>
 
@@ -7,6 +7,6 @@
 
 </script>
 
-<style>
+<style scoped>
 
 </style>

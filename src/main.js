@@ -11,6 +11,9 @@ import { authStore } from '@/stores/auth.store'
 import { authMiddleware } from '@/router/router.middleware'
 import authLayout from '@/layouts/authLayout.vue'
 import emptyLayout from '@/layouts/emptyLayout.vue'
+// import gAuthPlugin from 'vue3-google-oauth2'
+
+// const 
 
 const initApp = async () => {
     authMiddleware()

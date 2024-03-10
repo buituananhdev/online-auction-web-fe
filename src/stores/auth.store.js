@@ -8,6 +8,7 @@ export const authStore = defineStore('auth', {
     actions: {
         async initAuthStore() {
             if (localStorage.getItem('access_token')) {
+                console.log("heheheheheehhh");
                 // const { data } = await getInfo()
                 // authStore.user = data; // Assuming 'data' contains user information
                 this.isLoggedIn = true;
