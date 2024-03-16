@@ -7,6 +7,12 @@ const routes = [
         component: () => import('@/views/Dashboard.vue'),
         meta: { layout: 'auth', requiresAuth: true },
     },
+    {
+        path: '/list-products',
+        name: 'list-products',
+        component: () => import('@/views/products/listProducts/index.vue'),
+        meta: { layout: 'auth', requiresAuth: true },
+    },
     // Auth router
     {
         path: '/login',

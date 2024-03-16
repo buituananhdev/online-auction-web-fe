@@ -14,9 +14,7 @@
                     :model="user"
                     label-width="auto"
                 >
-                    <el-form-item
-                        prop="email"
-                    >
+                    <el-form-item prop="email">
                         <el-input
                             v-model="user.email"
                             type="email"
@@ -39,20 +37,10 @@
                     </el-form-item>
                     <el-form-item>
                         <el-button size="large" color="#3665f3" class="w-[340px]" @click="submit(userRef)" round
-                            >Create account</el-button
+                            >Sign in</el-button
                         >
                     </el-form-item>
                 </el-form>
-                <!-- <el-input v-model="email" style="width: 340px" size="large" class="cursor-pointer" placeholder="Please input your email" />
-                <el-input
-                    v-model="password"
-                    style="width: 340px"
-                    type="password"
-                    size="large"
-                    placeholder="Please input your password"
-                    show-password
-                />
-                <el-button size="large" color="#3665f3" class="w-[340px]" @click="submit" round>Log in</el-button> -->
                 <div class="relative">
                     <hr />
                     <div class="absolute z-2 bg-[black] h-[1px] w-[360px] left-[-180px] opacity-20"></div>
@@ -148,7 +136,7 @@ const submit = async (formEl) => {
             localStorage.setItem('refresh_token', data.data.refreshToken)
             await auth.initAuthStore()
             router.push({ name: 'dashboard' })
-            console.log();
+            console.log()
             ElNotification({
                 title: 'Success',
                 message: 'Log in successfully!',

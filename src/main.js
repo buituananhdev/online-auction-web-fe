@@ -11,7 +11,7 @@ import { authStore } from '@/stores/auth.store'
 import { authMiddleware } from '@/router/router.middleware'
 import authLayout from '@/layouts/authLayout.vue'
 import emptyLayout from '@/layouts/emptyLayout.vue'
-// import gAuthPlugin from 'vue3-google-oauth2'
+import ProductCard from '@/components/card/ProductCard.vue'
 
 // const 
 
@@ -24,6 +24,7 @@ const initApp = async () => {
     app.use(router)
     app.component('auth-layout', authLayout)
     app.component('empty-layout', emptyLayout)
+    app.component('product-card', ProductCard)
     app.use(ElementPlus)
     app.mount('#app')
 }
