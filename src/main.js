@@ -9,6 +9,8 @@ import { authMiddleware } from './router/router.middleware'
 import authLayout from './layouts/authLayout.vue'
 import emptyLayout from './layouts/emptyLayout.vue'
 
+const gAuthOptions = { clientId: '666131485042-hnsv2co3gq2dg5g8hc77e4p1fto5rell.apps.googleusercontent.com', scope: 'email', prompt: 'select_account'}
+
 
 const initApp = async () => {
     authMiddleware()

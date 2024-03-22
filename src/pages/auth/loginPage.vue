@@ -46,10 +46,10 @@
                     <div class="absolute z-2 bg-[black] h-[1px] w-[360px] left-[-180px] opacity-20"></div>
                     <span class="absolute bg-white top-[-10px] text-sm">or</span>
                 </div>
-                <div class="button-google relative">
+                <GoogleLogin :callback="callback" prompt class="button-google relative">
                     <img src="../../assets/images/google.png" class="absolute top-2.5 left-4" width="20" alt="" />
                     <el-button size="large" class="w-[340px]" round>Log in with Google </el-button>
-                </div>
+                </GoogleLogin>
             </div>
         </div>
     </div>
@@ -68,6 +68,11 @@ const user = reactive({
     email: '',
     password: '',
 })
+
+const callback = (res) => {
+    console.log('logged in')
+    console.log(res)
+}
 const googleLoginBtn = ref()
 const auth = authStore()
 onMounted(() => {

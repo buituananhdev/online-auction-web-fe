@@ -2,12 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 
 const routes = [
-    // {
-    //     path: '/',
-    //     name: 'dashboard',
-    //     component: () => import('../pages/dashboard/index.vue'),
-    //     meta: { layout: 'auth', requiresAuth: true },
-    // },
+    {
+        path: '/',
+        name: 'dashboard',
+        component: () => import('../pages/dashboard/index.vue'),
+        meta: { layout: 'auth', requiresAuth: true },
+    },
     // {
     //     path: '/list-products',
     //     name: 'list-products',
