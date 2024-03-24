@@ -4,6 +4,7 @@ export const authMiddleware = () => {
         console.log('beforeEach aa', to, from)
         const isLoggedIn = localStorage.getItem('access_token')
         if (to.matched.some((record) => record.meta.requiresAuth)) {
+            console.log('!isLoggedIn ', !isLoggedIn);
             if (!isLoggedIn) {
                 next({ name: 'login' })
             } else {
