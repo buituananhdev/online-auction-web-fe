@@ -60,7 +60,7 @@
                 <div class="relative">
                     <hr />
                     <div class="absolute z-2 bg-[black] h-[1px] w-[360px] left-[-180px] opacity-20"></div>
-                    <span class="absolute bg-white top-[-10px] text-sm">or</span>
+                    <span class="absolute bg-white top-[-10px] text-sm px-1">or</span>
                 </div>
                 <div class="button-google relative">
                     <img src="../../assets/images/google.png" class="absolute top-2.5 left-4" width="20" alt="" />
@@ -91,14 +91,22 @@ const user = reactive({
 const userRef = ref()
 const options = ref([1, 2])
 const isValids = ref([])
+const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
 const checkMail = (rule, value, callback) => {
     if (!value) {
-        isValids.value[0] = false
-        return callback(new Error('Please input email address'))
+        isValids.value[0] = false;
+        return callback(new Error('Please enter email address!'));
+    } else if (!validateEmail(value)) {
+        isValids.value[0] = false;
+        return callback(new Error('Email address is not valid!'));
     }
-    isValids.value[0] = true
-}
-
+    isValids.value[0] = true;
+    callback();
+};
 
 const validatePass = (rule, value, callback) => {
     if (value === '' || value === undefined) {

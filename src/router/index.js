@@ -8,12 +8,12 @@ const routes = [
         component: () => import('../pages/dashboard/index.vue'),
         meta: { layout: 'auth', requiresAuth: true },
     },
-    // {
-    //     path: '/list-products',
-    //     name: 'list-products',
-    //     component: () => import('../pages/products/listProducts/index.vue'),
-    //     meta: { layout: 'auth', requiresAuth: true },
-    // },
+    {
+        path: '/list-auctions',
+        name: 'list-auctions',
+        component: () => import('../pages/auctions/index.vue'),
+        meta: { layout: 'auth', requiresAuth: true },
+    },
     // Auth router
     {
         path: '/login',

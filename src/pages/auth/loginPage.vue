@@ -44,7 +44,7 @@
                 <div class="relative">
                     <hr />
                     <div class="absolute z-2 bg-[black] h-[1px] w-[360px] left-[-180px] opacity-20"></div>
-                    <span class="absolute bg-white top-[-10px] text-sm">or</span>
+                    <span class="absolute bg-white top-[-10px] text-sm px-1">or</span>
                 </div>
                 <GoogleLogin :callback="callback" prompt class="button-google relative">
                     <img src="../../assets/images/google.png" class="absolute top-2.5 left-4" width="20" alt="" />
@@ -97,16 +97,27 @@ const handleCredentialResponse = async (res) => {
         })
         await auth.initAuthStore()
         router.push('/')
-    } catch (error) {}
+    } catch (error) {
+        console.log(error)
+    }
 }
+
+const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
 
 const checkMail = (rule, value, callback) => {
     if (!value) {
-        isValids.value[0] = false
-        return callback(new Error('Please input email address'))
+        isValids.value[0] = false;
+        return callback(new Error('Please enter email address!'));
+    } else if (!validateEmail(value)) {
+        isValids.value[0] = false;
+        return callback(new Error('Email address is not valid!'));
     }
-    isValids.value[0] = true
-}
+    isValids.value[0] = true;
+    callback();
+};
 
 const validatePass = (rule, value, callback) => {
     if (value === '' || value === undefined) {
@@ -125,6 +136,10 @@ const rules = reactive({
 const submit = async (formEl) => {
     if (!formEl) return
     formEl.validate((valid) => {
+        if(!valid) {
+            console.log('error submit!')
+            return false
+        }
         console.log('Not input information.')
     })
     if (isValids.value.includes(false)) {
