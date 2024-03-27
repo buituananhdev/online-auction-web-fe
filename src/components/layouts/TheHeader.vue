@@ -10,16 +10,7 @@
             <p>Web Name</p>
         </div>
 
-        <el-input
-            v-model="input3"
-            style="width: 35%; border-radius: 30px"
-            placeholder="Search..."
-            class="input-with-select"
-        >
-            <template #append>
-                <el-button style="" :icon="Search" />
-            </template>
-        </el-input>
+        <slot/>
         <div class="flex gap-6">
             <el-select v-model="value" placeholder="WatchList" style="width: 110px">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
@@ -47,8 +38,14 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from '../../stores/auth.store'
-import { Search } from '@element-plus/icons-vue'
 
+const props = defineProps({
+    modelValue: {
+        type: String,
+        require: true
+    }
+})
+const value=ref('')
 const options = [
     {
         value: 'Option1',
@@ -115,13 +112,14 @@ onUnmounted(() => {
     document.removeEventListener('click', handleOutsideClick)
 })
 </script>
-<style>
+<style >
 .el-input-group__append {
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
 }
 .el-input__wrapper {
-    border-top-left-radius: 30px;
-    border-bottom-left-radius: 30px;
+    /* border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px; */
+    border-radius: 30px;
 }
 </style>
