@@ -46,10 +46,7 @@
                     <div class="absolute z-2 bg-[black] h-[1px] w-[360px] left-[-180px] opacity-20"></div>
                     <span class="absolute bg-white top-[-10px] text-sm px-1">or</span>
                 </div>
-                <GoogleLogin :callback="callback" prompt class="button-google relative">
-                    <img src="../../assets/images/google.png" class="absolute top-2.5 left-4" width="20" alt="" />
-                    <el-button size="large" class="w-[340px]" round>Log in with Google </el-button>
-                </GoogleLogin>
+                <div ref="googleLoginBtn" class="rounded"></div>
             </div>
         </div>
     </div>
@@ -68,7 +65,6 @@ const user = reactive({
     email: '',
     password: '',
 })
-
 const callback = (res) => {
     console.log('logged in')
     console.log(res)
@@ -77,24 +73,23 @@ const googleLoginBtn = ref()
 const auth = authStore()
 onMounted(() => {
     console.log('onBeforeMount')
-    // const gClientId = '539910609167-67i01tcoja47s71qshaeodhcc69d5u99.apps.googleusercontent.com'
-    // window.google.accounts.id.initialize({
-    //     client_id: gClientId,
-    //     scope: 'user profile openid',
-    //     callback: handleCredentialResponse,
-    //     auto_select: true,
-    // })
-    // window.google.accounts.id.renderButton(googleLoginBtn.value, { theme: 'outline', size: 'large', width: '400' })
-    // window.google.accounts.id.prompt()
+    const gClientId = '666131485042-hnsv2co3gq2dg5g8hc77e4p1fto5rell.apps.googleusercontent.com'
+    window.google.accounts.id.initialize({
+        client_id: gClientId,
+        scope: 'user profile openid',
+        callback: handleCredentialResponse,
+        auto_select: true,
+    })
+    window.google.accounts.id.renderButton(googleLoginBtn.value, { theme: 'outline', size: 'large', width: '340' })
+    window.google.accounts.id.prompt()
 })
 const handleCredentialResponse = async (res) => {
     try {
-        await loginGGApi({ credential: res.credential }).then((res) => {
-            const data = res.data
-            console.log('data', res.data)
-            localStorage.setItem('access_token', data.access_token)
-            localStorage.setItem('refresh_token', data.refresh_token)
-        })
+        // console.log('res', res)
+        // const hihi = await loginGGApi(res.credential)
+        // console.log('data', hihi.data)
+        // localStorage.setItem('access_token', data.access_token)
+        // localStorage.setItem('refresh_token', data.refresh_token)
         await auth.initAuthStore()
         router.push('/')
     } catch (error) {
@@ -103,21 +98,21 @@ const handleCredentialResponse = async (res) => {
 }
 
 const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+}
 
 const checkMail = (rule, value, callback) => {
     if (!value) {
-        isValids.value[0] = false;
-        return callback(new Error('Please enter email address!'));
+        isValids.value[0] = false
+        return callback(new Error('Please enter email address!'))
     } else if (!validateEmail(value)) {
-        isValids.value[0] = false;
-        return callback(new Error('Email address is not valid!'));
+        isValids.value[0] = false
+        return callback(new Error('Email address is not valid!'))
     }
-    isValids.value[0] = true;
-    callback();
-};
+    isValids.value[0] = true
+    callback()
+}
 
 const validatePass = (rule, value, callback) => {
     if (value === '' || value === undefined) {
@@ -136,7 +131,7 @@ const rules = reactive({
 const submit = async (formEl) => {
     if (!formEl) return
     formEl.validate((valid) => {
-        if(!valid) {
+        if (!valid) {
             console.log('error submit!')
             return false
         }
