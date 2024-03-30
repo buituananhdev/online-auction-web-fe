@@ -65,10 +65,6 @@ const user = reactive({
     email: '',
     password: '',
 })
-const callback = (res) => {
-    console.log('logged in')
-    console.log(res)
-}
 const googleLoginBtn = ref()
 const auth = authStore()
 onMounted(() => {
