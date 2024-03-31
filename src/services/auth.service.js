@@ -11,8 +11,12 @@ export const refreshAccessToken = async () => {
 export const loginApi = async (data) => {
     return await axiosApiInstance.post('/auth/login', data)
 }
-export const loginGGApi = async (data) => {
-    return await axiosApiInstance.post('/auth/login-gg', data)
+export const loginGGApi = async (accessToken) => {
+    return await axios.post('https://www.googleapis.com/oauth2/v1/userinfo', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
 }
 export const registerApi = async (data) => {
     return await axiosApiInstance.post('/auth/register', data)

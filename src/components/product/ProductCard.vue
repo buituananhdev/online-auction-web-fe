@@ -1,5 +1,5 @@
 <template>
-    <el-tooltip show-after="300" class="box-item" effect="light" content="Left Center prompts info" placement="right">
+    <el-tooltip class="box-item" effect="light" content="Left Center prompts info" placement="right">
         <template #content>
             <div class="w-[280px] flex flex-col gap-2 p-3">
                 <div>
@@ -60,7 +60,6 @@
                         <el-text style="font-size: 13px; display: inline-block">14 bids</el-text>
                     </div>
                     <p style="font-size: 13px">Time left {{ convertISOToRegularTime(auction.endTime) }}</p>
-                    <!-- <el-button type="primary" class="w-full mt-2">Place Bid</el-button> -->
                 </div>
             </template>
         </el-card>
