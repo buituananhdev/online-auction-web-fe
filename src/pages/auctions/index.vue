@@ -121,7 +121,9 @@ const options = ref([
         context: 'sell',
     },
 ])
-const searchValue = ref('')
+const searchValue = computed(() => {
+    return route.query.search.toString()
+})
 const meta = ref({
     currentPage: 1,
     totalPage: 1,
@@ -134,6 +136,9 @@ const isEnableButton = computed(() => {
 })
 watch(filter.price, () => {
     isError.value = false
+})
+watch(searchValue, async () => {
+    await Search()
 })
 const getListProduct = async (
     pageNumber,
