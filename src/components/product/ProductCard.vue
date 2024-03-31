@@ -56,7 +56,7 @@
                 <div class="flex flex-col items-start gap-1">
                     <b class="w-full truncate ">{{ auction.productName }}</b>
                     <div class="flex justify-between w-full">
-                        <p class="font-bold text-xl text-price">{{ auction.startingPrice }} VND</p>
+                        <p class="font-bold text-xl text-price">{{ auction.currentPrice }} VND</p>
                         <el-text style="font-size: 13px; display: inline-block">14 bids</el-text>
                     </div>
                     <p style="font-size: 13px">Time left {{ convertISOToRegularTime(auction.endTime) }}</p>
