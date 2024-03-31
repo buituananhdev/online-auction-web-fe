@@ -2,13 +2,12 @@
     <div v-loading="loading" full-screen="false" class="flex justify-start gap-[16px] min-h-[80vh] overfolw-hidden">
         <div class="w-[200px] grow-0 shrink-0" v-show="!loading">
             <VueDatePicker
-                @update:model-value="handleFilterchange"
                 :time-zone="{ tz: 'Asia/Novosibirsk', offset: 7 }"
                 v-model="filter.dateTime"
+                @update:model-value="handleFilterchange"
                 placeholder="Select time range"
                 range
             />
-            {{ filter.dateTime }}
             <el-form @change="refreshData" :model="filter" label="Filter by" class="">
                 <el-form-item label="Category" class="border-b" prop="type">
                     <el-checkbox-group class="flex flex-col gap-1 mt-2 pb-2" v-model="filter.categories">
@@ -108,24 +107,8 @@ const filter = reactive({
     },
     dateTime: [],
 })
-const date = ref()
-
-const listcondition = reactive([
-    {
-        id: 1,
-        name: 'New',
-    },
-    {
-        id: 2,
-        name: 'Open box',
-    },
-    {
-        id: 3,
-        name: 'Used',
-    },
-])
-const handleFilterchange = async () => {
-    alert('hihii')
+const handleFilterchange = async (modelData) => {
+    filter.dateTime = modelData
     await Search()
 }
 const options = ref([
@@ -149,7 +132,7 @@ const listCategories = ref([])
 const isEnableButton = computed(() => {
     return !Boolean(filter.price.min || filter.price.max)
 })
-watch(filter.price, (newVal, oldVal) => {
+watch(filter.price, () => {
     isError.value = false
 })
 const getListProduct = async (
@@ -165,9 +148,6 @@ const getListProduct = async (
     maxMaxPrice,
 ) => {
     try {
-        console.log('hi')
-        console.log("hiiii", minMaxPrice,
-            maxMaxPrice,);
         const res = await getListAuctions(
             pageNumber,
             pageSize,
@@ -184,7 +164,6 @@ const getListProduct = async (
     } catch (error) {
         console.error(error)
     }
-    // console.log(data)
 }
 const getAllCategories = async () => {
     try {
@@ -208,10 +187,6 @@ const appyPriceFilter = () => {
     }
 }
 const Search = async () => {
-    // console.log('hihiih')
-    // console.log('hihiii', priceFilterType.value)
-    // console.log('hehehehhe', filter.price.min, filter.price.max)
-    // console.log('hhhhhhhh', filter)
     try {
         // console.log('hihieeeeeeeeih')
         let res
@@ -273,10 +248,6 @@ const Search = async () => {
     }
 }
 const refreshData = async () => {
-    // console.log('filter', !isEmpty(filter.condition));
-    // console.log('filter', !filter.price.min);
-    // console.log('filter', !filter.price.max);
-    // console.log('searchValue.value', !searchValue.value);
     if (searchValue.value || filter.condition || filter.price.min || filter.price.max || filter.dateTime.length > 0) {
         await Search()
     } else {
