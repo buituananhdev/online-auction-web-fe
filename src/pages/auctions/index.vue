@@ -1,7 +1,9 @@
 <template>
     <div v-loading="loading" full-screen="false" class="flex justify-start gap-[16px] min-h-[80vh] overfolw-hidden">
         <div class="w-[200px] grow-0 shrink-0" v-show="!loading">
+            <el-text style="display: inline-block; padding-bottom: 14px;">Time Range</el-text>
             <VueDatePicker
+            class="pb-4 border-b"
                 :time-zone="{ tz: 'Asia/Novosibirsk', offset: 7 }"
                 v-model="filter.dateTime"
                 @update:model-value="handleFilterchange"
@@ -41,11 +43,11 @@
                             type="number"
                             controls="false"
                             style="border-radius: 30px"
-                            v-model="filter.price.min"
+                            v-model="filter.price.minCurrent"
                             placeholder="Min"
                         />
                         to
-                        <el-input type="number" v-model="filter.price.max" placeholder="Max" />
+                        <el-input type="number" v-model="filter.price.maxCurrent" placeholder="Max" />
                     </div>
                     <p v-show="isError" class="mx-1 text-xs text-[red] pt-1 px-2 text-center">
                         Please fill in the appropriate price range
@@ -63,7 +65,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div class="hihii w-[924px] flex items-center justify-start flex-wrap gap-[16px]">
+        <div class="hihii w-[924px] flex items-start justify-start flex-wrap gap-[16px]">
             <div
                 v-if="listProducts.length > 0"
                 v-for="(item, index) in listProducts"
@@ -92,25 +94,22 @@ import { useRoute, useRouter } from 'vue-router'
 import { getListAuctions } from '../../services/auction.service'
 import { getListCategories } from '../../services/category.service'
 
+const router = useRouter()
 const route = useRoute()
-const loading = computed(() => {
-    return !Boolean(listProducts.value.length > 0 || listCategories.value.length)
-})
+
 const priceFilterType = ref(1)
 const isError = ref(false)
-const filter = reactive({
+let filter = reactive({
     categories: [],
     condition: 0,
     price: {
-        min: '',
-        max: '',
+        minCurrent: '',
+        maxCurrent: '',
+        minMax: '',
+        maxMax: '',
     },
     dateTime: [],
 })
-const handleFilterchange = async (modelData) => {
-    filter.dateTime = modelData
-    await Search()
-}
 const options = ref([
     {
         id: 1,
@@ -121,9 +120,6 @@ const options = ref([
         context: 'sell',
     },
 ])
-const searchValue = computed(() => {
-    return route.query.search.toString()
-})
 const meta = ref({
     currentPage: 1,
     totalPage: 1,
@@ -131,15 +127,26 @@ const meta = ref({
 })
 const listProducts = ref([])
 const listCategories = ref([])
-const isEnableButton = computed(() => {
-    return !Boolean(filter.price.min || filter.price.max)
+const loading = computed(() => {
+    return !Boolean(listProducts.value.length > 0 || listCategories.value.length)
 })
+const searchValue = computed(() => {
+    return route.query.search
+})
+const isEnableButton = computed(() => {
+    return !Boolean(filter.price.minCurrent || filter.price.maxCurrent)
+})
+
 watch(filter.price, () => {
     isError.value = false
 })
 watch(searchValue, async () => {
     await Search()
 })
+const handleFilterchange = async (modelData) => {
+    filter.dateTime = modelData
+    await Search()
+}
 const getListProduct = async (
     pageNumber,
     pageSize,
@@ -147,10 +154,10 @@ const getListProduct = async (
     condition,
     minPrice,
     maxPrice,
-    minEndTime,
-    maxEndTime,
     minMaxPrice,
     maxMaxPrice,
+    minEndTime,
+    maxEndTime,
 ) => {
     try {
         const res = await getListAuctions(
@@ -160,14 +167,14 @@ const getListProduct = async (
             condition,
             minPrice,
             maxPrice,
-            minEndTime,
-            maxEndTime,
             minMaxPrice,
             maxMaxPrice,
+            minEndTime,
+            maxEndTime,
         )
         listProducts.value = res.data.data
     } catch (error) {
-        console.error(error)
+        console.log(error)
     }
 }
 const getAllCategories = async () => {
@@ -176,99 +183,134 @@ const getAllCategories = async () => {
         listCategories.value = res.data.data
         console.log(res.data.data)
     } catch (error) {
-        console.error(error)
+        console.log(error)
     }
 }
-const appyPriceFilter = () => {
+const appyPriceFilter = async () => {
     try {
-        if (filter.price.min > filter.price.max) {
+        if(!filter.price.minCurrent || !filter.price.maxCurrent) {
+            isError.value = false
+        } else if (filter.price.minCurrent > filter.price.maxCurrent || filter.price.minMax > filter.price.maxMax) {
             isError.value = true
             return
+        }
+        if (priceFilterType.value === 2) {
+            filter.price.minMax = filter.price.minCurrent
+            filter.price.maxMax = filter.price.maxCurrent
+            filter.price.maxCurrent = ''
+            filter.price.minCurrent = ''
+            await Search()
         } else {
-            Search()
+            filter.price.minMax = ''
+            filter.price.maxMax = ''
+            await Search()
         }
     } catch (error) {
-        console.error(error)
+        console.log(error)
     }
 }
 const Search = async () => {
     try {
-        // console.log('hihieeeeeeeeih')
-        let res
-        if (priceFilterType.value === 1) {
-            console.log('vp day heee')
-            res = await getListProduct(
-                meta.value.pageNumber,
-                meta.value.pageSize,
-                searchValue.value,
-                filter.condition,
-                filter.price.min,
-                filter.price.max,
-                filter.dateTime[0],
-                filter.dateTime[1],
-            )
-            console.log('vp day heee')
-        } else {
-            console.log('vp day ha')
-            res = await getListProduct(
-                meta.value.pageNumber,
-                meta.value.pageSize,
-                searchValue.value,
-                filter.condition,
-                '',
-                '',
-                filter.dateTime[0].toISOString(),
-                filter.dateTime[1].toISOString(),
-                filter.price.min,
-                filter.price.max,
-            )
-        }
-        // console.log('hahah')
+        console.log('hihieeeeeeeeih')
+        console.log('filter', filter.price);
+        filter.dateTime.forEach(date => {
+            if(date) {
+                date = date.toISOString()
+            }
+        })
+        const res = await getListAuctions(
+            meta.value.pageNumber,
+            meta.value.pageSize,
+            searchValue.value,
+            filter.condition,
+            filter.price.minCurrent,
+            filter.price.maxCurrent,
+            filter.price.minMax,
+            filter.price.maxMax,
+            filter.dateTime[0],
+            filter.dateTime[1],
+        )
+        console.log('hahah')
         // console.log('meta.value', meta.value)
         meta.value = res.data.meta
         // console.log('qqqq')
         listProducts.value = res.data.data
-        // console.log('qqqq')
+        console.log('qqqq')
 
         const query = {}
         if (searchValue.value) {
             query.search = searchValue.value
         }
+        console.log(filter)
         if (filter.condition) {
             query.condition = filter.condition
         }
-        if (filter.price.min) {
-            query.minPrice = filter.price.min
+        if (filter.price.minCurrent) {
+            query.minCurPrice = filter.price.minCurrent
         }
-        if (filter.price.max) {
-            query.maxPrice = filter.price.max
+        if (filter.price.maxCurrent) {
+            query.maxCurPrice = filter.price.maxCurrent
         }
-
-        const router = useRouter()
-        router.push({ path: `/`, query })
-        // console.log('query', query)
+        if (filter.price.minMax) {
+            query.minMaxPrice = filter.price.minMax
+        }
+        if (filter.price.maxMax) {
+            query.maxMaxPrice = filter.price.maxMax
+        }
+        if (filter.dateTime[0]) {
+            query.startTime = filter.dateTime[0]
+        }
+        if (filter.price.maxMax) {
+            query.endTime = filter.dateTime[1]
+        }
+        console.log('query', query)
+        router.push({ path: `/list-auctions`, query })
+        console.log('query', query)
         // console.log('fffff')
     } catch (error) {
         // console.log(error)
     }
 }
 const refreshData = async () => {
-    if (searchValue.value || filter.condition || filter.price.min || filter.price.max || filter.dateTime.length > 0) {
+    if (
+        searchValue.value ||
+        filter.condition ||
+        filter.price.minCurrent ||
+        filter.price.maxCurrent ||
+        filter.dateTime.length > 0
+    ) {
         await Search()
     } else {
         await getListProduct(meta.value.pageNumber, meta.value.pageSize)
     }
 }
-const pageParam = computed(() => {
-    return route.query.pageSize
-})
-const pageSearch = computed(() => {
-    return route.query.search
-})
-
-onBeforeMount(() => {
-    refreshData()
-    getAllCategories()
+const getQueryValue = () => {
+    if(route.query.condition) {
+        filter.condition = parseInt(route.query.condition) 
+    }
+    if(route.query.minCurPrice) {
+        filter.price.minCurrent = parseInt(route.query.minCurPrice) 
+    }
+    if(route.query.maxCurPrice) {
+        filter.price.maxCurrent = parseInt(route.query.maxCurPrice) 
+    }
+    if(route.query.minMaxPrice) {
+        filter.price.minMax = parseInt(route.query.minMaxPrice) 
+    }
+    if(route.query.maxMaxPrice) {
+        filter.price.maxMax = parseInt(route.query.maxMaxPrice) 
+    }
+    if(route.query.startTime) {
+        filter.dateTime[0] = parseInt(route.query.startTime) 
+    }
+    if(route.query.endTime) {
+        filter.dateTime[1] = parseInt(route.query.endTime) 
+    }
+}
+onBeforeMount(async () => {
+    getQueryValue()
+    await refreshData()
+    await getAllCategories()
 })
 </script>
 <style scoped lang="scss">

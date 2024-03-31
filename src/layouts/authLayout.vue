@@ -34,10 +34,15 @@ const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()
 const handleClickSearch = () => {
-    router.push({
-        path: '/list-auctions',
-        query: { search: searchValue.value },
-    })
+    if (searchValue.value.trim() !== '') {
+        router.push({
+            path: '/list-auctions',
+            query: { search: searchValue.value.trim() },
+        })
+    } else {
+        const { search, ...queryWithoutSearch } = route.query
+        router.push({ path: '/list-auctions', query: queryWithoutSearch })
+    }
 }
 onMounted(() => {
     if (route.query.search) {
