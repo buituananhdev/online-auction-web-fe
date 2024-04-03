@@ -5,22 +5,23 @@ export const getListAuctions = async (
     page = 1,
     pageSize = 10,
     searchQuery = '',
-    condition = '',
+    condition = [],
     minCurrentPrice = '',
     maxCurrentPrice = '',
     minMaxPrice = '',
     maxMaxPrice = '',
     minEndTime='',
-    maxEndTime=''
+    maxEndTime='',
+    categoryIds=[]
 ) => {
     console.log('hi nhan ne');
-    //&searchQuery=1231&condition=1&minCurrentPrice=122&maxCurrentPrice=1234&minMaxPrice=12345&maxMaxPrice=123456&minEndTime=2024-05-07T14%3A56%3A00.000Z&maxEndTime=2024-05-15T14%3A56%3A00.000Z'
+    //&searchQuery=1231&condition=1&minCurrentPrice=122&maxCurrentPrice=1234&minMaxPrice=12345&maxMaxPrice=123456&minEndTime=2024-05-07T14%3A56%3A00.000Z&maxEndTime=2024-05-15T14%3A56%3A00.000Z&categoryIds=%5B1%5D'
     let url = `/auctions?pageNumber=${page}&pageSize=${pageSize}`
     if(searchQuery) {
         url += `&searchQuery=${searchQuery}`
     }
-    if(condition) {
-        url += `&condition=${condition}`
+    if(condition.length) {
+        url += '&conditions=' + encodeURIComponent('[') +`${condition}` + encodeURIComponent(']')
     }
     if(minMaxPrice) {
         url += `&minMaxPrice=${minMaxPrice}`
@@ -40,6 +41,9 @@ export const getListAuctions = async (
     if(maxEndTime) {
         url += `&maxEndTime=${maxEndTime.toISOString()}`
     } 
+    if(categoryIds.length) {
+        url += `&categoryIds=` + encodeURIComponent('[') +`${categoryIds}` + encodeURIComponent(']')
+    }
     return await axiosApiInstance.get(url)
 }
 
