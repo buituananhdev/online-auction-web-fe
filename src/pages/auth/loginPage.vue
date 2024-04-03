@@ -56,7 +56,6 @@ import { ref, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from '../../stores/auth.store'
 import { loginApi, loginGGApi } from '../../services/auth.service'
-import { ElNotification } from 'element-plus'
 
 const isValids = ref([])
 const router = useRouter()
@@ -147,12 +146,12 @@ const submit = async (formEl) => {
             localStorage.setItem('refresh_token', data.data.refreshToken)
             await auth.initAuthStore()
             router.push({ name: 'dashboard' })
-            console.log()
             ElNotification({
                 title: 'Success',
                 message: 'Log in successfully!',
                 type: 'success',
             })
+            console.log()
         } catch (error) {
             ElNotification({
                 title: 'Error',
