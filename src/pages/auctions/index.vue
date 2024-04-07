@@ -99,15 +99,8 @@
             <div v-else class="w-full">
                 <el-empty description="No data" />
             </div>
+            <!-- <el-pagination layout="prev, pager, next" /> -->
         </div>
-        <!-- <el-pagination
-            :page-size="meta.pageSize"
-            :current-page="meta.currentPage"
-            :pager-count="11"
-            layout="prev, pager, next"
-            :total="meta.total"
-            :hide-on-single-page="true"
-        /> -->
     </div>
 </template>
 <script setup>
@@ -118,8 +111,6 @@ import { getListCategories } from '../../services/category.service'
 
 const router = useRouter()
 const route = useRoute()
-
-const priceFilterType = ref(1)
 const isError = ref(false)
 const isCurrentError = ref(false)
 let filter = reactive({
@@ -127,11 +118,11 @@ let filter = reactive({
     conditions: [],
     currentPrice: {
         min: '',
-        max: ''
+        max: '',
     },
     sellPrice: {
         min: '',
-        max: ''
+        max: '',
     },
     dateTime: [],
 })
@@ -210,6 +201,8 @@ const getListProduct = async (
             categoriesId,
         )
         listProducts.value = res.data.data
+        meta.value = res.data.meta
+        console.log('neta', meta)
     } catch (error) {
         console.log(error)
     }
@@ -267,8 +260,8 @@ const Search = async () => {
             filter.categories,
         )
         console.log('hahah')
-        // console.log('meta.value', meta.value)
         meta.value = res.data.meta
+        console.log('meta.value', meta.value)
         // console.log('qqqq')
         listProducts.value = res.data.data
         console.log('qqqq')
@@ -326,10 +319,12 @@ const refreshData = async () => {
 }
 const getQueryValue = () => {
     if (router.currentRoute.value.query.conditions) {
-        filter.conditions = router.currentRoute.value.query.conditions.split(',').map(condition => parseInt(condition))
+        filter.conditions = router.currentRoute.value.query.conditions
+            .split(',')
+            .map((condition) => parseInt(condition))
     }
     if (router.currentRoute.value.query.categories) {
-        filter.categories = router.currentRoute.value.query.categories.split(',').map(category => parseInt(category))
+        filter.categories = router.currentRoute.value.query.categories.split(',').map((category) => parseInt(category))
     }
     if (route.query.minCurPrice) {
         filter.currentPrice.min = parseInt(route.query.minCurPrice)
@@ -349,7 +344,7 @@ const getQueryValue = () => {
     if (route.query.endTime) {
         filter.dateTime[1] = parseInt(route.query.endTime)
     }
-    console.log('init filter',filter);
+    console.log('init filter', filter)
 }
 onBeforeMount(async () => {
     getQueryValue()

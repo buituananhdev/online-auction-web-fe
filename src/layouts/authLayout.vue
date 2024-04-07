@@ -17,7 +17,7 @@
                 </the-header>
             </el-header>
             <el-main style="padding-top: 40px; margin: auto; max-width: 1140px; overflow: hidden">
-                <slot :search-value="searchValue" />
+                <slot />
             </el-main>
         </el-container>
     </div>
