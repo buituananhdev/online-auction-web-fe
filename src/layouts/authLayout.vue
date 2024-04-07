@@ -8,6 +8,7 @@
                         style="width: 35%; border-radius: 30px"
                         placeholder="Search..."
                         class="input-with-select"
+                        @keyup.enter="handleClickSearch"
                     >
                         <template #append>
                             <el-button :icon="SearchIcon" @click="handleClickSearch" />
@@ -16,7 +17,7 @@
                 </the-header>
             </el-header>
             <el-main style="padding-top: 40px; margin: auto; max-width: 1140px; overflow: hidden">
-                <slot :search-value="searchValue" />
+                <slot />
             </el-main>
         </el-container>
     </div>

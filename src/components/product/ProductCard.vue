@@ -44,7 +44,7 @@
             </div>
         </template>
         <el-card
-            style="height: 300px; margin-bottom: 20px"
+            style="height: 300px; margin-bottom: 20px; cursor: pointer;"
             onmouseover="this.style.borderColor='red'; this.style.transform='translateY(-4px)';"
             onmouseout="this.style.borderColor='white'; this.style.transform='translateY(0)';"
         >
