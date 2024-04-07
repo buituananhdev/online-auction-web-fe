@@ -86,9 +86,19 @@ const handleCredentialResponse = async (res) => {
         localStorage.setItem('access_token', data.access_token)
         localStorage.setItem('refresh_token', data.refresh_token)
         await auth.initAuthStore()
+        ElNotification({
+            title: 'Success',
+            message: 'Log in successfully!',
+            type: 'success',
+        })
         router.push('/')
     } catch (error) {
-        console.log('hihiii')
+        ElNotification({
+            title: 'Error',
+            message: 'Login Failed!',
+            type: 'error',
+        })
+        console.log(error)
     }
 }
 
@@ -151,7 +161,6 @@ const submit = async (formEl) => {
                 message: 'Log in successfully!',
                 type: 'success',
             })
-            console.log()
         } catch (error) {
             ElNotification({
                 title: 'Error',

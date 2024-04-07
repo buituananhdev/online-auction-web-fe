@@ -1,7 +1,7 @@
 <template>
     <div v-loading="loading" full-screen="false" class="flex justify-start gap-[16px] min-h-[80vh] overfolw-hidden">
         <div class="w-[200px] grow-0 shrink-0" v-show="!loading">
-            <el-text style="display: inline-block; padding-bottom: 14px">Time Range</el-text>
+            <el-text style="display: inline-block; padding-bottom: 14px">Bidding Time Frame Range</el-text>
             <VueDatePicker
                 class="pb-4 border-b"
                 :time-zone="{ tz: 'Asia/Novosibirsk', offset: 7 }"
@@ -37,26 +37,48 @@
                 </el-form-item>
             </el-form>
             <el-form style="position: relative" class="border-b">
-                <el-form-item label="Price Range" prop="type" class="mt-3">
+                <el-form-item label="Current Price Range" prop="type" class="mt-3">
                     <div class="mt-3 flex gap-2">
                         <el-input
                             type="number"
                             controls="false"
                             style="border-radius: 30px"
-                            v-model="filter.price.minCurrent"
+                            v-model="filter.currentPrice.min"
                             placeholder="Min"
                         />
                         to
-                        <el-input type="number" v-model="filter.price.maxCurrent" placeholder="Max" />
+                        <el-input type="number" v-model="filter.currentPrice.max" placeholder="Max" />
+                    </div>
+                    <p v-show="isCurrentError" class="mx-1 text-xs text-[red] pt-1 px-2 text-center">
+                        Please fill in the appropriate price range
+                    </p>
+                </el-form-item>
+                <el-form-item class="border-b">
+                    <el-button
+                        type="primary"
+                        style="width: 200px"
+                        :disabled="isEnableCurrentButton"
+                        @click="appyPriceFilter"
+                        >Apply</el-button
+                    >
+                </el-form-item>
+            </el-form>
+            <el-form style="position: relative" class="border-b">
+                <el-form-item label="Instant Purchase Price Range" prop="type" class="mt-3">
+                    <div class="mt-3 flex gap-2">
+                        <el-input
+                            type="number"
+                            controls="false"
+                            style="border-radius: 30px"
+                            v-model="filter.sellPrice.min"
+                            placeholder="Min"
+                        />
+                        to
+                        <el-input type="number" v-model="filter.sellPrice.max" placeholder="Max" />
                     </div>
                     <p v-show="isError" class="mx-1 text-xs text-[red] pt-1 px-2 text-center">
                         Please fill in the appropriate price range
                     </p>
-                </el-form-item>
-                <el-form-item style="position: absolute; top: 5px; right: 0px">
-                    <el-select v-model="priceFilterType" placeholder="Select" size="small" style="width: 80px">
-                        <el-option v-for="item in options" :key="item.id" :label="item.context" :value="item.id" />
-                    </el-select>
                 </el-form-item>
                 <el-form-item class="border-b">
                     <el-button type="primary" style="width: 200px" :disabled="isEnableButton" @click="appyPriceFilter"
@@ -65,7 +87,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div class="hihii w-[924px] flex items-start justify-start flex-wrap gap-[16px]">
+        <div class="list-product w-[924px]">
             <div
                 v-if="listProducts.length > 0"
                 v-for="(item, index) in listProducts"
@@ -99,27 +121,20 @@ const route = useRoute()
 
 const priceFilterType = ref(1)
 const isError = ref(false)
+const isCurrentError = ref(false)
 let filter = reactive({
     categories: [],
     conditions: [],
-    price: {
-        minCurrent: '',
-        maxCurrent: '',
-        minMax: '',
-        maxMax: '',
+    currentPrice: {
+        min: '',
+        max: ''
+    },
+    sellPrice: {
+        min: '',
+        max: ''
     },
     dateTime: [],
 })
-const options = ref([
-    {
-        id: 1,
-        context: 'current',
-    },
-    {
-        id: 2,
-        context: 'sell',
-    },
-])
 const conditionsList = ref([
     {
         id: 1,
@@ -137,7 +152,7 @@ const conditionsList = ref([
 const meta = ref({
     currentPage: 1,
     totalPage: 1,
-    pageSize: 15,
+    pageSize: 16,
 })
 const listProducts = ref([])
 const listCategories = ref([])
@@ -147,12 +162,18 @@ const loading = computed(() => {
 const searchValue = computed(() => {
     return route.query.search
 })
+const isEnableCurrentButton = computed(() => {
+    return !Boolean(filter.currentPrice.min || filter.currentPrice.max)
+})
 const isEnableButton = computed(() => {
-    return !Boolean(filter.price.minCurrent || filter.price.maxCurrent)
+    return !Boolean(filter.sellPrice.min || filter.sellPrice.max)
 })
 
-watch(filter.price, () => {
+watch(filter.sellPrice, () => {
     isError.value = false
+})
+watch(filter.currentPrice, () => {
+    isCurrentError.value = false
 })
 watch(searchValue, async () => {
     await Search()
@@ -172,6 +193,7 @@ const getListProduct = async (
     maxMaxPrice,
     minEndTime,
     maxEndTime,
+    categoriesId,
 ) => {
     try {
         const res = await getListAuctions(
@@ -185,6 +207,7 @@ const getListProduct = async (
             maxMaxPrice,
             minEndTime,
             maxEndTime,
+            categoriesId,
         )
         listProducts.value = res.data.data
     } catch (error) {
@@ -202,23 +225,20 @@ const getAllCategories = async () => {
 }
 const appyPriceFilter = async () => {
     try {
-        if (!filter.price.minCurrent || !filter.price.maxCurrent) {
-            isError.value = false
-        } else if (filter.price.minCurrent > filter.price.maxCurrent || filter.price.minMax > filter.price.maxMax) {
-            isError.value = true
-            return
+        console.log(filter)
+        if (filter.sellPrice.max || filter.sellPrice.min) {
+            if (parseFloat(filter.sellPrice.min) > parseFloat(filter.sellPrice.max)) {
+                isError.value = true
+                return
+            }
         }
-        if (priceFilterType.value === 2) {
-            filter.price.minMax = filter.price.minCurrent
-            filter.price.maxMax = filter.price.maxCurrent
-            filter.price.maxCurrent = ''
-            filter.price.minCurrent = ''
-            await Search()
-        } else {
-            filter.price.minMax = ''
-            filter.price.maxMax = ''
-            await Search()
+        if (filter.currentPrice.min || filter.currentPrice.max) {
+            if (parseFloat(filter.currentPrice.min) > parseFloat(filter.currentPrice.max)) {
+                isCurrentError.value = true
+                return
+            }
         }
+        await refreshData()
     } catch (error) {
         console.log(error)
     }
@@ -238,12 +258,13 @@ const Search = async () => {
             meta.value.pageSize,
             searchValue.value,
             filter.conditions,
-            filter.price.minCurrent,
-            filter.price.maxCurrent,
-            filter.price.minMax,
-            filter.price.maxMax,
+            filter.currentPrice.min,
+            filter.currentPrice.max,
+            filter.sellPrice.min,
+            filter.sellPrice.max,
             filter.dateTime[0],
             filter.dateTime[1],
+            filter.categories,
         )
         console.log('hahah')
         // console.log('meta.value', meta.value)
@@ -257,26 +278,29 @@ const Search = async () => {
             query.search = searchValue.value
         }
         console.log(filter.conditions)
-        if (filter.conditions) {
-            query.conditions = filter.conditions
+        if (filter.conditions && filter.conditions.length) {
+            query.conditions = filter.conditions.join(',')
         }
-        if (filter.price.minCurrent) {
-            query.minCurPrice = filter.price.minCurrent
+        if (filter.currentPrice.min) {
+            query.minCurPrice = filter.currentPrice.min
         }
-        if (filter.price.maxCurrent) {
-            query.maxCurPrice = filter.price.maxCurrent
+        if (filter.currentPrice.max) {
+            query.maxCurPrice = filter.currentPrice.max
         }
-        if (filter.price.minMax) {
-            query.minMaxPrice = filter.price.minMax
+        if (filter.sellPrice.min) {
+            query.minMaxPrice = filter.sellPrice.min
         }
-        if (filter.price.maxMax) {
-            query.maxMaxPrice = filter.price.maxMax
+        if (filter.sellPrice.max) {
+            query.maxMaxPrice = filter.sellPrice.max
         }
         if (filter.dateTime[0]) {
             query.startTime = filter.dateTime[0]
         }
-        if (filter.price.maxMax) {
+        if (filter.sellPrice.max) {
             query.endTime = filter.dateTime[1]
+        }
+        if (filter.categories && filter.categories.length) {
+            query.categories = filter.categories.join(',')
         }
         console.log('query', query)
         router.push({ path: `/auctions`, query })
@@ -290,9 +314,10 @@ const refreshData = async () => {
     if (
         searchValue.value ||
         filter.conditions.length ||
-        filter.price.minCurrent ||
-        filter.price.maxCurrent ||
-        filter.dateTime.length > 0
+        filter.currentPrice.min ||
+        filter.currentPrice.max ||
+        filter.dateTime.length > 0 ||
+        filter.categories.length > 0
     ) {
         await Search()
     } else {
@@ -300,20 +325,23 @@ const refreshData = async () => {
     }
 }
 const getQueryValue = () => {
-    if (route.query.conditions) {
-        // filter.conditions = parseInt(route.query.conditions)
+    if (router.currentRoute.value.query.conditions) {
+        filter.conditions = router.currentRoute.value.query.conditions.split(',').map(condition => parseInt(condition))
+    }
+    if (router.currentRoute.value.query.categories) {
+        filter.categories = router.currentRoute.value.query.categories.split(',').map(category => parseInt(category))
     }
     if (route.query.minCurPrice) {
-        filter.price.minCurrent = parseInt(route.query.minCurPrice)
+        filter.currentPrice.min = parseInt(route.query.minCurPrice)
     }
     if (route.query.maxCurPrice) {
-        filter.price.maxCurrent = parseInt(route.query.maxCurPrice)
+        filter.currentPrice.max = parseInt(route.query.maxCurPrice)
     }
     if (route.query.minMaxPrice) {
-        filter.price.minMax = parseInt(route.query.minMaxPrice)
+        filter.sellPrice.min = parseInt(route.query.minMaxPrice)
     }
     if (route.query.maxMaxPrice) {
-        filter.price.maxMax = parseInt(route.query.maxMaxPrice)
+        filter.sellPrice.max = parseInt(route.query.maxMaxPrice)
     }
     if (route.query.startTime) {
         filter.dateTime[0] = parseInt(route.query.startTime)
@@ -321,6 +349,7 @@ const getQueryValue = () => {
     if (route.query.endTime) {
         filter.dateTime[1] = parseInt(route.query.endTime)
     }
+    console.log('init filter',filter);
 }
 onBeforeMount(async () => {
     getQueryValue()
@@ -331,8 +360,14 @@ onBeforeMount(async () => {
 <style scoped lang="scss">
 .product-card {
     width: calc((100% - 48px) / 4);
+    height: fit-content;
 }
-.hihii {
+.list-product {
     color: $color-primary;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    height: fit-content;
 }
 </style>

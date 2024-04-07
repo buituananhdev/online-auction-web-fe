@@ -8,6 +8,7 @@
                         style="width: 35%; border-radius: 30px"
                         placeholder="Search..."
                         class="input-with-select"
+                        @keyup.enter="handleClickSearch"
                     >
                         <template #append>
                             <el-button :icon="SearchIcon" @click="handleClickSearch" />
