@@ -80,15 +80,15 @@ onMounted(() => {
 })
 const handleCredentialResponse = async (res) => {
     try {
-        // console.log('res', res)
-        // const hihi = await loginGGApi(res.credential)
-        // console.log('data', hihi.data)
-        // localStorage.setItem('access_token', data.access_token)
-        // localStorage.setItem('refresh_token', data.refresh_token)
+        console.log('res', res)
+        const data = await loginGGApi(res.credential)
+        console.log('data', data.data)
+        localStorage.setItem('access_token', data.access_token)
+        localStorage.setItem('refresh_token', data.refresh_token)
         await auth.initAuthStore()
         router.push('/')
     } catch (error) {
-        console.log(error)
+        console.log('hihiii')
     }
 }
 
