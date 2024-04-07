@@ -36,12 +36,12 @@ const route = useRoute()
 const handleClickSearch = () => {
     if (searchValue.value.trim() !== '') {
         router.push({
-            path: '/list-auctions',
+            path: '/auctions',
             query: { search: searchValue.value.trim() },
         })
     } else {
         const { search, ...queryWithoutSearch } = route.query
-        router.push({ path: '/list-auctions', query: queryWithoutSearch })
+        router.push({ path: '/auctions', query: queryWithoutSearch })
     }
 }
 onMounted(() => {

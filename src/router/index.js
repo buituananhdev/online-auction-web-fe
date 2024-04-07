@@ -9,7 +9,7 @@ const routes = [
         meta: { layout: 'auth', requiresAuth: true },
     },
     {
-        path: '/list-auctions',
+        path: '/auctions',
         name: 'list-auctions',
         component: () => import('../pages/auctions/index.vue'),
         meta: { layout: 'auth', requiresAuth: true },

@@ -1,9 +1,9 @@
 <template>
     <div v-loading="loading" full-screen="false" class="flex justify-start gap-[16px] min-h-[80vh] overfolw-hidden">
         <div class="w-[200px] grow-0 shrink-0" v-show="!loading">
-            <el-text style="display: inline-block; padding-bottom: 14px;">Time Range</el-text>
+            <el-text style="display: inline-block; padding-bottom: 14px">Time Range</el-text>
             <VueDatePicker
-            class="pb-4 border-b"
+                class="pb-4 border-b"
                 :time-zone="{ tz: 'Asia/Novosibirsk', offset: 7 }"
                 v-model="filter.dateTime"
                 @update:model-value="handleFilterchange"
@@ -24,16 +24,16 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="Condition" prop="type" class="mt-3 border-b">
-                    <el-radio-group
-                        class="flex flex-col gap-1"
-                        style="align-items: flex-start"
-                        v-model="filter.condition"
-                    >
-                        <el-radio :value="1">New</el-radio>
-                        <el-radio :value="2">Open box</el-radio>
-                        <el-radio :value="3">Used</el-radio>
-                        <el-radio :value="0">None</el-radio>
-                    </el-radio-group>
+                    <el-checkbox-group class="flex flex-col gap-1 mt-2 pb-2" v-model="filter.conditions">
+                        <el-checkbox
+                            class="pl-2"
+                            v-for="(item, index) in conditionsList"
+                            :key="item.id"
+                            :value="item.id"
+                            name="type"
+                            >{{ item.text }}</el-checkbox
+                        >
+                    </el-checkbox-group>
                 </el-form-item>
             </el-form>
             <el-form style="position: relative" class="border-b">
@@ -101,7 +101,7 @@ const priceFilterType = ref(1)
 const isError = ref(false)
 let filter = reactive({
     categories: [],
-    condition: 0,
+    conditions: [],
     price: {
         minCurrent: '',
         maxCurrent: '',
@@ -118,6 +118,20 @@ const options = ref([
     {
         id: 2,
         context: 'sell',
+    },
+])
+const conditionsList = ref([
+    {
+        id: 1,
+        text: 'New',
+    },
+    {
+        id: 2,
+        text: 'Open box',
+    },
+    {
+        id: 3,
+        text: 'Used',
     },
 ])
 const meta = ref({
@@ -151,7 +165,7 @@ const getListProduct = async (
     pageNumber,
     pageSize,
     searchValue,
-    condition,
+    conditions,
     minPrice,
     maxPrice,
     minMaxPrice,
@@ -164,7 +178,7 @@ const getListProduct = async (
             pageNumber,
             pageSize,
             searchValue,
-            condition,
+            conditions,
             minPrice,
             maxPrice,
             minMaxPrice,
@@ -188,7 +202,7 @@ const getAllCategories = async () => {
 }
 const appyPriceFilter = async () => {
     try {
-        if(!filter.price.minCurrent || !filter.price.maxCurrent) {
+        if (!filter.price.minCurrent || !filter.price.maxCurrent) {
             isError.value = false
         } else if (filter.price.minCurrent > filter.price.maxCurrent || filter.price.minMax > filter.price.maxMax) {
             isError.value = true
@@ -212,17 +226,18 @@ const appyPriceFilter = async () => {
 const Search = async () => {
     try {
         console.log('hihieeeeeeeeih')
-        console.log('filter', filter.price);
-        filter.dateTime.forEach(date => {
-            if(date) {
+        console.log('filter', filter.price)
+        filter.dateTime.forEach((date) => {
+            if (date) {
                 date = date.toISOString()
             }
         })
+        console.log('filter.conditions', filter.conditions)
         const res = await getListAuctions(
             meta.value.pageNumber,
             meta.value.pageSize,
             searchValue.value,
-            filter.condition,
+            filter.conditions,
             filter.price.minCurrent,
             filter.price.maxCurrent,
             filter.price.minMax,
@@ -241,9 +256,9 @@ const Search = async () => {
         if (searchValue.value) {
             query.search = searchValue.value
         }
-        console.log(filter)
-        if (filter.condition) {
-            query.condition = filter.condition
+        console.log(filter.conditions)
+        if (filter.conditions) {
+            query.conditions = filter.conditions
         }
         if (filter.price.minCurrent) {
             query.minCurPrice = filter.price.minCurrent
@@ -264,7 +279,7 @@ const Search = async () => {
             query.endTime = filter.dateTime[1]
         }
         console.log('query', query)
-        router.push({ path: `/list-auctions`, query })
+        router.push({ path: `/auctions`, query })
         console.log('query', query)
         // console.log('fffff')
     } catch (error) {
@@ -274,7 +289,7 @@ const Search = async () => {
 const refreshData = async () => {
     if (
         searchValue.value ||
-        filter.condition ||
+        filter.conditions.length ||
         filter.price.minCurrent ||
         filter.price.maxCurrent ||
         filter.dateTime.length > 0
@@ -285,26 +300,26 @@ const refreshData = async () => {
     }
 }
 const getQueryValue = () => {
-    if(route.query.condition) {
-        filter.condition = parseInt(route.query.condition) 
+    if (route.query.conditions) {
+        // filter.conditions = parseInt(route.query.conditions)
     }
-    if(route.query.minCurPrice) {
-        filter.price.minCurrent = parseInt(route.query.minCurPrice) 
+    if (route.query.minCurPrice) {
+        filter.price.minCurrent = parseInt(route.query.minCurPrice)
     }
-    if(route.query.maxCurPrice) {
-        filter.price.maxCurrent = parseInt(route.query.maxCurPrice) 
+    if (route.query.maxCurPrice) {
+        filter.price.maxCurrent = parseInt(route.query.maxCurPrice)
     }
-    if(route.query.minMaxPrice) {
-        filter.price.minMax = parseInt(route.query.minMaxPrice) 
+    if (route.query.minMaxPrice) {
+        filter.price.minMax = parseInt(route.query.minMaxPrice)
     }
-    if(route.query.maxMaxPrice) {
-        filter.price.maxMax = parseInt(route.query.maxMaxPrice) 
+    if (route.query.maxMaxPrice) {
+        filter.price.maxMax = parseInt(route.query.maxMaxPrice)
     }
-    if(route.query.startTime) {
-        filter.dateTime[0] = parseInt(route.query.startTime) 
+    if (route.query.startTime) {
+        filter.dateTime[0] = parseInt(route.query.startTime)
     }
-    if(route.query.endTime) {
-        filter.dateTime[1] = parseInt(route.query.endTime) 
+    if (route.query.endTime) {
+        filter.dateTime[1] = parseInt(route.query.endTime)
     }
 }
 onBeforeMount(async () => {

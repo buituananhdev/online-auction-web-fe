@@ -1,5 +1,5 @@
 <template>
-    <el-tooltip class="box-item" effect="light" content="Left Center prompts info" placement="right">
+    <el-tooltip class="box-item" show-after="400" effect="light" content="Left Center prompts info" placement="right">
         <template #content>
             <div class="w-[280px] flex flex-col gap-2 p-3">
                 <div>
@@ -57,9 +57,9 @@
                     <b class="w-full truncate ">{{ auction.productName }}</b>
                     <div class="flex justify-between w-full">
                         <p class="font-bold text-xl text-price">{{ auction.currentPrice }} VND</p>
-                        <el-text style="font-size: 13px; display: inline-block">14 bids</el-text>
+                        <el-text style="font-size: 13px; display: inline-block">{{ auction.bidCount }} bids</el-text>
                     </div>
-                    <p style="font-size: 13px">Time left {{ convertISOToRegularTime(auction.endTime) }}</p>
+                    <el-text truncated style="font-size: 13px">Time left {{ convertISOToRegularTime(auction.endTime) }}</el-text>
                 </div>
             </template>
         </el-card>

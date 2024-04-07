@@ -56,7 +56,6 @@ import { ref, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from '../../stores/auth.store'
 import { loginApi, loginGGApi } from '../../services/auth.service'
-import { ElNotification } from 'element-plus'
 
 const isValids = ref([])
 const router = useRouter()
@@ -81,15 +80,15 @@ onMounted(() => {
 })
 const handleCredentialResponse = async (res) => {
     try {
-        // console.log('res', res)
-        // const hihi = await loginGGApi(res.credential)
-        // console.log('data', hihi.data)
-        // localStorage.setItem('access_token', data.access_token)
-        // localStorage.setItem('refresh_token', data.refresh_token)
+        console.log('res', res)
+        const data = await loginGGApi(res.credential)
+        console.log('data', data.data)
+        localStorage.setItem('access_token', data.access_token)
+        localStorage.setItem('refresh_token', data.refresh_token)
         await auth.initAuthStore()
         router.push('/')
     } catch (error) {
-        console.log(error)
+        console.log('hihiii')
     }
 }
 
@@ -147,12 +146,12 @@ const submit = async (formEl) => {
             localStorage.setItem('refresh_token', data.data.refreshToken)
             await auth.initAuthStore()
             router.push({ name: 'dashboard' })
-            console.log()
             ElNotification({
                 title: 'Success',
                 message: 'Log in successfully!',
                 type: 'success',
             })
+            console.log()
         } catch (error) {
             ElNotification({
                 title: 'Error',
