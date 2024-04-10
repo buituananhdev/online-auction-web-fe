@@ -2,50 +2,27 @@
     <div v-loading="loading" full-screen="false" class="flex justify-start gap-[16px] min-h-[80vh] overfolw-hidden">
         <div class="w-[200px] grow-0 shrink-0" v-show="!loading">
             <el-text style="display: inline-block; padding-bottom: 14px">Bidding Time Frame Range</el-text>
-            <VueDatePicker
-                class="pb-4 border-b"
-                :time-zone="{ tz: 'Asia/Novosibirsk', offset: 7 }"
-                v-model="filter.dateTime"
-                @update:model-value="handleFilterchange"
-                placeholder="Select time range"
-                range
-            />
+            <VueDatePicker class="pb-4 border-b" :time-zone="{ tz: 'Asia/Novosibirsk', offset: 7 }"
+                v-model="filter.dateTime" @update:model-value="handleFilterchange" placeholder="Select time range" range />
             <el-form @change="refreshData" :model="filter" label="Filter by" class="">
                 <el-form-item label="Category" class="border-b" prop="type">
                     <el-checkbox-group class="flex flex-col gap-1 mt-2 pb-2" v-model="filter.categories">
-                        <el-checkbox
-                            class="pl-2"
-                            v-for="(item, index) in listCategories"
-                            :key="item.id"
-                            :value="item.id"
-                            name="type"
-                            >{{ item.categoryName }}</el-checkbox
-                        >
+                        <el-checkbox class="pl-2" v-for="item in listCategories" :key="item.id" :value="item.id"
+                            name="type">{{ item.categoryName }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="Condition" prop="type" class="mt-3 border-b">
                     <el-checkbox-group class="flex flex-col gap-1 mt-2 pb-2" v-model="filter.conditions">
-                        <el-checkbox
-                            class="pl-2"
-                            v-for="(item, index) in conditionsList"
-                            :key="item.id"
-                            :value="item.id"
-                            name="type"
-                            >{{ item.text }}</el-checkbox
-                        >
+                        <el-checkbox class="pl-2" v-for="item in conditionsList" :key="item.id" :value="item.id"
+                            name="type">{{ item.text }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
             </el-form>
             <el-form style="position: relative" class="border-b">
                 <el-form-item label="Current Price Range" prop="type" class="mt-3">
                     <div class="mt-3 flex gap-2">
-                        <el-input
-                            type="number"
-                            controls="false"
-                            style="border-radius: 30px"
-                            v-model="filter.currentPrice.min"
-                            placeholder="Min"
-                        />
+                        <el-input type="number" controls="false" style="border-radius: 30px"
+                            v-model="filter.currentPrice.min" placeholder="Min" />
                         to
                         <el-input type="number" v-model="filter.currentPrice.max" placeholder="Max" />
                     </div>
@@ -54,25 +31,15 @@
                     </p>
                 </el-form-item>
                 <el-form-item class="border-b">
-                    <el-button
-                        type="primary"
-                        style="width: 200px"
-                        :disabled="isEnableCurrentButton"
-                        @click="appyPriceFilter"
-                        >Apply</el-button
-                    >
+                    <el-button type="primary" style="width: 200px" :disabled="isEnableCurrentButton"
+                        @click="appyPriceFilter">Apply</el-button>
                 </el-form-item>
             </el-form>
             <el-form style="position: relative" class="border-b">
                 <el-form-item label="Instant Purchase Price Range" prop="type" class="mt-3">
                     <div class="mt-3 flex gap-2">
-                        <el-input
-                            type="number"
-                            controls="false"
-                            style="border-radius: 30px"
-                            v-model="filter.sellPrice.min"
-                            placeholder="Min"
-                        />
+                        <el-input type="number" controls="false" style="border-radius: 30px" v-model="filter.sellPrice.min"
+                            placeholder="Min" />
                         to
                         <el-input type="number" v-model="filter.sellPrice.max" placeholder="Max" />
                     </div>
@@ -81,26 +48,22 @@
                     </p>
                 </el-form-item>
                 <el-form-item class="border-b">
-                    <el-button type="primary" style="width: 200px" :disabled="isEnableButton" @click="appyPriceFilter"
-                        >Apply</el-button
-                    >
+                    <el-button type="primary" style="width: 200px" :disabled="isEnableButton"
+                        @click="appyPriceFilter">Apply</el-button>
                 </el-form-item>
             </el-form>
         </div>
         <div class="list-product w-[924px]">
-            <div
-                v-if="listProducts.length > 0"
-                v-for="(item, index) in listProducts"
-                :key="item.id"
-                class="product-card"
-            >
-                <product-card :auction="item" />
+            <div v-if="listProducts.length">
+                <div v-for="item in listProducts" :key="item.id" class="product-card">
+                    <product-card :auction="item" />
+                </div>
             </div>
             <div v-else class="w-full">
                 <el-empty description="No data" />
             </div>
-            <!-- <el-pagination layout="prev, pager, next" /> -->
         </div>
+        <!-- <el-pagination layout="prev, pager, next" /> -->
     </div>
 </template>
 <script setup>
@@ -357,6 +320,7 @@ onBeforeMount(async () => {
     width: calc((100% - 48px) / 4);
     height: fit-content;
 }
+
 .list-product {
     color: $color-primary;
     display: flex;
