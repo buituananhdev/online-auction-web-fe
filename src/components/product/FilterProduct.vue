@@ -9,7 +9,7 @@
                 >
                     <el-checkbox
                         class="pl-2"
-                        v-for="(item, index) in listCategories"
+                        v-for="item in listCategories"
                         :key="item.id"
                         :value="item.id"
                         name="type"
@@ -25,7 +25,7 @@
                 >
                     <el-checkbox
                         class="pl-2"
-                        v-for="(item, index) in listConditions"
+                        v-for="item in listConditions"
                         :key="item.id"
                         :value="item.id"
                         name="type"
