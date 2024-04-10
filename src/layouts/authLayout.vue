@@ -16,16 +16,18 @@
                     </el-input>
                 </the-header>
             </el-header>
-            <el-main style="padding-top: 40px; margin: auto; max-width: 1140px; overflow: hidden">
+            <el-main style="padding-top: 40px;background-color: #ffff; margin: auto; max-width: 1140px; overflow: hidden;">
                 <slot />
             </el-main>
+            <el-footer style="padding: 0;"><the-footer/></el-footer>
         </el-container>
     </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import TheHeader from '../components/layouts/TheHeader.vue'
+import TheHeader from '../components/Layout/TheHeader.vue'
+import TheFooter from '../components/Layout/TheFooter.vue'
 import { authStore } from '../stores/auth.store'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
