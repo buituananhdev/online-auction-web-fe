@@ -9,7 +9,6 @@
             />
             <p>Web Name</p>
         </div>
-
         <slot/>
         <div class="flex gap-6">
             <el-select v-model="value" placeholder="WatchList" style="width: 110px">
