@@ -1,6 +1,8 @@
 import axiosApiInstance from '../plugins/api'
 import axios from 'axios'
+
 axios.defaults.baseURL = import.meta.env.VITE_API_URL
+
 export const getListAuctions = async (
     page = 1,
     pageSize = 10,
@@ -61,4 +63,12 @@ export const updateAuction = async (id, data) => {
 
 export const deleteAuction = async (id) => {
     return axiosApiInstance.delete(`/auctions/${id}`)
+}
+
+export const getTopAuctionsList = async () => {
+    return axiosApiInstance.get(`/auctions/top-10`)
+}
+
+export const getRecentlyViewedList = async () => {
+    return axiosApiInstance.get('/auctions/recently-viewed')
 }

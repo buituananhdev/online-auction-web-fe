@@ -1,5 +1,5 @@
 <template>
-    <el-tooltip class="box-item" show-after="400" effect="light" content="Left Center prompts info" placement="right">
+    <el-tooltip class="box-item" effect="light" content="Left Center prompts info" placement="right" show-after="400">
         <template #content>
             <div class="w-[280px] flex flex-col gap-2 p-3">
                 <div>
@@ -16,13 +16,13 @@
                     <p style="font-size: 12px">Time left {{ convertISOToRegularTime(auction.endTime) }}</p>
                     <div class="flex justify-between items-center">
                         <p style="font-size: 14px; margin-bottom: 6px">
-                            Owner: <b>{{ auction.seller.fullName }}</b>
+                            Owner: <b>{{ auction.user.fullName }}</b>
                         </p>
                         <el-rate
-                            v-model="auction.seller.ratings.avarageRating"
+                            v-model="auction.user.ratings.avarageRating"
                             disabled
                             :colors="colors"
-                            score-template="({auction.seller.ratings.totalRatings})"
+                            score-template="({auction.user.ratings.totalRatings})"
                         />
                     </div>
                     <p class="text-[16px]">About product:</p>

@@ -53,8 +53,8 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div class="list-product w-[924px]">
-            <div v-if="listProducts.length">
+        <div>
+            <div v-if="listProducts.length" class="list-product">
                 <div v-for="item in listProducts" :key="item.id" class="product-card">
                     <product-card :auction="item" />
                 </div>

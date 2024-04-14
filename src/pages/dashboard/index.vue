@@ -9,39 +9,59 @@
             </el-carousel>
         </div>
         <div class="mt-10 mx-4">
-            <span class="font-bold text-2xl">Phone</span>
-            <el-scrollbar>
-                <div class="scrollbar-flex-content">
-                    <p v-for="item in phonesList" :key="item" class="scrollbar-demo-item">
+            <span class="font-bold text-2xl">Recently viewed</span>
+            <div v-if="!recentlyViewdList.length" class="scrollbar-flex-content">
+                <skeleton-card v-for="item in 4" :key="item" style="padding-right: 20px;" />
+            </div>
+            <div v-else class="dashboard-list">
+                <Icon @click="scrollToLeft(scrollBox2)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
+                    icon="ic:round-keyboard-arrow-left" />
+                <div ref="scrollBox2" class="scrollbar-flex-content scroll-custom">
+                    <p v-for="item in recentlyViewdList" :key="item" class="scrollbar-demo-item">
                         <product-card :auction="item" />
                     </p>
                 </div>
-            </el-scrollbar>
+                <Icon @click="scrollRight(scrollBox2)" class="dashboard-arrow-icon dashboard-right-icon w-[300px]"
+                    icon="ic:round-keyboard-arrow-right" />
+            </div>
         </div>
         <div class="dashboard-categories mt-10 mx-4">
             <span class="font-bold text-2xl">Trending on myWeb</span>
-            <el-scrollbar>
-                <div class="scrollbar-flex-content">
+            <div v-if="!categoriesList.length" class="scrollbar-flex-content">
+                <skeleton-card v-for="item in 4" :key="item" style="padding-right: 20px;" />
+            </div>
+            <div class="dashboard-list">
+                <Icon @click="scrollToLeft(scrollBox1)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
+                    icon="ic:round-keyboard-arrow-left" />
+                <div ref="scrollBox1" class="scrollbar-flex-content scroll-custom">
                     <p v-for="item in categoriesList" :key="item" class="scrollbar-demo-item">
                         <category-card :category="item" />
                     </p>
                 </div>
-            </el-scrollbar>
+                <Icon @click="scrollRight(scrollBox1)" class="dashboard-arrow-icon dashboard-right-icon w-[300px]"
+                    icon="ic:round-keyboard-arrow-right" />
+            </div>
         </div>
         <div class="mt-10 mx-4">
-            <span class="font-bold text-2xl">Phone</span>
-            <el-scrollbar>
-                <div class="scrollbar-flex-content">
-                    <p v-for="item in phonesList" :key="item" class="scrollbar-demo-item">
+            <span class="font-bold text-2xl">Top Bid Auctions</span>
+            <div class="dashboard-list">
+                <Icon @click="scrollToLeft(scrollBox)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
+                    icon="ic:round-keyboard-arrow-left" />
+                <div ref="scrollBox" class="scrollbar-flex-content scroll-custom">
+                    <p v-for="item in topAuctionsList" :key="item" class="scrollbar-demo-item">
                         <product-card :auction="item" />
                     </p>
                 </div>
-            </el-scrollbar>
+                <Icon @click="scrollRight(scrollBox)" class="dashboard-arrow-icon dashboard-right-icon w-[300px]"
+                    icon="ic:round-keyboard-arrow-right" />
+            </div>
         </div>
+        <!-- <button class="scroll-btn" @click="scrollRight(scrollBox1)">
+        </button> -->
     </div>
 </template>
 <script setup>
-import { getListAuctions } from '../../services/auction.service';
+import { getTopAuctionsList, getRecentlyViewedList } from '../../services/auction.service';
 import { onMounted, ref } from 'vue';
 
 const listImg = [
@@ -100,26 +120,47 @@ const categoriesList = ref([
         name: "hhehhe"
     },
 ])
-const phonesList = ref([])
-const getPhonesList = async () => {
-    const data = await getListAuctions(
-        1,
-        16,
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        [1]
-    )
-    console.log(data);
-    phonesList.value = data.data.data
+const topAuctionsList = ref([]);
+const recentlyViewdList = ref([])
+
+const getAuctionsList = async () => {
+    try {
+        const res = await getTopAuctionsList()
+        topAuctionsList.value = res.data
+    } catch (error) {
+        console.log(error);
+    }
+}
+const getRecentyViewdAuctionsList = async () => {
+    try {
+        const res = await getRecentlyViewedList()
+        recentlyViewdList.value = res.data
+    } catch (error) {
+        console.log(error);
+    }
+}
+const scrollBox = ref();
+const scrollBox1 = ref();
+const scrollBox2 = ref();
+
+function scrollRight(scrollBox) {
+    console.log('1');
+    if (scrollBox) {
+        console.log('2');
+        scrollBox.scrollLeft += 400; // Kéo sang phải 400px
+    }
+}
+
+function scrollToLeft(scrollBox) {
+    console.log('1');
+    if (scrollBox) {
+        console.log('2');
+        scrollBox.scrollLeft -= 400; // Kéo sang phải 400px
+    }
 }
 onMounted(() => {
-    getPhonesList()
+    getAuctionsList()
+    getRecentyViewdAuctionsList()
 })
 </script>
 <style scoped>
@@ -153,7 +194,68 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
     width: fit-content;
-    margin: 16px 18px 16px 0;
+    margin: 16px 18px 0px 0;
     border-radius: 4px;
+}
+
+.scroll-custom {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding-bottom: 7px;
+}
+
+.scroll-custom::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #ffff;
+}
+
+.dashboard-list:hover .scroll-custom {
+    overflow-x: auto;
+    padding-bottom: 0px;
+}
+
+.scroll-custom::-webkit-scrollbar {
+    height: 7px;
+}
+
+.scroll-custom::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #dfdfdf;
+}
+
+.dashboard-list {
+    position: relative;
+}
+
+.dashboard-arrow-icon {
+    z-index: 9;
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+    border-radius: 50%;
+    background-color: #dfdfdf;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.dashboard-arrow-icon:hover {
+    background-color: #ebe9e9;
+}
+
+.dashboard-arrow-icon:hover .scroll-custom {
+    overflow-x: auto;
+    margin-bottom: 0px;
+}
+
+.dashboard-right-icon {
+    position: absolute;
+    right: -10px;
+    top: 45%;
+}
+
+.dashboard-left-icon {
+    position: absolute;
+    left: -10px;
+    top: 45%;
 }
 </style>
