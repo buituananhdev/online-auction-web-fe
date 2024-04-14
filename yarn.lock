@@ -195,7 +195,7 @@
   dependencies:
     "@floating-ui/utils" "^0.2.1"
 
-"@floating-ui/dom@^1.0.1":
+"@floating-ui/dom@^1.0.1", "@floating-ui/dom@^1.6.1":
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.6.3.tgz#954e46c1dd3ad48e49db9ada7218b0985cee75ef"
   integrity sha512-RnDthu3mzPlQ31Ss/BTwQ1zjzIhr3lk1gZB1OC56h/1vEtaXkESrOqL5fQVMfXpwGtRwX+YsZBdyHtJMQnkArw==
@@ -207,6 +207,15 @@
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.1.tgz#16308cea045f0fc777b6ff20a9f25474dd8293d2"
   integrity sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==
+
+"@floating-ui/vue@^1.0.1":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@floating-ui/vue/-/vue-1.0.6.tgz#31860a12f1135d19554c232d99c5bab631c5c576"
+  integrity sha512-EdrOljjkpkkqZnrpqUcPoz9NvHxuTjUtSInh6GMv3+Mcy+giY2cE2pHh9rpacRcZ2eMSCxel9jWkWXTjLmY55w==
+  dependencies:
+    "@floating-ui/dom" "^1.6.1"
+    "@floating-ui/utils" "^0.2.1"
+    vue-demi ">=0.13.0"
 
 "@humanwhocodes/config-array@^0.11.14":
   version "0.11.14"
@@ -417,7 +426,7 @@
   dependencies:
     "@types/lodash" "*"
 
-"@types/lodash@*", "@types/lodash@^4.14.182":
+"@types/lodash@*", "@types/lodash@^4.14.161", "@types/lodash@^4.14.182":
   version "4.17.0"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.0.tgz#d774355e41f372d5350a4d0714abb48194a489c3"
   integrity sha512-t7dhREVv6dbNj0q17X12j7yDG4bD/DHYX7o5/DbDxobP0HnGPgpRz2Ej77aL7TZT3DSw13fqUTj8J4mMnqa7WA==
@@ -741,6 +750,11 @@ chalk@^4.0.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
+cleave.js@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/cleave.js/-/cleave.js-1.6.0.tgz#0e4e011943bdd70c67c9dcf4ff800ce710529171"
+  integrity sha512-ivqesy3j5hQVG3gywPfwKPbi/7ZSftY/UNp5uphnqjr25yI2CP8FS2ODQPzuLXXnNLi29e2+PgPkkiKUXLs/Nw==
+
 color-convert@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-2.0.1.tgz#72d3a68d598c9bdb3af2ad1e84f21d896abd4de3"
@@ -752,6 +766,11 @@ color-name@~1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
+
+colortranslator@^1.9.2:
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/colortranslator/-/colortranslator-1.10.2.tgz#0a02b75f8c6cf50b50feb119ddccfbce1111f7f7"
+  integrity sha512-+vAnjWTdI0Vh6fT3I+dA6DAtnLfo91TzYKjewYeZ2dHdhF8Yo5OMo47inNJdJOXwjJ9lPD0LkNeQOLU/8yyfZA==
 
 combined-stream@^1.0.8:
   version "1.0.8"
@@ -2276,7 +2295,7 @@ vite@^5.1.6:
   optionalDependencies:
     fsevents "~2.3.3"
 
-vue-demi@*, vue-demi@>=0.14.5:
+vue-demi@*, vue-demi@>=0.13.0, vue-demi@>=0.14.5:
   version "0.14.7"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.14.7.tgz#8317536b3ef74c5b09f268f7782e70194567d8f2"
   integrity sha512-EOG8KXDQNwkJILkx/gPcoL/7vH+hORoBaKgGe+6W7VFMvCYJfmF2dGbvgDroVnI8LU7/kTu8mbjRZGBU1z9NTA==
@@ -2311,6 +2330,17 @@ vue@^3.4.21:
     "@vue/runtime-dom" "3.4.21"
     "@vue/server-renderer" "3.4.21"
     "@vue/shared" "3.4.21"
+
+vuestic-ui@^1.9.8:
+  version "1.9.8"
+  resolved "https://registry.yarnpkg.com/vuestic-ui/-/vuestic-ui-1.9.8.tgz#151e05b7630d0d609b3dbc8282640d5eb9fb67b6"
+  integrity sha512-FAJ/zSZBQC71l4M75l5ufTuiymKO5nkaWWlUaRu84FPTzQ5+NgmC+pbwYJmqYvXEbVjKZsi+2mq+gLHnTL92vg==
+  dependencies:
+    "@floating-ui/vue" "^1.0.1"
+    "@types/lodash" "^4.14.161"
+    cleave.js "^1.6.0"
+    colortranslator "^1.9.2"
+    lodash "^4.17.21"
 
 webpack-sources@^3.2.3:
   version "3.2.3"
