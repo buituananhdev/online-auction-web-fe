@@ -72,3 +72,7 @@ export const getTopAuctionsList = async () => {
 export const getRecentlyViewedList = async () => {
     return axiosApiInstance.get('/auctions/recently-viewed')
 }
+
+export const getSellerHistory = async () => {
+    return axiosApiInstance.get('/auctions/seller-history')
+}
