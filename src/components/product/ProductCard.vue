@@ -1,7 +1,7 @@
 <template>
     <el-tooltip class="box-item" effect="light" content="Left Center prompts info" placement="right" show-after="400">
         <template #content>
-            <div class="w-[280px] flex flex-col gap-2 p-3">
+            <div class="w-[300px] flex flex-col gap-2 p-3">
                 <div>
                     <b class="text-lg">{{ auction.productName }}</b>
                     <div class="flex justify-between items-center">
@@ -9,7 +9,7 @@
                             <el-text class="border rounded-md text-xs" style="padding: 0px 10px">{{
                                 converConditionText(auction.condition)
                             }}</el-text>
-                            <el-text class="border rounded-md text-xs" style="padding: 0px 10px">{{ auction.categoryName }}</el-text>
+                            <el-text class="border rounded-md text-xs" style="padding: 0px 10px">{{ auction.category.categoryName }}</el-text>
                         </div>
                         <el-text class="text-xs" style="padding: 0px 10px">Views: {{ auction.viewCount }}</el-text>
                     </div>
@@ -44,6 +44,7 @@
         </template>
         <el-card
             style="height: 300px; margin-bottom: 20px; cursor: pointer;"
+            @click="goToDetail(auction.id)"
             onmouseover="this.style.borderColor='red'; this.style.transform='translateY(-4px)';"
             onmouseout="this.style.borderColor='white'; this.style.transform='translateY(0)';"
         >
@@ -66,10 +67,12 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 defineProps({
     auction: Object,
 })
 
+const router = useRouter()
 const isLike = ref(false)
 
 const convertISOToRegularTime = (isoTimeString) => {
@@ -113,6 +116,10 @@ const converConditionText = (id) => {
         default:
             return
     }
+}
+const goToDetail = (id) => {
+    console.log('hehehe');
+    router.push(`/auctions/${id}`)
 }
 </script>
 <style>

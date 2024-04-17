@@ -44,6 +44,9 @@
         </div>
         <div class="mt-10 mx-4">
             <span class="font-bold text-2xl">Top Bid Auctions</span>
+            <div v-if="!topAuctionsList.length" class="scrollbar-flex-content">
+                <skeleton-card v-for="item in 4" :key="item" style="padding-right: 20px;" />
+            </div>
             <div class="dashboard-list">
                 <Icon @click="scrollToLeft(scrollBox)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-left" />
