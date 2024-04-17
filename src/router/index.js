@@ -13,6 +13,7 @@ const routes = [
         name: 'list-auctions',
         component: () => import('../pages/auctions/index.vue'),
         meta: { layout: 'auth', requiresAuth: true },
+        children: []
     },
     {
         path: '/seller-history',
