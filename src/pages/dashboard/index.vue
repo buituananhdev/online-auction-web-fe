@@ -8,7 +8,7 @@
                 </el-carousel-item>
             </el-carousel>
         </div>
-        <div class="mt-10 mx-4">
+        <div class="mt-10 mx-6">
             <span class="font-bold text-2xl">Recently viewed</span>
             <div v-if="!recentlyViewdList.length" class="scrollbar-flex-content">
                 <skeleton-card v-for="item in 4" :key="item" style="padding-right: 20px;" />

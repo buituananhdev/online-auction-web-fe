@@ -38,7 +38,6 @@
                     <div @click="() => isLike = !isLike" class="image border rounded-full p-2 border-black border-[0.7px] cursor-pointer">
                         <img class="hover:opacity-40" v-if="isLike" src="../../assets/icons/heart-icon.svg" width="25" alt="" />
                         <img v-else src="../../assets/icons/full-heart-icon.svg" width="25" alt="" />
-
                     </div>
                 </div>
             </div>
