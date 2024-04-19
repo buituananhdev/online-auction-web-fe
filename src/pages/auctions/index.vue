@@ -1,5 +1,5 @@
 <template>
-    <div v-loading="loading" full-screen="false" class="flex justify-start gap-[16px] min-h-[80vh] overfolw-hidden">
+    <div v-loading="loading" full-screen="false" class="flex justify-start gap-[16px] min-h-[80vh] overfolw-hidden min-w-[800px]">
         <div class="w-[200px] grow-0 shrink-0" v-show="!loading">
             <el-text style="display: inline-block; padding-bottom: 14px">Bidding Time Frame Range</el-text>
             <VueDatePicker class="pb-4 border-b" :time-zone="{ tz: 'Asia/Novosibirsk', offset: 7 }"
@@ -53,7 +53,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div>
+        <div class="min-w-[900px]">
             <div v-if="listProducts.length" class="list-product">
                 <div v-for="item in listProducts" :key="item.id" class="product-card">
                     <product-card :auction="item" />
@@ -140,6 +140,7 @@ const getListProduct = async (
     pageNumber,
     pageSize,
     searchValue,
+    categoriesId,
     conditions,
     minPrice,
     maxPrice,
@@ -147,13 +148,13 @@ const getListProduct = async (
     maxMaxPrice,
     minEndTime,
     maxEndTime,
-    categoriesId,
 ) => {
     try {
         const res = await getListAuctions(
             pageNumber,
             pageSize,
             searchValue,
+            categoriesId,
             conditions,
             minPrice,
             maxPrice,
@@ -161,7 +162,6 @@ const getListProduct = async (
             maxMaxPrice,
             minEndTime,
             maxEndTime,
-            categoriesId,
         )
         listProducts.value = res.data.data
         console.log('list', listProducts.length);
@@ -214,6 +214,7 @@ const Search = async () => {
             meta.value.pageNumber,
             meta.value.pageSize,
             searchValue.value,
+            filter.categories,
             filter.conditions,
             filter.currentPrice.min,
             filter.currentPrice.max,
@@ -221,7 +222,6 @@ const Search = async () => {
             filter.sellPrice.max,
             filter.dateTime[0],
             filter.dateTime[1],
-            filter.categories,
         )
         console.log('hahah')
         meta.value = res.data.meta

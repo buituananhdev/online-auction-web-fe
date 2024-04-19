@@ -7,14 +7,14 @@ export const getListAuctions = async (
     page = 1,
     pageSize = 10,
     searchQuery = '',
+    categoryIds=[],
     condition = [],
     minCurrentPrice = '',
     maxCurrentPrice = '',
     minMaxPrice = '',
     maxMaxPrice = '',
     minEndTime='',
-    maxEndTime='',
-    categoryIds=[]
+    maxEndTime=''
 ) => {
     console.log('hi nhan ne');
     //&searchQuery=1231&condition=1&minCurrentPrice=122&maxCurrentPrice=1234&minMaxPrice=12345&maxMaxPrice=123456&minEndTime=2024-05-07T14%3A56%3A00.000Z&maxEndTime=2024-05-15T14%3A56%3A00.000Z&categoryIds=%5B1%5D'

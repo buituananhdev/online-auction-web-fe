@@ -34,6 +34,12 @@ const routes = [
         meta: { layout: 'empty' },
         component: () => import('../pages/auth/registerPage.vue'),
     },
+    {
+        path: '/auctions/:id',
+        name: 'register',
+        meta: { layout: 'auth', requiresAuth: true },
+        component: () => import('../pages/auctions/[id].vue'),
+    },
 ]
 const router = createRouter({
     history: createWebHistory(),
