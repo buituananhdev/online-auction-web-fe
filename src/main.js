@@ -8,13 +8,15 @@ import { authStore } from './stores/auth.store'
 import { authMiddleware } from './router/router.middleware'
 import authLayout from './layouts/authLayout.vue'
 import emptyLayout from './layouts/emptyLayout.vue'
-import ProductCard from './components/Product/ProductCard.vue'
-import FilterProduct from './components/Product/FilterProduct.vue'
-import SkeletonCard from './components/Product/SkeletonCard.vue'
+import ProductCard from './components/product/ProductCard.vue'
+import FilterProduct from './components/product/FilterProduct.vue'
+import SkeletonCard from './components/product/SkeletonCard.vue'
 import CategoryCard from './components/Category/CategoryCard.vue'
+import HistoryCard from './components/product/HistoryCard.vue'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { Icon } from '@iconify/vue';
+
 
 const initApp = async () => {
     authMiddleware()

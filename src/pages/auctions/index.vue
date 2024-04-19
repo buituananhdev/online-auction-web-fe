@@ -164,6 +164,7 @@ const getListProduct = async (
             maxEndTime,
         )
         listProducts.value = res.data.data
+        console.log('list', listProducts.length);
         meta.value = res.data.meta
         console.log('neta', meta)
     } catch (error) {
