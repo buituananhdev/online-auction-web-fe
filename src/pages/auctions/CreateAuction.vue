@@ -25,13 +25,14 @@
             <span class="text-sm font-semibold mb-[6px]">Item title</span>
             <div class="w-full">
                 <el-input
-                    v-model="text"
-                    style="width: 240px; height: 48px; width: 100%"
+                    v-model="currentAuction.productName"
+                    style="width: 240px; height: 48px; width: 100%;"
                     maxlength="100"
                     placeholder="Please input"
                     show-word-limit
                     clearable
                     type="text"
+                    
                 />
             </div>
         </div>
@@ -39,7 +40,7 @@
             <h2 class="font-bold mb-[10px]">ITEM CATEGORY</h2>
             <div class="w-full flex gap-10 justify-center items-center">
                 <span class="text-sm">Please select the product's category type!</span>
-                <el-select v-model="value" placeholder="Select" size="large" style="width: 60%">
+                <el-select v-model="currentAuction.categoryId" placeholder="Select" size="large" style="width: 60%">
                     <el-option
                         v-for="item in listCategories"
                         :key="item.id"
@@ -53,24 +54,14 @@
             <h2 class="font-bold mb-[10px]">CONDITION</h2>
             <h3 class="font-semibold mt-4 mb-1">Item condition</h3>
             <button class="underline w-fit cursor-default hover:opacity-50" @click="handleSelectCondition">
-                {{ getConditionText(radio) }}
+                {{ getConditionText(currentAuction.condition) }}
             </button>
             <span class="mt-4 text-sm">Disclose all defects to prevent returns and earn better feedback.</span>
         </div>
         <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
             <h2 class="font-bold mb-[10px]">DESCRIPTION</h2>
-            <!-- <el-input
-            v-model="textarea"
-            maxlength="1000"
-            style="width: 100%;"
-            placeholder="Write a detailed description of your item, or save time and let Al draft it for you"
-            show-word-limit
-            type="textarea"
-            clearable
-            autosize
-        /> -->
             <textarea
-                v-model="textarea"
+                v-model="currentAuction.description"
                 name="description"
                 id="description"
                 cols="30"
@@ -86,7 +77,7 @@
                 <div class="flex flex-col">
                     <span class="mb-1 font-medium">Starting bid</span>
                     <el-input
-                        v-model="startingPrice"
+                        v-model="currentAuction.startingPrice"
                         style="width: 240px"
                         placeholder="Please input"
                         :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
@@ -96,7 +87,7 @@
                 <div class="flex flex-col">
                     <span class="mb-1 font-medium">Buy It Now(optional)</span>
                     <el-input
-                        v-model="maxPrice"
+                        v-model="currentAuction.maxPrice"
                         style="width: 240px"
                         placeholder="Please input"
                         :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
@@ -107,16 +98,19 @@
             <div class="flex flex-col mt-4">
                 <span class="mb-1 font-medium">Auction End Time</span>
                 <div class="block">
-                    <el-date-picker v-model="endTime" type="datetime" placeholder="Select date and time" />
+                    <el-date-picker v-model="currentAuction.endTime" type="datetime" placeholder="Select date and time" />
                 </div>
             </div>
             <div class="w-full mt-4">
                 <el-checkbox
-                    v-model="canReturn"
-                    label="Buyers can return the goods after receiving the goods"
+                    v-model="currentAuction.canReturn"
+                    label="After receipt, returns allowed"
                     size="large"
                 />
             </div>
+        </div>
+        <div class="w-full my-10">
+            <button class="py-[13px] px-5 my-2 mx-auto bg-[#3665f3] text-white font-bold rounded-full min-w-[343px] flex justify-center items-center" @click="createAuction">List it</button>
         </div>
     </div>
     <div
@@ -134,14 +128,14 @@
                     Done
                 </button>
             </div>
-            <div class="flex flex-col px-8 py-4">
-                <el-radio-group v-model="radio" v-for="item in radioList" :key="item.value">
+            <div class="flex flex-col px-8 py-4 overflow-hidden">
+                <el-radio-group v-model="currentAuction.condition" v-for="item in radioList" :key="item.value">
                     <div class="flex-col flex">
-                        <el-radio :value="item.value">
-                            <span>
+                        <el-radio :value="item.value" class="my-[60px]">
+                            <span class="text-[#191919] font-bold">
                                 {{ item.text }}
                             </span>
-                            <span class="text-[#707070]">{{ item.description }}</span>
+                            <div class="text-[#707070] flex flex-wrap whitespace-normal">{{ item.description }}</div>
                         </el-radio>
                     </div>
                 </el-radio-group>
@@ -154,25 +148,29 @@
 import { onBeforeMount, ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { getListCategories } from '../../services/category.service'
+import { addAuction } from '../../services/auction.service'
 
-import type { UploadProps, UploadUserFile } from 'element-plus'
+import { UploadProps, UploadUserFile } from 'element-plus'
 
-const text = ref('')
-const textarea = ref('')
-const startingPrice = ref(0)
-const maxPrice = ref(1)
-const endTime = ref('')
-const condition = ref({ value: 1, text: 'New' })
-const canReturn = ref(false)
 const listCategories = ref([])
+
+const currentAuction = ref({
+    productName: '',
+    categoryId: null,
+    condition: 1,
+    description: '',
+    startingPrice: 0,
+    maxPrice: 9999,
+    endTime: new Date(),
+    canReturn: false
+})
+
 const meta = ref({
     pageNumber: 1,
     totalPage: 1,
     pageSize: 16,
 })
-const value = ref('')
 const isShowSelectCondition = ref(false)
-const radio = ref(1)
 const radioList = ref([
     {
         value: 1,
@@ -243,7 +241,6 @@ const fileList = ref<UploadUserFile[]>([
 ])
 
 const handleCloseModel = () => {
-    console.log(radio)
     isShowSelectCondition.value = false
 }
 
@@ -266,6 +263,24 @@ const getAllCategories = async () => {
 
         console.log(res.data.data)
     } catch (error) {
+        console.log(error)
+    }
+}
+
+const createAuction = async () => {
+    try {
+        const res = await addAuction(currentAuction.value)
+        ElNotification({
+            title: 'Create Auction',
+            message: 'Create Auction Successfully!',
+            type: 'success',
+        })
+    } catch (error) {
+        ElNotification({
+            title: 'Create Auction',
+            message: 'Create Auction Failed!',
+            type: 'error',
+        })
         console.log(error)
     }
 }

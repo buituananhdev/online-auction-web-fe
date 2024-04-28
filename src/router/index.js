@@ -21,13 +21,13 @@ const routes = [
     {
         path: '/create-auction',
         name: 'create-auction',
-        component: () => import('../pages/auctions/CreateAuction.vue'),
+        component: () => import('../pages/auctions/createAuction.vue'),
         meta: { layout: 'auth', requiresAuth: true },
     },
     {
         path: '/seller-history',
         name: 'seller-history',
-        component: () => import('../pages/history/SellerHistory.vue'),
+        component: () => import('../pages/history/sellerHistory.vue'),
         meta: { layout: 'auth', requiresAuth: true },
     },
     // Auth router
