@@ -7,13 +7,15 @@ const routes = [
         path: '/',
         name: 'dashboard',
         component: () => import('../pages/dashboard/index.vue'),
-        meta: { layout: 'auth', requiresAuth: true },
+        // meta: { layout: 'auth', requiresAuth: true },
+        meta: { layout: 'empty' },
     },
     {
         path: '/auctions',
         name: 'list-auctions',
         component: () => import('../pages/auctions/index.vue'),
-        meta: { layout: 'auth', requiresAuth: true },
+        // meta: { layout: 'auth', requiresAuth: true },
+        meta: { layout: 'empty' },
         children: []
     },
     {
@@ -43,7 +45,7 @@ const routes = [
     },
     {
         path: '/auctions/:id',
-        name: 'register',
+        name: 'singleAuction',
         meta: { layout: 'auth', requiresAuth: true },
         component: () => import('../pages/auctions/[id].vue'),
     },
