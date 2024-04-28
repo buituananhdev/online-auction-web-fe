@@ -1,68 +1,65 @@
 <template>
-  <div class="w-full flex flex-col px-[72px] text-[#191919] z-0">
-    <h1 class="font-bold text-2xl mt-[50px] px-6 w-full flex justify-start">Complete your listing</h1>
-    <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-        <h2 class="font-bold mb-[10px]">PHOTOS & VIDEO</h2>
-        <span class="text-sm font-semibold">Buyers want to see all details and angles.</span>
-        <div class="mt-6">
-            <el-upload
-                v-model:file-list="fileList"
-                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-                list-type="picture-card"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-            >
-                <el-icon><Plus /></el-icon>
-            </el-upload>
+    <div class="w-full flex flex-col px-[72px] text-[#191919] z-0">
+        <h1 class="font-bold text-2xl mt-[50px] px-6 w-full flex justify-start">Complete your listing</h1>
+        <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+            <h2 class="font-bold mb-[10px]">PHOTOS & VIDEO</h2>
+            <span class="text-sm font-semibold">Buyers want to see all details and angles.</span>
+            <div class="mt-6">
+                <el-upload
+                    v-model:file-list="fileList"
+                    action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                    list-type="picture-card"
+                    :on-preview="handlePictureCardPreview"
+                    :on-remove="handleRemove"
+                >
+                    <el-icon><Plus /></el-icon>
+                </el-upload>
 
-            <el-dialog v-model="dialogVisible">
-                <img w-full :src="dialogImageUrl" alt="Preview Image" />
-            </el-dialog>
+                <el-dialog v-model="dialogVisible">
+                    <img w-full :src="dialogImageUrl" alt="Preview Image" />
+                </el-dialog>
+            </div>
         </div>
-    </div>
-    <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-        <h2 class="font-bold mb-[10px]">TITLE</h2>
-        <span class="text-sm font-semibold mb-[6px]">Item title</span>
-        <div class="w-full">
-            <el-input
-                v-model="text"
-                style="width: 240px; height: 48px; width: 100%;"
-                maxlength="100"
-                placeholder="Please input"
-                show-word-limit
-                clearable
-                type="text"
-            />
-        </div>
-    </div>
-    <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-        <h2 class="font-bold mb-[10px]">ITEM CATEGORY</h2>
-        <div class="w-full flex gap-10 justify-center items-center">
-            <span class="text-sm">Please select the product's category type!</span>
-            <el-select
-                v-model="value"
-                placeholder="Select"
-                size="large"
-                style="width: 60%"
-            >
-                <el-option
-                    v-for="item in listCategories"
-                    :key="item.id"
-                    :label="item.categoryName"
-                    :value="item.id"
+        <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+            <h2 class="font-bold mb-[10px]">TITLE</h2>
+            <span class="text-sm font-semibold mb-[6px]">Item title</span>
+            <div class="w-full">
+                <el-input
+                    v-model="text"
+                    style="width: 240px; height: 48px; width: 100%"
+                    maxlength="100"
+                    placeholder="Please input"
+                    show-word-limit
+                    clearable
+                    type="text"
                 />
-            </el-select>
+            </div>
         </div>
-    </div>
-    <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-        <h2 class="font-bold mb-[10px]">CONDITION</h2>
-        <h3 class="font-semibold mt-4 mb-1">Item condition</h3>
-        <button class="underline w-fit cursor-default hover:opacity-50" @click="handleSelectCondition">{{ radio.text }}</button>
-        <span class="mt-4 text-sm">Disclose all defects to prevent returns and earn better feedback.</span>
-    </div>
-    <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-        <h2 class="font-bold mb-[10px]">DESCRIPTION</h2>
-        <!-- <el-input
+        <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+            <h2 class="font-bold mb-[10px]">ITEM CATEGORY</h2>
+            <div class="w-full flex gap-10 justify-center items-center">
+                <span class="text-sm">Please select the product's category type!</span>
+                <el-select v-model="value" placeholder="Select" size="large" style="width: 60%">
+                    <el-option
+                        v-for="item in listCategories"
+                        :key="item.id"
+                        :label="item.categoryName"
+                        :value="item.id"
+                    />
+                </el-select>
+            </div>
+        </div>
+        <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+            <h2 class="font-bold mb-[10px]">CONDITION</h2>
+            <h3 class="font-semibold mt-4 mb-1">Item condition</h3>
+            <button class="underline w-fit cursor-default hover:opacity-50" @click="handleSelectCondition">
+                {{ getConditionText(radio) }}
+            </button>
+            <span class="mt-4 text-sm">Disclose all defects to prevent returns and earn better feedback.</span>
+        </div>
+        <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+            <h2 class="font-bold mb-[10px]">DESCRIPTION</h2>
+            <!-- <el-input
             v-model="textarea"
             maxlength="1000"
             style="width: 100%;"
@@ -72,72 +69,91 @@
             clearable
             autosize
         /> -->
-        <textarea v-model="textarea" name="description" id="description" cols="30" rows="10" class="border-[1px] border-gray-400 rounded-lg px-4 py-2" placeholder="Write a detailed description of your item, or save time and let Al draft it for you">
-        </textarea>
-    </div>
-    <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-        <h2 class="font-bold mb-[10px]">PRICING</h2>
-        <div class="flex gap-5">
-            <div class="flex flex-col">
-                <span class="mb-1 font-medium">Starting bid</span>
-                <el-input
-                    v-model="startingPrice"
-                    style="width: 240px"
-                    placeholder="Please input"
-                    :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                    :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
-                />
-            </div>
-            <div class="flex flex-col">
-                <span class="mb-1 font-medium">Buy It Now(optional)</span>
-                <el-input
-                    v-model="maxPrice"
-                    style="width: 240px"
-                    placeholder="Please input"
-                    :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                    :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
-                />
-            </div>
+            <textarea
+                v-model="textarea"
+                name="description"
+                id="description"
+                cols="30"
+                rows="10"
+                class="border-[1px] border-gray-400 rounded-lg px-4 py-2"
+                placeholder="Write a detailed description of your item, or save time and let Al draft it for you"
+            >
+            </textarea>
         </div>
-        <div class="flex flex-col mt-4">
-            <span class="mb-1 font-medium">Auction End Time</span>
-            <div class="block">
-                <el-date-picker
-                    v-model="endTime"
-                    type="datetime"
-                    placeholder="Select date and time"
-                />
-            </div>
-        </div>
-        <div class="w-full mt-4">
-            <el-checkbox v-model="canReturn" label="Buyers can return the goods after receiving the goods" size="large" />
-        </div>
-    </div>
-  </div>
-  <div v-if="isShowSelectCondition" class="w-full bg-[rgba(17,24,32,0.7)] fixed top-0 bottom-0 left-0 right-0 h-screen z-10 flex items-center justify-center">
-    <div class="w-[616px] h-[80%] mx-[460px] mt-[50px] bg-white z-20 rounded-2xl flex flex-col">
-        <div class="w-full flex justify-between border-b-[1px] border-gray-300">
-            <div></div>
-            <div class="text-xl font-bold my-4">Item condition</div>
-            <button class="text-[#3665f3] py-[10px] px-5 m-2 font-semibold hover:bg-slate-100 hover:cursor-default rounded-full" @click="handleCloseModel">Done</button>
-        </div>
-        <div class="flex flex-col px-8 py-4">
-            <el-radio-group v-model="radio.value" v-for="item in radioList" :key="item.value">
-                <div class="flex-col flex">
-                    <el-radio :value="item.value">{{ item.text }}</el-radio>
-                    <span class="text-[#707070]">{{ item.description }}</span>
+        <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+            <h2 class="font-bold mb-[10px]">PRICING</h2>
+            <div class="flex gap-5">
+                <div class="flex flex-col">
+                    <span class="mb-1 font-medium">Starting bid</span>
+                    <el-input
+                        v-model="startingPrice"
+                        style="width: 240px"
+                        placeholder="Please input"
+                        :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                        :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+                    />
                 </div>
-            </el-radio-group>
+                <div class="flex flex-col">
+                    <span class="mb-1 font-medium">Buy It Now(optional)</span>
+                    <el-input
+                        v-model="maxPrice"
+                        style="width: 240px"
+                        placeholder="Please input"
+                        :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                        :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+                    />
+                </div>
+            </div>
+            <div class="flex flex-col mt-4">
+                <span class="mb-1 font-medium">Auction End Time</span>
+                <div class="block">
+                    <el-date-picker v-model="endTime" type="datetime" placeholder="Select date and time" />
+                </div>
+            </div>
+            <div class="w-full mt-4">
+                <el-checkbox
+                    v-model="canReturn"
+                    label="Buyers can return the goods after receiving the goods"
+                    size="large"
+                />
+            </div>
         </div>
     </div>
-  </div>
+    <div
+        v-if="isShowSelectCondition"
+        class="w-full bg-[rgba(17,24,32,0.7)] fixed top-0 bottom-0 left-0 right-0 h-screen z-10 flex items-center justify-center"
+    >
+        <div class="w-[616px] h-[80%] mx-[460px] mt-[50px] bg-white z-20 rounded-2xl flex flex-col">
+            <div class="w-full flex justify-between border-b-[1px] border-gray-300">
+                <div></div>
+                <div class="text-xl font-bold my-4">Item condition</div>
+                <button
+                    class="text-[#3665f3] py-[10px] px-5 m-2 font-semibold hover:bg-slate-100 hover:cursor-default rounded-full"
+                    @click="handleCloseModel"
+                >
+                    Done
+                </button>
+            </div>
+            <div class="flex flex-col px-8 py-4">
+                <el-radio-group v-model="radio" v-for="item in radioList" :key="item.value">
+                    <div class="flex-col flex">
+                        <el-radio :value="item.value">
+                            <span>
+                                {{ item.text }}
+                            </span>
+                            <span class="text-[#707070]">{{ item.description }}</span>
+                        </el-radio>
+                    </div>
+                </el-radio-group>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script lang="ts" setup>
 import { onBeforeMount, ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { getListCategories } from '../../services/category.service'
-
 
 import type { UploadProps, UploadUserFile } from 'element-plus'
 
@@ -146,7 +162,7 @@ const textarea = ref('')
 const startingPrice = ref(0)
 const maxPrice = ref(1)
 const endTime = ref('')
-const condition = ref({ value: 1, text: 'New'})
+const condition = ref({ value: 1, text: 'New' })
 const canReturn = ref(false)
 const listCategories = ref([])
 const meta = ref({
@@ -156,62 +172,78 @@ const meta = ref({
 })
 const value = ref('')
 const isShowSelectCondition = ref(false)
-const radio = ref({ value: 1, text: 'New'})
+const radio = ref(1)
 const radioList = ref([
-    { 
+    {
         value: 1,
         text: 'New',
-        description: "A brand-new, unused, unopened, undamaged item in its original packaging (where packaging is applicable). Packaging should be the same as what is found in a retail store, unless the item is handmade or was packaged by the manufacturer in non-retail packaging, such as an unprinted box or plastic bag. See the seller's listing for full details."
+        description:
+            "A brand-new, unused, unopened, undamaged item in its original packaging (where packaging is applicable). Packaging should be the same as what is found in a retail store, unless the item is handmade or was packaged by the manufacturer in non-retail packaging, such as an unprinted box or plastic bag. See the seller's listing for full details.",
     },
-    { 
-        value: 2, 
+    {
+        value: 2,
         text: 'Open Box',
-        description: "An item in excellent, new condition with no wear. The item may be missing the original packaging or protective wrapping, or may be in the original packaging but not sealed. The item includes original accessories. The item may be a factory second. See the seller's listing for full details and description."
+        description:
+            "An item in excellent, new condition with no wear. The item may be missing the original packaging or protective wrapping, or may be in the original packaging but not sealed. The item includes original accessories. The item may be a factory second. See the seller's listing for full details and description.",
     },
-    { 
-        value: 3, 
+    {
+        value: 3,
         text: 'Used',
-        description: "An item that has been used previously. The item may have some signs of cosmetic wear, but is fully operational and functions as intended. This item may be a floor model or store return that has been used. See the seller's listing for full details and description of any imperfections."
+        description:
+            "An item that has been used previously. The item may have some signs of cosmetic wear, but is fully operational and functions as intended. This item may be a floor model or store return that has been used. See the seller's listing for full details and description of any imperfections.",
     },
 ])
 
+function getConditionText(id) {
+    switch (id) {
+        case 1: 
+            return "New"
+        case 2:
+            return "Open box"
+        case 3: 
+            return "Used"
+        default:
+            return
+    }
+}
+
 const fileList = ref<UploadUserFile[]>([
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'plant-1.png',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'plant-2.png',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'figure-1.png',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
-  {
-    name: 'figure-2.png',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  },
+    {
+        name: 'food.jpeg',
+        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    },
+    {
+        name: 'plant-1.png',
+        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    },
+    {
+        name: 'food.jpeg',
+        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    },
+    {
+        name: 'plant-2.png',
+        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    },
+    {
+        name: 'food.jpeg',
+        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    },
+    {
+        name: 'figure-1.png',
+        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    },
+    {
+        name: 'food.jpeg',
+        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    },
+    {
+        name: 'figure-2.png',
+        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    },
 ])
 
 const handleCloseModel = () => {
-    console.log(radio);
+    console.log(radio)
     isShowSelectCondition.value = false
 }
 
@@ -219,19 +251,19 @@ const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 
 const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
-  console.log(uploadFile, uploadFiles)
+    console.log(uploadFile, uploadFiles)
 }
 
 const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
-  dialogImageUrl.value = uploadFile.url!
-  dialogVisible.value = true
+    dialogImageUrl.value = uploadFile.url!
+    dialogVisible.value = true
 }
 const getAllCategories = async () => {
     try {
         const res = await getListCategories(meta.value.pageNumber, meta.value.pageSize)
         listCategories.value = res.data.data
-        console.log(listCategories);
-        
+        console.log(listCategories)
+
         console.log(res.data.data)
     } catch (error) {
         console.log(error)
@@ -249,24 +281,24 @@ onBeforeMount(async () => {
 
 <style scoped>
 .demo-datetime-picker {
-  display: flex;
-  width: 100%;
-  padding: 0;
-  flex-wrap: wrap;
+    display: flex;
+    width: 100%;
+    padding: 0;
+    flex-wrap: wrap;
 }
 .demo-datetime-picker .block {
-  padding: 30px 0;
-  text-align: center;
-  border-right: solid 1px var(--el-border-color);
-  flex: 1;
+    padding: 30px 0;
+    text-align: center;
+    border-right: solid 1px var(--el-border-color);
+    flex: 1;
 }
 .demo-datetime-picker .block:last-child {
-  border-right: none;
+    border-right: none;
 }
 .demo-datetime-picker .demonstration {
-  display: block;
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
-  margin-bottom: 20px;
+    display: block;
+    color: var(--el-text-color-secondary);
+    font-size: 14px;
+    margin-bottom: 20px;
 }
 </style>
