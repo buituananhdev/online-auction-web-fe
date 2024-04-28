@@ -47,6 +47,11 @@ axiosApiInstance.interceptors.response.use(
                     title: 'Authorization',
                     text: 'Bạn đã hết phiên đăng nhập, vui lòng đăng nhập lại!',
                 })
+                // ElNotification({
+                //     title: 'Authorization',
+                //     message: 'v',
+                //     type: 'error',
+                // })
                 localStorage.clear()
                 window.location.href = '/login'
             }

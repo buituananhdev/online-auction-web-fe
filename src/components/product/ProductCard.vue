@@ -34,7 +34,7 @@
                     </ul>
                 </div>
                 <div class="footer flex gap-3 items-center">
-                    <el-button type="primary" style="width: 80%" size="large" color="#EC4D37">Place bid</el-button>
+                    <el-button type="primary" style="width: 80%; color: #ffff;" size="large" color="#409EFF">Place bid</el-button>
                     <div @click="() => isLike = !isLike" class="image border rounded-full p-2 border-black border-[0.7px] cursor-pointer">
                         <img class="hover:opacity-40" v-if="isLike" src="../../assets/icons/heart-icon.svg" width="25" alt="" />
                         <img v-else src="../../assets/icons/full-heart-icon.svg" width="25" alt="" />
@@ -43,9 +43,9 @@
             </div>
         </template>
         <el-card
-            style="height: 300px; margin-bottom: 20px; cursor: pointer;"
+            style="height: 300px; margin-bottom: 20px; cursor: pointer; width: 220px;"
             @click="goToDetail(auction.id)"
-            onmouseover="this.style.borderColor='red'; this.style.transform='translateY(-4px)';"
+            onmouseover="this.style.borderColor='#409EFF'; this.style.transform='translateY(-4px)';"
             onmouseout="this.style.borderColor='white'; this.style.transform='translateY(0)';"
         >
             <img

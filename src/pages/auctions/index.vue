@@ -1,9 +1,6 @@
 <template>
     <div v-loading="loading" full-screen="false" class="flex justify-start gap-[16px] min-h-[80vh] overfolw-hidden min-w-[800px]">
         <div class="w-[200px] grow-0 shrink-0" v-show="!loading">
-            <el-text style="display: inline-block; padding-bottom: 14px">Bidding Time Frame Range</el-text>
-            <VueDatePicker class="pb-4 border-b" :time-zone="{ tz: 'Asia/Novosibirsk', offset: 7 }"
-                v-model="filter.dateTime" @update:model-value="handleFilterchange" placeholder="Select time range" range />
             <el-form @change="refreshData" :model="filter" label="Filter by" class="">
                 <el-form-item label="Category" class="border-b" prop="type">
                     <el-checkbox-group class="flex flex-col gap-1 mt-2 pb-2" v-model="filter.categories">
@@ -87,7 +84,6 @@ let filter = reactive({
         min: '',
         max: '',
     },
-    dateTime: [],
 })
 const conditionsList = ref([
     {
@@ -133,7 +129,6 @@ watch(searchValue, async () => {
     await Search()
 })
 const handleFilterchange = async (modelData) => {
-    filter.dateTime = modelData
     await Search()
 }
 const getListProduct = async (
@@ -204,11 +199,6 @@ const Search = async () => {
     try {
         console.log('hihieeeeeeeeih')
         console.log('filter', filter.price)
-        filter.dateTime.forEach((date) => {
-            if (date) {
-                date = date.toISOString()
-            }
-        })
         console.log('filter.conditions', filter.conditions)
         const res = await getListAuctions(
             meta.value.pageNumber,
@@ -220,8 +210,6 @@ const Search = async () => {
             filter.currentPrice.max,
             filter.sellPrice.min,
             filter.sellPrice.max,
-            filter.dateTime[0],
-            filter.dateTime[1],
         )
         console.log('hahah')
         meta.value = res.data.meta
@@ -250,12 +238,6 @@ const Search = async () => {
         if (filter.sellPrice.max) {
             query.maxMaxPrice = filter.sellPrice.max
         }
-        if (filter.dateTime[0]) {
-            query.startTime = filter.dateTime[0]
-        }
-        if (filter.sellPrice.max) {
-            query.endTime = filter.dateTime[1]
-        }
         if (filter.categories && filter.categories.length) {
             query.categories = filter.categories.join(',')
         }
@@ -273,7 +255,6 @@ const refreshData = async () => {
         filter.conditions.length ||
         filter.currentPrice.min ||
         filter.currentPrice.max ||
-        filter.dateTime.length > 0 ||
         filter.categories.length > 0
     ) {
         await Search()
@@ -301,12 +282,6 @@ const getQueryValue = () => {
     }
     if (route.query.maxMaxPrice) {
         filter.sellPrice.max = parseInt(route.query.maxMaxPrice)
-    }
-    if (route.query.startTime) {
-        filter.dateTime[0] = parseInt(route.query.startTime)
-    }
-    if (route.query.endTime) {
-        filter.dateTime[1] = parseInt(route.query.endTime)
     }
     console.log('init filter', filter)
 }

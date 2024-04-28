@@ -86,7 +86,6 @@ const user = reactive({
     password: '',
     confirmPassword: '',
     email: '',
-    fullName: 'test',
 })
 const userRef = ref()
 const options = ref([1, 2])

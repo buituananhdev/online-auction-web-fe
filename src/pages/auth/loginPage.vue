@@ -82,9 +82,9 @@ const handleCredentialResponse = async (res) => {
     try {
         console.log('res', res)
         const data = await loginGGApi(res.credential)
-        console.log('data', data.data)
-        localStorage.setItem('access_token', data.access_token)
-        localStorage.setItem('refresh_token', data.refresh_token)
+        console.log('data hheehh', data.data)
+        localStorage.setItem('access_token', data.data.accessToken)
+        localStorage.setItem('refresh_token', data.data.refresh_token)
         await auth.initAuthStore()
         ElNotification({
             title: 'Success',
