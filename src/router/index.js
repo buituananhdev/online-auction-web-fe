@@ -1,3 +1,4 @@
+import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs'
 import { createRouter, createWebHistory } from 'vue-router'
 
 
@@ -16,6 +17,12 @@ const routes = [
         // meta: { layout: 'auth', requiresAuth: true },
         meta: { layout: 'empty' },
         children: []
+    },
+    {
+        path: '/create-auction',
+        name: 'create-auction',
+        component: () => import('../pages/auctions/CreateAuction.vue'),
+        meta: { layout: 'auth', requiresAuth: true },
     },
     {
         path: '/seller-history',

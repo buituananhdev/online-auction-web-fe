@@ -1,12 +1,12 @@
 <template>
-    <div class="bg-slate-200 w-[80%] h-[80%]">
-        <div class="flex justify-between px-10 bg-neutral-100">
-            <div class="flex gap-7 items-center">
+    <div class="w-[80%] h-[80%] border-2 rounded-xl">
+        <div class="flex justify-between px-4 rounded-t-xl bg-white">
+            <div class="flex gap-7 items-center px-6 py-3 ">
                 <Icon :icon="icons[auction.productStatus]" />
                 <div class="flex flex-col">
-                    <span>{{ ProductStatusNames[auction.productStatus] }}</span>
-                    <div class="flex gap-4">
-                        <span>Date created: {{ auction.dateCreated.split("T")[0] }}</span>
+                    <span class="font-semibold">{{ ProductStatusNames[auction.productStatus] }}</span>
+                    <div class="flex gap-8">
+                        <span>Product Name: {{ auction.productName }}</span>
                         <span>Bid count: {{ auction.bidCount }}</span>
                         <span>Condition: {{ ConditionNames[auction.condition] }}</span>
                     </div>
@@ -14,11 +14,11 @@
             </div>
             <el-button class="my-auto">View detail</el-button>
         </div>
-        <div class="mt-4 bg-neutral-100">
-            <div class="flex gap-5">
+        <div class=" bg-white border-t-2 rounded-b-xl">
+            <div class="flex gap-5 px-4 py-2 ">
                 <div class="demo-image__preview">
                     <el-image
-                    style="width: 200px; height: 200px"
+                    style="width: 200px; height: 200px; border-radius: 6px;"
                     :src="url"
                     :zoom-rate="1.2"
                     :max-scale="7"
@@ -28,15 +28,15 @@
                     fit="cover"
                     />
                 </div>
-                <div class="flex flex-col gap-5">
+                <div class="flex flex-col gap-4">
                     <div class="flex flex-col">
-                        <span class="font-semibold text-base">Delivered on Tue 20 Dec</span>
-                        <span>Return window closed on 18 Feb</span>
-                        <span>Return window closed on 18 Feb</span>
+                        <span class="font-semibold text-base mb-2">Delivered on Tue 20 Dec</span>
+                        <span>Date created: {{ auction.dateCreated.split("T")[0] }}</span>
+                        <span>Return window closed on: {{ auction.endTime.split("T")[0] }}</span>
+                        <span>Category: {{ auction.category }}</span>
                     </div>
                     <div class="flex-col flex">
-                        <span>AAAAAAAAAAAA</span>
-                        <span class="mt-1">{{ auction.currentPrice }}$</span>
+                        <span class="mt-1">Price: {{ auction.currentPrice }}$</span>
                     </div>
                     <span>Buy by: {{ auction.user }}</span>
                 </div>
