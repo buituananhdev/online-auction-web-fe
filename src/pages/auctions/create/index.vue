@@ -151,8 +151,8 @@
 <script lang="ts" setup>
 import { onBeforeMount, ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
-import { getListCategories } from '../../services/category.service'
-import { addAuction } from '../../services/auction.service'
+import { getListCategories } from '../../../services/category.service'
+import { addAuction } from '../../../services/auction.service'
 
 import { UploadProps, UploadUserFile } from 'element-plus'
 
