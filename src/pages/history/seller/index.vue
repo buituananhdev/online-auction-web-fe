@@ -1,38 +1,43 @@
 <template>
-    <div v-loading="loading" class="w-[1100px]">
-        <div class="w-full bg-zinc-50 rounded-lg pt-5 pl-2">
-            <div class="flex justify-between gap-5 mx-5 py-6">
-                <span class="font-bold text-2xl">Sold</span>
+    <div v-loading="loading" class="w-full">
+        <div class="w-full mt-6 ml-2">
+            <div class="flex justify-between gap-5 my-[42px]">
+                <span class="font-bold text-2xl flex items-center justify-center">Sold</span>
                 <div class="w-1/2">
-                    <el-input
-                        v-model="searchValue"
-                        style="border-radius: 30px; height: 40px"
-                        placeholder="Search..."
-                        class="input-with-select"
-                        @keyup.enter="handleClickSearch"
-                        clearable
-                    >
-                        <template #append>
-                            <el-button :icon="SearchIcon" @click="handleClickSearch" />
-                        </template>
-                    </el-input>
+                    <div class="w-full flex items-center justify-center">
+                        <el-input
+                            v-model="searchValue"
+                            style="border-radius: 30px"
+                            placeholder="Search..."
+                            class="input-with-select"
+                            @keyup.enter="handleClickSearch"
+                            clearable
+                            size="large"
+                        >
+                            <template #append>
+                                <el-button :icon="SearchIcon" @click="handleClickSearch" />
+                            </template>
+                        </el-input>
+                    </div>
                 </div>
             </div>
 
-            <div class="my-5 flex items-center gap-5 pl-8 pb-[10px]">
+            <div class="flex items-center gap-4 pb-[10px] my-4">
                 <div v-for="item in listProductStatus" :key="item.value" class="">
                     <span
-                        class="px-8 py-2 border-gray-500 border-[1px] rounded-full font-semibold bg-slate-100 hover:cursor-pointer hover:bg-slate-200"
+                        :class="{ 'bg-[#ededed]': selectedItem === item.value }"
+                        class="px-4 py-1 flex items-center justify-center border-gray-600 border-[1px] rounded-full bg-[#f7f7f7] hover:cursor-pointer hover:bg-[#ededed]"
+                        @click="filterStatus(item.value)"
                     >
                         {{ item.text }}
                     </span>
                 </div>
             </div>
 
-            <div class="mt-10 mx-5 flex flex-col gap-5">
-                <div class="mb-4 flex justify-between items-center">
+            <div class="flex flex-col">
+                <div class="pb-8 flex justify-between items-center">
                     <span class="font-bold text-xl">Orders</span>
-                    <el-button type="primary" style="font-size: medium" round size="large" @click="createAuction"
+                    <el-button color="#626aef" style="font-size: medium" round size="large" @click="createAuction"
                         >Create Auction</el-button
                     >
                 </div>
@@ -40,7 +45,7 @@
                     <div
                         v-for="item in listSellerHistorys"
                         :key="item.id"
-                        class="w-full flex items-center justify-center mb-16"
+                        class="w-full flex items-center justify-center mb-12"
                     >
                         <history-card :auction="item" />
                     </div>
@@ -57,21 +62,24 @@
 import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getSellerHistory } from '../../../services/auction.service'
+import { getSellerHistory } from '../../services/auction.service'
 
-const searchValue = ref('')
 const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()
+const searchValue = ref('')
+const status = ref('')
+const selectedItem = ref(null)
 
 const meta = ref({
-    currentPage: 1,
+    pageNumber: 1,
     totalPage: 1,
-    pageSize: 4,
+    pageSize: 8,
 })
 
 const listSellerHistorys = ref([])
 const listProductStatus = ref([
+    { value: null, text: 'All Sold' },
     { value: 1, text: 'Available' },
     { value: 2, text: 'Sold' },
     { value: 3, text: 'Deleted' },
@@ -83,26 +91,28 @@ const loading = computed(() => {
     return !Boolean(listSellerHistorys.value.length > 0)
 })
 
-// const searchValue = computed(() => {
-//     return route.query.search
-// })
-
 watch(searchValue, async () => {
-    await Search()
+    await SearchHistory()
 })
 
-const getHistory = async () => {
+const getHistory = async (pageNumber, pageSize, searchQuery, status) => {
     try {
-        const res = await getSellerHistory()
+        const res = await getSellerHistory(pageNumber, pageSize, searchQuery, status)
         console.log(res)
-        listSellerHistorys.value = res.data
+        listSellerHistorys.value = res.data.data
         meta.value = res.data.meta
-        console.log('list', listSellerHistorys)
+        console.log('list', listSellerHistorys.value)
 
         // console.log('meta', meta)
     } catch (error) {
         console.log(error)
     }
+}
+
+const filterStatus = async (value) => {
+    selectedItem.value = value
+    status.value = value
+    await SearchHistory()
 }
 
 const createAuction = () => {
@@ -111,18 +121,44 @@ const createAuction = () => {
 
 const handleClickSearch = () => {
     if (searchValue.value.trim() !== '') {
+        console.log(searchValue.value)
         router.push({
-            path: '/auctions',
+            path: '/seller-history',
             query: { search: searchValue.value.trim() },
         })
     } else {
         const { search, ...queryWithoutSearch } = route.query
-        router.push({ path: '/auctions', query: queryWithoutSearch })
+        router.push({ path: '/seller-history', query: queryWithoutSearch })
+    }
+}
+
+const SearchHistory = async () => {
+    try {
+        const res = await getSellerHistory(meta.value.pageNumber, meta.value.pageSize, searchValue.value, status.value)
+        meta.value = res.data.meta
+        listSellerHistorys.value = res.data.data
+
+        const query = {}
+        if (searchValue.value) {
+            query.search = searchValue.value
+        }
+        if (status.value) {
+            query.status = status.value.join(',')
+        }
+        console.log('query1', query)
+        router.push({ path: `/seller-history`, query })
+        console.log('query2', query)
+    } catch (error) {
+        console.log(error)
     }
 }
 
 const refreshData = async () => {
-    await getHistory()
+    if (searchValue.value || status.value) {
+        await SearchHistory()
+    } else {
+        await getHistory(meta.value.pageNumber, meta.value.pageSize)
+    }
 }
 
 onBeforeMount(async () => {

@@ -27,7 +27,7 @@ const routes = [
     {
         path: '/seller-history',
         name: 'seller-history',
-        component: () => import('../pages/history/sellerHistory.vue'),
+        component: () => import('../pages/history/seller/index.vue'),
         meta: { layout: 'activity', requiresAuth: true },
     },
     // Auth router
