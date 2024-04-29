@@ -157,6 +157,7 @@ const submit = async (formEl) => {
             console.log('data', data)
             localStorage.setItem('access_token', data.data.accessToken)
             localStorage.setItem('refresh_token', data.data.refreshToken)
+            localStorage.setItem('role', data.data.role)
             await auth.initAuthStore()
             await useAuction.initializeConnection()
             router.push({ name: 'dashboard' })
