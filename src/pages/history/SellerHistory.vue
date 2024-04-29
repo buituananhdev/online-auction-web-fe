@@ -24,7 +24,7 @@
 
         <div class="flex items-center gap-4 pb-[10px] my-4">
             <div v-for="item in listProductStatus" :key="item.value" class="">
-                <span class="px-4 py-1 flex items-center justify-center border-gray-600 border-[1px] rounded-full bg-[#f7f7f7] hover:cursor-pointer hover:bg-[#ededed]"> {{ item.text }} </span>
+                <span :class="{ 'bg-[#ededed]': selectedItem === item.value }" class="px-4 py-1 flex items-center justify-center border-gray-600 border-[1px] rounded-full bg-[#f7f7f7] hover:cursor-pointer hover:bg-[#ededed]" @click="filterStatus(item.value)"> {{ item.text }} </span>
             </div>
         </div>
 
@@ -57,14 +57,14 @@ const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()
 const searchValue = ref('')
+const status = ref('')
+const selectedItem = ref(null);
 
 const meta = ref({
     pageNumber: 1,
     totalPage: 1,
     pageSize: 8,
 })
-
-
 
 const listSellerHistorys = ref([])
 const listProductStatus = ref([
@@ -79,10 +79,6 @@ const listProductStatus = ref([
 const loading = computed(() => {
     return !Boolean(listSellerHistorys.value.length > 0 )
 })
-
-// const searchValue = computed(() => {
-//     return route.query.search
-// })
 
 watch(searchValue, async () => {
     await SearchHistory()
@@ -101,6 +97,12 @@ const getHistory = async (pageNumber, pageSize, searchQuery, status) => {
     } catch (error) {
         console.log(error)
     }
+}
+
+const filterStatus = async (value) => {
+    selectedItem.value = value;
+    status.value = value
+    await SearchHistory()
 }
 
 const createAuction = () => {
@@ -126,7 +128,8 @@ const SearchHistory = async () => {
         const res = await getSellerHistory(
             meta.value.pageNumber,
             meta.value.pageSize,
-            searchValue.value
+            searchValue.value,
+            status.value
         )
         meta.value = res.data.meta
         listSellerHistorys.value = res.data.data
@@ -135,17 +138,19 @@ const SearchHistory = async () => {
         if (searchValue.value) {
             query.search = searchValue.value
         }
+        if (status.value) {
+            query.status = status.value.join(',')
+        }
+        console.log('query1', query)
         router.push({ path: `/seller-history`, query })
-        console.log('query', query)
+        console.log('query2', query)
     } catch (error) {
         console.log(error)
     }
 }
 
 const refreshData = async () => {
-    if (
-        searchValue.value 
-    ) {
+    if ( searchValue.value || status.value ) {
         await SearchHistory()
     } else {
         await getHistory(meta.value.pageNumber, meta.value.pageSize)

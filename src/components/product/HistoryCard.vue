@@ -28,14 +28,14 @@
                     fit="cover"
                     />
                 </div>
-                <div class="flex flex-col gap-2 mt-1 mb-3">
+                <div class="flex flex-col gap-2 mt-1 mb-3 text-sm">
                     <div class="flex flex-col">
                         <span class="font-bold text-base mb-1">Delivered on Tue 20 Dec</span>
-                        <span class="text-sm">Date created: {{ auction.dateCreated.split("T")[0] }}</span>
-                        <span class="text-sm">Return window closed on: {{ auction.endTime.split("T")[0] }}</span>
+                        <span>Date created: {{ auction.dateCreated.split("T")[0] }}</span>
+                        <span>Return window closed on: {{ auction.endTime.split("T")[0] }}</span>
                     </div>
-                    <div class="flex flex-col">
-                        <span class="text-sm">Category: {{ auction.category.categoryName }}</span>
+                    <div class="flex flex-col text-sm">
+                        <span >Category: {{ auction.category.categoryName }}</span>
                         <span>Bid count: {{ auction.bidCount }}</span>
                     </div>
                     <div class="flex-col flex">

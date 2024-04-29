@@ -73,13 +73,13 @@ export const getRecentlyViewedList = async () => {
     return axiosApiInstance.get('/auctions/recently-viewed')
 }
 
-export const getSellerHistory = async (page = 1, pageSize = 10, searchQuery = '', status = []) => {
-    let url = `/auctions?pageNumber=${page}&pageSize=${pageSize}`
+export const getSellerHistory = async (page = 1, pageSize = 10, searchQuery = '', status = '') => {
+    let url = `/auctions/?pageNumber=${page}&pageSize=${pageSize}`
     if(searchQuery) {
         url += `&searchQuery=${searchQuery}`
     }
-    if(status.length) {
-        url += '&status=' + encodeURIComponent('[') +`${status}` + encodeURIComponent(']')
+    if(status) {
+        url += `&status=${status}`
     }
     return axiosApiInstance.get(url)
 }
