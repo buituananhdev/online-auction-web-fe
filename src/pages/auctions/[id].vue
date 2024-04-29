@@ -138,20 +138,6 @@ function scrollToDown(scrollBox) {
     }
 }
 
-function reviewBid() {
-    if (!bidAmount.value || bidAmount.value < auction.value.currentPrice) return
-    else {
-        isReviewBid.value = true
-        bidPopUpTitle.value = 'Review your bid'
-    }
-}
-
-function scrollToTop(scrollBox) {
-    if (scrollBox) {
-        scrollBox.scrollTop -= 400
-    }
-}
-
 function scrollRight(scrollBox) {
     console.log('1')
     if (scrollBox) {
@@ -194,6 +180,11 @@ onMounted(async () => {
     await getDetailAuction()
     await getExploreAuctionList()
     startCountdown(auction.value.endTime)
+
+    CallHub.client.on('send', () => {
+        console.log('heheheheh')
+    })
+    CallHub.start()
 })
 </script>
 
@@ -301,15 +292,18 @@ onMounted(async () => {
                 </div>
             </template>
         </el-dialog>
-        <div class="flex items-start gap-8">
-            <div class="auction-detail-images flex items-start">
-                <div class="auction-detail-list w-[80px]">
+        <div class="flex items-start gap-10 p-8 border rounded-2xl mt-3">
+            <div class="auction-detail-images flex flex-col items-start">
+                <div class="border p-3 rounded-lg">
+                    <img :src="imageList[imageOverIndex]" alt="" class="w-[500px] h-[500px] rounded-xl" />
+                </div>
+                <div class="auction-detail-list w-full h-fit">
                     <Icon
-                        @click="scrollToTop(scrollBox)"
-                        class="auction-detail-arrow-icon auction-detail-top-icon w-[300px]"
-                        icon="material-symbols:keyboard-arrow-up-rounded"
+                        @click="scrollToLeft(scrollBox)"
+                        class="auction-detail-arrow-icon auction-detail-left-icon w-[300px]"
+                        icon="ic:round-keyboard-arrow-left"
                     />
-                    <div ref="scrollBox" class="flex flex-col scroll-column-custom h-full w-[80px] overflow-auto">
+                    <div ref="scrollBox" class="flex scroll-column-custom h-[100px] w-[500px] overflow-auto">
                         <p
                             v-for="(item, index) in imageList"
                             :key="index"
@@ -328,19 +322,18 @@ onMounted(async () => {
                         </p>
                     </div>
                     <Icon
-                        @click="scrollToDown(scrollBox)"
-                        class="auction-detail-arrow-icon auction-detail-bottom-icon w-[300px]"
-                        icon="material-symbols:keyboard-arrow-down-rounded"
+                        @click="scrollRight(scrollBox)"
+                        class="auction-detail-arrow-icon auction-detail-right-icon w-[300px]"
+                        icon="ic:round-keyboard-arrow-right"
                     />
                 </div>
-                <img :src="imageList[imageOverIndex]" alt="" class="w-[650px] h-[550px]" />
             </div>
-            <div v-show="auction.user" class="auction-detail-information flex flex-col gap-2 items-start w-[35%]">
-                <span class="text-xl font-bold">{{ auction.productName }}</span>
+            <div v-show="auction.user" class="auction-detail-information flex flex-col gap-2 items-start w-[43%] py-4">
+                <span class="text-xl font-semibold">{{ auction.productName }}</span>
                 <div class="flex items-center gap-2 p-2 border rounded-lg w-full">
                     <img
                         class="w-[35px] h-[35px] object-contain rounded-full"
-                        src="https://scontent.fdad3-6.fna.fbcdn.net/v/t39.30808-1/426587256_1430509044210042_7946706195478323343_n.jpg?stp=dst-jpg_p480x480&_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_ohc=IuXde7DL6hcAb45ULXs&_nc_ht=scontent.fdad3-6.fna&oh=00_AfAdkZNPXKCrv9XYe_o6I3weKudCAs5oJ9ho_4j12SAo2Q&oe=6625998E"
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8xme21WZD0--nyHf-4B90Lmycw0tCNGjld7D1l4edsQ&s"
                         alt=""
                     />
                     <div class="flex flex-col">
@@ -353,14 +346,21 @@ onMounted(async () => {
                         />
                     </div>
                 </div>
-                <span class="text-2xl font-bold">{{ auction.currentPrice }} VNĐ</span>
+                <div class="bg-[#FFF0DF] w-full p-3 flex items-center gap-3">
+                    <p class="font-semibold w-[50px] border-r border-black">${{ auction.currentPrice }}</p>
+                    <div class="flex items-center gap-2">
+                        <p class="text-xs">Buy it now with:</p>
+                        <p class="font-semibold">${{ auction.maxPrice }}</p>
+                    </div>
+                </div>
                 <div class="flex gap-2 items-center">
                     <span class="font-xs text-xs border-b border-black">{{ auction.bidCount }} bids</span>
                     <span class="text-xs">Ends in: {{ countdown }}</span>
                 </div>
-                <span>Condition: {{ converConditionText(auction.condition) }}</span>
-                <span class="text-[12px] text-[#c7c7c7]">Buy it now with</span>
-                <span class="text-xl text-[#726D6D] font-bold">{{ auction.maxPrice }}</span>
+                <div class="flex items-flex w-full">
+                    <span class="inline-block text-[#8B96A5] w-1/3">Condition:</span>
+                    <span class="text-[#505050]">{{ converConditionText(auction.condition) }}</span>
+                </div>
                 <button
                     @click="dialogFormVisible = true"
                     class="w-full bg-[#409EFF] text-white font-bold rounded-3xl py-2 text-lg hover:bg-[#3A8EE4]"
@@ -538,8 +538,8 @@ onMounted(async () => {
 
 .auction-detail-arrow-icon {
     z-index: 99;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     padding: 4px;
     border-radius: 50%;
     background-color: #dfdfdf;
@@ -558,19 +558,18 @@ onMounted(async () => {
 
 .auction-detail-right-icon {
     position: absolute;
-    right: -10px;
+    right: 0px;
     top: 45%;
 }
 
 .auction-detail-left-icon {
     position: absolute;
-    left: -10px;
+    left: 0px;
     top: 45%;
 }
 
 .auction-detail-list {
     position: relative;
-    height: 550px;
     overflow: hidden;
 }
 

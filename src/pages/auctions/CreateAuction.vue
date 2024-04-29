@@ -26,13 +26,12 @@
             <div class="w-full">
                 <el-input
                     v-model="currentAuction.productName"
-                    style="width: 240px; height: 48px; width: 100%;"
+                    style="width: 240px; height: 48px; width: 100%"
                     maxlength="100"
                     placeholder="Please input"
                     show-word-limit
                     clearable
                     type="text"
-                    
                 />
             </div>
         </div>
@@ -98,19 +97,24 @@
             <div class="flex flex-col mt-4">
                 <span class="mb-1 font-medium">Auction End Time</span>
                 <div class="block">
-                    <el-date-picker v-model="currentAuction.endTime" type="datetime" placeholder="Select date and time" />
+                    <el-date-picker
+                        v-model="currentAuction.endTime"
+                        type="datetime"
+                        placeholder="Select date and time"
+                    />
                 </div>
             </div>
             <div class="w-full mt-4">
-                <el-checkbox
-                    v-model="currentAuction.canReturn"
-                    label="After receipt, returns allowed"
-                    size="large"
-                />
+                <el-checkbox v-model="currentAuction.canReturn" label="After receipt, returns allowed" size="large" />
             </div>
         </div>
         <div class="w-full my-10">
-            <button class="py-[13px] px-5 my-2 mx-auto bg-[#3665f3] text-white font-bold rounded-full min-w-[343px] flex justify-center items-center" @click="createAuction">List it</button>
+            <button
+                class="py-[13px] px-5 my-2 mx-auto bg-[#3665f3] text-white font-bold rounded-full min-w-[343px] flex justify-center items-center"
+                @click="createAuction"
+            >
+                List it
+            </button>
         </div>
     </div>
     <div
@@ -162,7 +166,7 @@ const currentAuction = ref({
     startingPrice: 0,
     maxPrice: 9999,
     endTime: new Date(),
-    canReturn: false
+    canReturn: false,
 })
 
 const meta = ref({
@@ -194,12 +198,12 @@ const radioList = ref([
 
 function getConditionText(id) {
     switch (id) {
-        case 1: 
-            return "New"
+        case 1:
+            return 'New'
         case 2:
-            return "Open box"
-        case 3: 
-            return "Used"
+            return 'Open box'
+        case 3:
+            return 'Used'
         default:
             return
     }

@@ -293,8 +293,8 @@ onBeforeMount(async () => {
 </script>
 <style scoped lang="scss">
 .product-card {
-    width: calc((100% - 48px) / 4);
-    height: fit-content;
+    // width: calc((100% - 90px) / 3);
+    // height: fit-content;
 }
 
 .list-product {
@@ -302,7 +302,7 @@ onBeforeMount(async () => {
     display: flex;
     align-items: flex-start;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 20px;
     height: fit-content;
 }
 </style>

@@ -38,6 +38,12 @@ const routes = [
         component: () => import('../pages/auth/loginPage.vue'),
     },
     {
+        path: '/test',
+        name: 'test',
+        meta: { layout: 'empty' },
+        component: () => import('../pages/auctions/test.vue'),
+    },
+    {
         path: '/register',
         name: 'register',
         meta: { layout: 'empty' },
