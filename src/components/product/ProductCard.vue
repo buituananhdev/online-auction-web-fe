@@ -1,7 +1,7 @@
 <template>
     <el-tooltip class="box-item" effect="light" content="Left Center prompts info" placement="right" show-after="400">
         <template #content>
-            <div class="w-[300px] flex flex-col gap-2 p-3">
+            <div class="w-[280px] min-h-[340px] flex flex-col gap-4 p-3">
                 <div>
                     <b class="text-lg">{{ auction.productName }}</b>
                     <div class="flex justify-between items-center">
@@ -9,7 +9,9 @@
                             <el-text class="border rounded-md text-xs" style="padding: 0px 10px">{{
                                 converConditionText(auction.condition)
                             }}</el-text>
-                            <el-text class="border rounded-md text-xs" style="padding: 0px 10px">{{ auction.category.categoryName }}</el-text>
+                            <el-text class="border rounded-md text-xs" style="padding: 0px 10px">{{
+                                auction.category.categoryName
+                            }}</el-text>
                         </div>
                         <el-text class="text-xs" style="padding: 0px 10px">Views: {{ auction.viewCount }}</el-text>
                     </div>
@@ -34,32 +36,54 @@
                     </ul>
                 </div>
                 <div class="footer flex gap-3 items-center">
-                    <el-button type="primary" style="width: 80%; color: #ffff;" size="large" color="#409EFF">Place bid</el-button>
-                    <div @click="() => isLike = !isLike" class="image border rounded-full p-2 border-black border-[0.7px] cursor-pointer">
-                        <img class="hover:opacity-40" v-if="isLike" src="../../assets/icons/heart-icon.svg" width="25" alt="" />
+                    <el-button type="primary" style="width: 80%; color: #ffff" size="large" color="#409EFF"
+                        >Place bid</el-button
+                    >
+                    <div
+                        @click="() => (isLike = !isLike)"
+                        class="image border rounded-full p-2 border-black border-[0.7px] cursor-pointer"
+                    >
+                        <img
+                            class="hover:opacity-40"
+                            v-if="isLike"
+                            src="../../assets/icons/heart-icon.svg"
+                            width="25"
+                            alt=""
+                        />
                         <img v-else src="../../assets/icons/full-heart-icon.svg" width="25" alt="" />
                     </div>
                 </div>
             </div>
         </template>
         <el-card
-            style="height: 300px; margin-bottom: 20px; cursor: pointer; width: 220px;"
+            style="height: 405px; margin-bottom: 20px; cursor: pointer; width: 285px"
             @click="goToDetail(auction.id)"
             onmouseover="this.style.borderColor='#409EFF'; this.style.transform='translateY(-4px)';"
             onmouseout="this.style.borderColor='white'; this.style.transform='translateY(0)';"
         >
-            <img
-                src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                style="width: 100%; height: 190px"
-            />
+            <div class="p-6">
+                <img
+                    src="https://queenmobile.store/wp-content/uploads/2023/12/5-17-image-47551.jpg"
+                    style="width: 230px; height: 230px"
+                />
+            </div>
             <template #footer>
-                <div class="flex flex-col items-start gap-1">
-                    <b class="w-full truncate ">{{ auction.productName }}</b>
+                <div class="flex flex-col items-start gap-1 p-1">
                     <div class="flex justify-between w-full">
-                        <p class="font-bold text-xl text-price">{{ auction.currentPrice }} VND</p>
+                        <p class="font-bold text-lg">${{ auction.currentPrice }}</p>
                         <el-text style="font-size: 13px; display: inline-block">{{ auction.bidCount }} bids</el-text>
                     </div>
-                    <el-text truncated style="font-size: 13px">Time left {{ convertISOToRegularTime(auction.endTime) }}</el-text>
+                    <el-rate
+                            v-model="auction.user.ratings.avarageRating"
+                            disabled
+                            style="height: 20px"
+                            :colors="colors"
+                            score-template="({auction.user.ratings.totalRatings})"
+                        />
+                    <span class="w-full truncate">${{ auction.productName }}</span>
+                    <p truncated style="font-size: 13px"
+                        >Time left {{ convertISOToRegularTime(auction.endTime) }}</p
+                    >
                 </div>
             </template>
         </el-card>
@@ -118,7 +142,7 @@ const converConditionText = (id) => {
     }
 }
 const goToDetail = (id) => {
-    console.log('hehehe');
+    console.log('hehehe')
     router.push(`/auctions/${id}`)
 }
 </script>
@@ -131,7 +155,5 @@ const goToDetail = (id) => {
 }
 </style>
 <style scoped lang="scss">
-.text-price {
-    color: $color-primary;
-}
+
 </style>
