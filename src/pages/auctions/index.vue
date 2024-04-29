@@ -83,23 +83,24 @@
             </el-form>
         </div>
         <div class="min-w-[900px]">
-            <div v-if="listProducts.length" class="list-product">
+            <div v-if="listProducts.length" class="list-product relative min-h-[800px] mb-10">
                 <div v-for="item in listProducts" :key="item.id" class="product-card">
                     <product-card :auction="item" />
+                </div>
+                <div class="flex justify-end w-full absolute bottom-[-40px] right-0">
+                    <el-pagination
+                        v-show="meta.totalPages > 1"
+                        v-model:current-page="meta.currentPage"
+                        background
+                        layout="prev, pager, next"
+                        :total="meta.totalPages * meta.pageSize"
+                    />
                 </div>
             </div>
             <div v-else class="w-full">
                 <el-empty description="No data" />
             </div>
         </div>
-        <!-- <el-pagination
-            v-model:current-page="meta.currentPage"
-            :page-size="10"
-            background
-            layout="total, prev, pager, next"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-        /> -->
     </div>
 </template>
 <script setup>
@@ -140,8 +141,8 @@ const conditionsList = ref([
 ])
 const meta = ref({
     currentPage: 1,
-    totalPage: 1,
-    pageSize: 16,
+    totalPages: 1,
+    pageSize: 9,
 })
 const listProducts = ref([])
 const listCategories = ref([])
@@ -167,11 +168,17 @@ watch(filter.currentPrice, () => {
 watch(searchValue, async () => {
     await Search()
 })
+
+watch(() => meta.value.currentPage, async (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+        await Search()
+    }
+})
 const handleFilterchange = async (modelData) => {
     await Search()
 }
 const getListProduct = async (
-    pageNumber,
+    currentPage,
     pageSize,
     searchValue,
     categoriesId,
@@ -185,7 +192,7 @@ const getListProduct = async (
 ) => {
     try {
         const res = await getListAuctions(
-            pageNumber,
+            currentPage,
             pageSize,
             searchValue,
             categoriesId,
@@ -207,7 +214,7 @@ const getListProduct = async (
 }
 const getAllCategories = async () => {
     try {
-        const res = await getListCategories(meta.value.pageNumber, meta.value.pageSize)
+        const res = await getListCategories(meta.value.currentPage, meta.value.pageSize)
         listCategories.value = res.data.data
         console.log(res.data.data)
     } catch (error) {
@@ -236,11 +243,8 @@ const appyPriceFilter = async () => {
 }
 const Search = async () => {
     try {
-        console.log('hihieeeeeeeeih')
-        console.log('filter', filter.price)
-        console.log('filter.conditions', filter.conditions)
         const res = await getListAuctions(
-            meta.value.pageNumber,
+            meta.value.currentPage,
             meta.value.pageSize,
             searchValue.value,
             filter.categories,
@@ -255,8 +259,6 @@ const Search = async () => {
         console.log('meta.value', meta.value)
         // console.log('qqqq')
         listProducts.value = res.data.data
-        console.log('qqqq')
-
         const query = {}
         if (searchValue.value) {
             query.search = searchValue.value
@@ -298,7 +300,7 @@ const refreshData = async () => {
     ) {
         await Search()
     } else {
-        await getListProduct(meta.value.pageNumber, meta.value.pageSize)
+        await getListProduct(meta.value.currentPage, meta.value.pageSize)
     }
 }
 const getQueryValue = () => {
@@ -324,6 +326,7 @@ const getQueryValue = () => {
     }
     console.log('init filter', filter)
 }
+
 onBeforeMount(async () => {
     getQueryValue()
     await refreshData()
@@ -342,6 +345,5 @@ onBeforeMount(async () => {
     align-items: flex-start;
     flex-wrap: wrap;
     gap: 20px;
-    height: fit-content;
 }
 </style>
