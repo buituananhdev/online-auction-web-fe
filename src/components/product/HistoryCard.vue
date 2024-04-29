@@ -1,24 +1,24 @@
 <template>
-    <div class="w-[80%] h-[80%] border-2 rounded-xl">
-        <div class="flex justify-between px-4 rounded-t-xl bg-white">
-            <div class="flex gap-7 items-center px-6 py-3 ">
+    <div class="w-full h-[80%] gap-4 flex flex-col">
+        <div class="flex justify-between px-5 bg-[#f7f7f7] text-[#191919] font-medium">
+            <div class="flex gap-4 items-center py-3">
                 <Icon :icon="icons[auction.productStatus]" />
                 <div class="flex flex-col">
-                    <span class="font-semibold">{{ ProductStatusNames[auction.productStatus] }}</span>
-                    <div class="flex gap-8">
-                        <span>Product Name: {{ auction.productName }}</span>
-                        <span>Bid count: {{ auction.bidCount }}</span>
+                    <span class="font-bold">{{ ProductStatusNames[auction.productStatus] }}</span>
+                    <div class="flex gap-10">
+                        <span>Product Name: {{ auction.productName.length > 30 ? auction.productName.slice(0,30) + '...': auction.productName}}</span>
+                        <span>Order total: <span class="font-bold">{{ auction.currentPrice }}$</span></span>
                         <span>Condition: {{ ConditionNames[auction.condition] }}</span>
                     </div>
                 </div>
             </div>
-            <el-button class="my-auto">View detail</el-button>
+            <el-button :key="primary" style="padding: 18px 40px;" class="my-auto">View order details</el-button>
         </div>
-        <div class=" bg-white border-t-2 rounded-b-xl">
-            <div class="flex gap-5 px-4 py-2 ">
+        <div class="h-fit font-medium bg-[#f7f7f7]">
+            <div class="flex gap-5">
                 <div class="demo-image__preview">
                     <el-image
-                    style="width: 200px; height: 200px; border-radius: 6px;"
+                    style="width: 200px; height: 200px;"
                     :src="url"
                     :zoom-rate="1.2"
                     :max-scale="7"
@@ -28,20 +28,23 @@
                     fit="cover"
                     />
                 </div>
-                <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-2 mt-1 mb-3 text-sm">
                     <div class="flex flex-col">
-                        <span class="font-semibold text-base mb-2">Delivered on Tue 20 Dec</span>
+                        <span class="font-bold text-base mb-1">Delivered on Tue 20 Dec</span>
                         <span>Date created: {{ auction.dateCreated.split("T")[0] }}</span>
                         <span>Return window closed on: {{ auction.endTime.split("T")[0] }}</span>
-                        <span>Category: {{ auction.category }}</span>
+                    </div>
+                    <div class="flex flex-col text-sm">
+                        <span >Category: {{ auction.category.categoryName }}</span>
+                        <span>Bid count: {{ auction.bidCount }}</span>
                     </div>
                     <div class="flex-col flex">
-                        <span class="mt-1">Price: {{ auction.currentPrice }}$</span>
+                        <span class="mt-1 text-sm">Price: {{ auction.currentPrice }}$</span>
                     </div>
-                    <span>Buy by: {{ auction.user }}</span>
+                    <span class="text-sm text-[#707070]">Buy by: <span class="underline text-[#3665f3]">{{ auction.user.fullName }}</span></span>
                 </div>
-                <div class="flex justify-end flex-auto mr-10">
-                    <el-button class="my-auto" type="primary">Accept</el-button>
+                <div class="flex justify-end flex-auto mr-5">
+                    <el-button style="min-width: 196px; padding: 18px 0;" class="my-auto" type="primary">More actions</el-button>
                 </div>
             </div>
         </div>

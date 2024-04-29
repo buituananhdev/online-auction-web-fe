@@ -8,6 +8,7 @@ import { authStore } from './stores/auth.store'
 import { authMiddleware } from './router/router.middleware'
 import authLayout from './layouts/authLayout.vue'
 import emptyLayout from './layouts/emptyLayout.vue'
+import activityLayout from './layouts/activityLayout.vue'
 import ProductCard from './components/product/ProductCard.vue'
 import FilterProduct from './components/product/FilterProduct.vue'
 import SkeletonCard from './components/product/SkeletonCard.vue'
@@ -27,6 +28,7 @@ const initApp = async () => {
     app.use(router)
     app.component('auth-layout', authLayout)
     app.component('empty-layout', emptyLayout)
+    app.component('activity-layout', activityLayout)
     app.component('product-card', ProductCard)
     app.component('skeleton-card', SkeletonCard)
     app.component('filter-product', FilterProduct)
