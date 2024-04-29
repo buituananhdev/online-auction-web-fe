@@ -41,13 +41,14 @@
                         >Create Auction</el-button
                     >
                 </div>
-                <div v-if="listSellerHistorys.length" class="w-full flex flex-col items-center justify-center">
+                <div v-if="listSellerHistorys.length" class="w-full flex flex-col items-center justify-center gap-4">
                     <div
                         v-for="item in listSellerHistorys"
                         :key="item.id"
-                        class="w-full flex items-center justify-center mb-12"
+                        class="w-full flex items-center justify-center"
                     >
-                        <history-card :auction="item" />
+                        <!-- <history-card :auction="item" /> -->
+                        <sold-card :auction="item" />
                     </div>
                 </div>
                 <div v-else class="w-full">
@@ -62,7 +63,7 @@
 import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getSellerHistory } from '../../services/auction.service'
+import { getSellerHistory } from '../../../services/auction.service'
 
 const SearchIcon = Search
 const router = useRouter()
