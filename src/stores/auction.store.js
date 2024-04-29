@@ -3,7 +3,6 @@ import { defineStore } from 'pinia'
 import { HubConnectionBuilder } from '@microsoft/signalr'
 import { getSingleAuction } from '../services/auction.service'
 
-const token = localStorage.getItem('access_token')
 let connection
 
 export const useAuctionStore = defineStore('auctions', {
@@ -13,18 +12,19 @@ export const useAuctionStore = defineStore('auctions', {
         currentAuctionId: 0
     }),
     actions: {
-        initializeConnection() {
+        initializeConnection(token) {
+            console.log('token', token);
             connection = new HubConnectionBuilder()
                 .withUrl('https://63nb9hjh-3002.asse.devtunnels.ms/hubs/auction', {
                     accessTokenFactory: () => token,
-                    withCredentials: false,
+                    withCredentials: true,
                 })
                 .build()
 
             connection.on('RECEIVE_NOTIFICATION', (data) => {
                 console.log('heeeeeeeeeeeeee',data)
             })
-            
+
             connection
                 .start()
                 .then(() => {

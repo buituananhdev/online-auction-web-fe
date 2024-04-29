@@ -127,7 +127,6 @@ async function handleBidAuction() {
             message: 'Bid successfully!',
             type: 'success',
         })
-        useAuction.initializeConnection()
     } catch (error) {
         console.log(error)
         ElNotification({
