@@ -21,7 +21,7 @@ const routes = [
     {
         path: '/create-auction',
         name: 'create-auction',
-        component: () => import('../pages/auctions/createAuction.vue'),
+        component: () => import('../pages/auctions/create/index.vue'),
         meta: { layout: 'auth', requiresAuth: true },
     },
     {

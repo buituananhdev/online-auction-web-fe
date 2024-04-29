@@ -21,40 +21,45 @@ export default {
         async startConnection() {
             this.connection = new signalR.HubConnectionBuilder()
                 .withUrl('https://63nb9hjh-3002.asse.devtunnels.ms/hubs/auction', {
-                    // accessTokenFactory: () => this.token,
-                    // transport: signalR.HttpTransportType.LongPolling,
-                    withCredentials: false 
+                    accessTokenFactory: () => this.token,
+                    transport: signalR.HttpTransportType.LongPolling,
+                    withCredentials: false,
                 })
                 // .configureLogging(signalR.LogLevel.Information)
                 .build()
-
             this.connection
                 .start()
                 .then(() => {
                     console.log('SignalR Connected.')
                 })
                 .catch((error) => {
+                    console.log('hihii')
                     console.error('SignalR Connection Error: ', error)
                 })
+            const auctionId = 13062 // Thay thế bằng id của phiên đấu giá muốn cập nhật
+            const newPrice = 100 // Giá mới của sản phẩm
+            await this.connection.invoke('UpdatePriceAsync', auctionId, newPrice)
         },
-        async updatePrice() {
-            if (this.connection && this.connection.state === signalR.HubConnectionState.Connected) {
-                const auctionId = 13062 // Thay thế bằng id của phiên đấu giá muốn cập nhật
-                const newPrice = 100 // Giá mới của sản phẩm
-                console.log('Price hehehehehe.')
+        // async updatePrice() {
+        //     console.log('Price hehehehehe.')
 
-                try {
-                console.log('Price hihiiii.')
+        //     if (this.connection && this.connection.state === signalR.HubConnectionState.Connected) {
+        //         const auctionId = 13062 // Thay thế bằng id của phiên đấu giá muốn cập nhật
+        //         const newPrice = 100 // Giá mới của sản phẩm
+        //         console.log('Price hehehehehe.')
 
-                    await this.connection.invoke('UpdatePriceAsync', auctionId, newPrice)
-                    console.log('Price updated successfully.')
-                } catch (error) {
-                    console.error('Error updating price: ', error)
-                }
-            } else {
-                console.error('SignalR connection is not established.')
-            }
-        },
+        //         try {
+        //         console.log('Price hihiiii.')
+
+        //             await this.connection.invoke('UpdatePriceAsync', auctionId, newPrice)
+        //             console.log('Price updated successfully.')
+        //         } catch (error) {
+        //             console.error('Error updating price: ', error)
+        //         }
+        //     } else {
+        //         console.error('SignalR connection is not established.')
+        //     }
+        // },
     },
 }
 </script>

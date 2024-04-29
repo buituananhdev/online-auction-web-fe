@@ -5,7 +5,10 @@ import { ref, defineProps, onMounted } from 'vue'
 import { getListAuctions, getSingleAuction } from '../../services/auction.service'
 import { bidAuction } from '../../services/bid.service'
 import CallHub from '../../services/hub.service'
+import { useAuctionStore } from '../../stores/auction.store'
 
+const auctionId = ref()
+const useAuction = useAuctionStore()
 const auction = ref({})
 const exploredAuctionList = ref([])
 const router = useRouter()
@@ -81,10 +84,16 @@ const converConditionText = (id) => {
     }
 }
 
+function reviewBid() {
+    if(!bidAmount.value || bidAmount.value < auction.value.currentPrice) return
+    isReviewBid.value = true
+    bidPopUpTitle.value = 'Review your bid'
+}
+
 async function getDetailAuction() {
     try {
-        const id = route.params.id
-        const res = await getSingleAuction(id)
+        // const id = route.params.id
+        const res = await getSingleAuction(auctionId.value)
         auction.value = res.data
     } catch (error) {
         console.log(error)
@@ -118,6 +127,7 @@ async function handleBidAuction() {
             message: 'Bid successfully!',
             type: 'success',
         })
+        useAuction.initializeConnection()
     } catch (error) {
         console.log(error)
         ElNotification({
@@ -177,14 +187,13 @@ function startCountdown(dateTime) {
 }
 
 onMounted(async () => {
-    await getDetailAuction()
+    useAuction.initializeConnection()
+    useAuction.setCurrentAuctionId(route.params.id)
+    await useAuction.getDetailAuction()
+    auction.value = useAuction.detailAuction
     await getExploreAuctionList()
     startCountdown(auction.value.endTime)
 
-    CallHub.client.on('send', () => {
-        console.log('heheheheh')
-    })
-    CallHub.start()
 })
 </script>
 
