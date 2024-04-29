@@ -26,13 +26,12 @@
             <div class="w-full">
                 <el-input
                     v-model="currentAuction.productName"
-                    style="width: 240px; height: 48px; width: 100%;"
                     maxlength="100"
                     placeholder="Please input"
                     show-word-limit
                     clearable
                     type="text"
-                    
+                    size="large"
                 />
             </div>
         </div>
@@ -151,6 +150,7 @@ import { getListCategories } from '../../services/category.service'
 import { addAuction } from '../../services/auction.service'
 
 import { UploadProps, UploadUserFile } from 'element-plus'
+import { useRouter } from 'vue-router'
 
 const listCategories = ref([])
 
@@ -171,6 +171,7 @@ const meta = ref({
     pageSize: 16,
 })
 const isShowSelectCondition = ref(false)
+const router = useRouter()
 const radioList = ref([
     {
         value: 1,
@@ -270,6 +271,7 @@ const getAllCategories = async () => {
 const createAuction = async () => {
     try {
         const res = await addAuction(currentAuction.value)
+        router.push({ name: 'seller-history' })
         ElNotification({
             title: 'Create Auction',
             message: 'Create Auction Successfully!',
