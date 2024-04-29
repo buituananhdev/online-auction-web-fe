@@ -187,7 +187,6 @@ function startCountdown(dateTime) {
 }
 
 onMounted(async () => {
-    useAuction.initializeConnection()
     useAuction.setCurrentAuctionId(route.params.id)
     await useAuction.getDetailAuction()
     auction.value = useAuction.detailAuction
