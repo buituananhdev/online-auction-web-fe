@@ -1,25 +1,46 @@
 <template>
-    <div v-loading="loading" full-screen="false" class="flex justify-start gap-[16px] min-h-[80vh] overfolw-hidden min-w-[800px]">
+    <div
+        v-loading="loading"
+        full-screen="false"
+        class="flex justify-start gap-[16px] min-h-[80vh] overfolw-hidden min-w-[800px]"
+    >
         <div class="w-[200px] grow-0 shrink-0" v-show="!loading">
             <el-form @change="refreshData" :model="filter" label="Filter by" class="">
                 <el-form-item label="Category" class="border-b" prop="type">
                     <el-checkbox-group class="flex flex-col gap-1 mt-2 pb-2" v-model="filter.categories">
-                        <el-checkbox class="pl-2" v-for="item in listCategories" :key="item.id" :value="item.id"
-                            name="type">{{ item.categoryName }}</el-checkbox>
+                        <el-checkbox
+                            class="pl-2"
+                            v-for="item in listCategories"
+                            :key="item.id"
+                            :value="item.id"
+                            name="type"
+                            >{{ item.categoryName }}</el-checkbox
+                        >
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="Condition" prop="type" class="mt-3 border-b">
                     <el-checkbox-group class="flex flex-col gap-1 mt-2 pb-2" v-model="filter.conditions">
-                        <el-checkbox class="pl-2" v-for="item in conditionsList" :key="item.id" :value="item.id"
-                            name="type">{{ item.text }}</el-checkbox>
+                        <el-checkbox
+                            class="pl-2"
+                            v-for="item in conditionsList"
+                            :key="item.id"
+                            :value="item.id"
+                            name="type"
+                            >{{ item.text }}</el-checkbox
+                        >
                     </el-checkbox-group>
                 </el-form-item>
             </el-form>
             <el-form style="position: relative" class="border-b">
                 <el-form-item label="Current Price Range" prop="type" class="mt-3">
                     <div class="mt-3 flex gap-2">
-                        <el-input type="number" controls="false" style="border-radius: 30px"
-                            v-model="filter.currentPrice.min" placeholder="Min" />
+                        <el-input
+                            type="number"
+                            controls="false"
+                            style="border-radius: 30px"
+                            v-model="filter.currentPrice.min"
+                            placeholder="Min"
+                        />
                         to
                         <el-input type="number" v-model="filter.currentPrice.max" placeholder="Max" />
                     </div>
@@ -28,15 +49,25 @@
                     </p>
                 </el-form-item>
                 <el-form-item class="border-b">
-                    <el-button type="primary" style="width: 200px" :disabled="isEnableCurrentButton"
-                        @click="appyPriceFilter">Apply</el-button>
+                    <el-button
+                        type="primary"
+                        style="width: 200px"
+                        :disabled="isEnableCurrentButton"
+                        @click="appyPriceFilter"
+                        >Apply</el-button
+                    >
                 </el-form-item>
             </el-form>
             <el-form style="position: relative" class="border-b">
                 <el-form-item label="Instant Purchase Price Range" prop="type" class="mt-3">
                     <div class="mt-3 flex gap-2">
-                        <el-input type="number" controls="false" style="border-radius: 30px" v-model="filter.sellPrice.min"
-                            placeholder="Min" />
+                        <el-input
+                            type="number"
+                            controls="false"
+                            style="border-radius: 30px"
+                            v-model="filter.sellPrice.min"
+                            placeholder="Min"
+                        />
                         to
                         <el-input type="number" v-model="filter.sellPrice.max" placeholder="Max" />
                     </div>
@@ -45,8 +76,9 @@
                     </p>
                 </el-form-item>
                 <el-form-item class="border-b">
-                    <el-button type="primary" style="width: 200px" :disabled="isEnableButton"
-                        @click="appyPriceFilter">Apply</el-button>
+                    <el-button type="primary" style="width: 200px" :disabled="isEnableButton" @click="appyPriceFilter"
+                        >Apply</el-button
+                    >
                 </el-form-item>
             </el-form>
         </div>
@@ -60,7 +92,14 @@
                 <el-empty description="No data" />
             </div>
         </div>
-        <!-- <el-pagination layout="prev, pager, next" /> -->
+        <!-- <el-pagination
+            v-model:current-page="meta.currentPage"
+            :page-size="10"
+            background
+            layout="total, prev, pager, next"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+        /> -->
     </div>
 </template>
 <script setup>
@@ -159,7 +198,7 @@ const getListProduct = async (
             maxEndTime,
         )
         listProducts.value = res.data.data
-        console.log('list', listProducts.length);
+        console.log('list', listProducts.length)
         meta.value = res.data.meta
         console.log('neta', meta)
     } catch (error) {

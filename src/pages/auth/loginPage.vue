@@ -55,6 +55,7 @@
 import { ref, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from '../../stores/auth.store'
+import { useAuctionStore } from '../../stores/auction.store'
 import { loginApi, loginGGApi } from '../../services/auth.service'
 
 const isValids = ref([])
@@ -64,6 +65,7 @@ const user = reactive({
     email: '',
     password: '',
 })
+const useAuction = useAuctionStore()
 const googleLoginBtn = ref()
 const auth = authStore()
 onMounted(() => {
@@ -86,6 +88,7 @@ const handleCredentialResponse = async (res) => {
         localStorage.setItem('access_token', data.data.accessToken)
         localStorage.setItem('refresh_token', data.data.refresh_token)
         await auth.initAuthStore()
+        await useAuction.initializeConnection()
         ElNotification({
             title: 'Success',
             message: 'Log in successfully!',
@@ -156,6 +159,7 @@ const submit = async (formEl) => {
             localStorage.setItem('refresh_token', data.data.refreshToken)
             localStorage.setItem('role', data.data.role)
             await auth.initAuthStore()
+            await useAuction.initializeConnection()
             router.push({ name: 'dashboard' })
             ElNotification({
                 title: 'Success',
