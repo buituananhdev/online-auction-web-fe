@@ -6,7 +6,9 @@ import { getListAuctions, getSingleAuction } from '../../services/auction.servic
 import { bidAuction } from '../../services/bid.service'
 import CallHub from '../../services/hub.service'
 import { useAuctionStore } from '../../stores/auction.store'
+import { authStore } from '../../stores/auth.store'
 
+const auth = authStore()
 const auctionId = ref()
 const useAuction = useAuctionStore()
 const auction = ref({})
@@ -71,6 +73,11 @@ const countdown = ref()
 const bidPopUpTitle = ref('Place your bid')
 const isReviewBid = ref(false)
 
+const handlePlaceBid = () => {
+    if(!auth.isLoggedIn) {
+        router.push('/login')
+    } else dialogFormVisible.value = true
+}
 const converConditionText = (id) => {
     switch (id) {
         case 1:
@@ -369,7 +376,7 @@ onMounted(async () => {
                     <span class="text-[#505050]">{{ converConditionText(auction.condition) }}</span>
                 </div>
                 <button
-                    @click="dialogFormVisible = true"
+                    @click="handlePlaceBid"
                     class="w-full bg-[#409EFF] text-white font-bold rounded-3xl py-2 text-lg hover:bg-[#3A8EE4]"
                 >
                     Place bid
