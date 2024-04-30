@@ -22,7 +22,6 @@
         </div>
         <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
             <h2 class="font-bold mb-[10px]">TITLE</h2>
-            <span class="text-sm font-semibold mb-[6px]">Item title</span>
             <div class="w-full">
                 <el-input
                     v-model="currentAuction.productName"
@@ -57,7 +56,7 @@
             </button>
             <span class="mt-4 text-sm">Disclose all defects to prevent returns and earn better feedback.</span>
         </div>
-        <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+        <!-- <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
             <h2 class="font-bold mb-[10px]">DESCRIPTION</h2>
             <textarea
                 v-model="currentAuction.description"
@@ -69,6 +68,9 @@
                 placeholder="Write a detailed description of your item, or save time and let Al draft it for you"
             >
             </textarea>
+        </div> -->
+        <div class="">
+            <div id="description"></div>
         </div>
         <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
             <h2 class="font-bold mb-[10px]">PRICING</h2>
@@ -148,22 +150,38 @@
     </div>
 </template>
 
-<script lang="ts" setup>
-import { onBeforeMount, ref } from 'vue'
+<script setup>
+import { onBeforeMount, onMounted, ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { getListCategories } from '../../../services/category.service'
 import { addAuction } from '../../../services/auction.service'
+import Quill from 'quill';
 
-import { UploadProps, UploadUserFile } from 'element-plus'
+// import { UploadProps, UploadUserFile } from 'element-plus'
 import { useRouter } from 'vue-router'
 
 const listCategories = ref([])
+
+const descriptionContent = ref(null);
+
+// Khởi tạo Quill sau khi DOM đã sẵn sàng
+onMounted(() => {
+    const quill = new Quill('#description', {
+        theme: 'snow',
+        placeholder: "Write a detailed description of your item, or save time and let Al draft it for you"
+    });
+    
+    // Lắng nghe sự kiện thay đổi nội dung của Quill
+    quill.on('text-change', () => {
+        descriptionContent.value = quill.getContents();
+    });
+});
 
 const currentAuction = ref({
     productName: '',
     categoryId: null,
     condition: 1,
-    description: '',
+    description: descriptionContent.value,
     startingPrice: 0,
     maxPrice: 9999,
     endTime: new Date(),
@@ -211,7 +229,7 @@ function getConditionText(id) {
     }
 }
 
-const fileList = ref<UploadUserFile[]>([
+const fileList = ref([
     {
         name: 'food.jpeg',
         url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
@@ -253,14 +271,24 @@ const handleCloseModel = () => {
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 
-const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
-    console.log(uploadFile, uploadFiles)
-}
+// const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+//     console.log(uploadFile, uploadFiles)
+// }
 
-const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
-    dialogImageUrl.value = uploadFile.url!
-    dialogVisible.value = true
-}
+// const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
+//     dialogImageUrl.value = uploadFile.url!
+//     dialogVisible.value = true
+// }
+
+const handleRemove = function(uploadFile, uploadFiles) {
+    console.log(uploadFile, uploadFiles);
+};
+
+const handlePictureCardPreview = function(uploadFile) {
+    dialogImageUrl.value = uploadFile.url;
+    dialogVisible.value = true;
+};
+
 const getAllCategories = async () => {
     try {
         const res = await getListCategories(meta.value.pageNumber, meta.value.pageSize)
