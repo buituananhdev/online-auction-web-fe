@@ -69,13 +69,10 @@
             >
             </textarea>
         </div> -->
-        <!-- <div class="">
-            <div id="description"></div>
-        </div> -->
-        <quill-editor
-            class="editor-form"
-            v-model.trim="content"
-        />
+        <div class="mx-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+            <h2 class="font-bold mb-[10px]">DESCRIPTION</h2>
+            <QuillEditor theme="snow" v-model="description" placeholder="Write a detailed description of your item, or save time and let Al draft it for you" />
+        </div>
         <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
             <h2 class="font-bold mb-[10px]">PRICING</h2>
             <div class="flex gap-5">
@@ -159,42 +156,19 @@ import { onBeforeMount, onMounted, ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { getListCategories } from '../../../services/category.service'
 import { addAuction } from '../../../services/auction.service'
-// import Quill from 'quill';
-
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
-
-import { quillEditor } from 'vue-quill-editor'
 
 // import { UploadProps, UploadUserFile } from 'element-plus'
 import { useRouter } from 'vue-router'
 
 const listCategories = ref([])
 
-// const descriptionContent = ref(null);
-
-// // Khởi tạo Quill sau khi DOM đã sẵn sàng
-// onMounted(() => {
-//     const quill = new Quill('#description', {
-//         theme: 'snow',
-//         placeholder: "Write a detailed description of your item, or save time and let Al draft it for you"
-//     });
-//     // Lắng nghe sự kiện thay đổi nội dung của Quill
-//     quill.on('text-change', () => {
-//         descriptionContent.value = quill.getContents();
-//     });
-// });
-
-const content = ref('')
-
 const currentAuction = ref({
     productName: '',
     categoryId: null,
     condition: 1,
-    description: content,
-    startingPrice: 0,
-    maxPrice: 9999,
+    description: '',
+    startingPrice: null,
+    maxPrice: null,
     endTime: new Date(),
     canReturn: false,
 })
