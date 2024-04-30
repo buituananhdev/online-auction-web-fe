@@ -71,7 +71,12 @@
         </div> -->
         <div class="mx-6 pt-8 flex flex-col pb-10 border-b-[1px]">
             <h2 class="font-bold mb-[10px]">DESCRIPTION</h2>
-            <QuillEditor theme="snow" v-model="description" placeholder="Write a detailed description of your item, or save time and let Al draft it for you" />
+            <QuillEditor 
+                theme="snow" 
+                v-model:content="currentAuction.description" 
+                contentType="text" 
+                placeholder="Write a detailed description of your item, or save time and let Al draft it for you"
+            />
         </div>
         <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
             <h2 class="font-bold mb-[10px]">PRICING</h2>
@@ -290,6 +295,7 @@ const createAuction = async () => {
     try {
         const res = await addAuction(currentAuction.value)
         router.push({ name: 'seller-history' })
+        console.log(111111111111111111, currentAuction.description);
         ElNotification({
             title: 'Create Auction',
             message: 'Create Auction Successfully!',
