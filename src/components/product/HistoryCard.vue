@@ -39,13 +39,13 @@
                             <span class="text-[#505050]">Return window closed on: </span>
                             <span class="text-[#505050]">{{ auction.endTime.split('T')[0] }}</span>
                         </div>
-                        <span class="text-[#505050]">Delivered on Tue 20 Dec</span>
-                        <!-- <div>
-                        <span class="text-[#505050]">Bid count: </span>
-                        <span class="text-[#505050]">{{ auction.bidCount }}</span>
-                    </div> -->
+                        <!-- <span class="text-[#505050]">Delivered on Tue 20 Dec</span> -->
                         <div>
-                            <span class="text-sm text-[#707070]">Sold by: </span>
+                            <span class="text-[#505050]">Condition: </span>
+                            <span class="text-[#505050]">{{ ConditionNames[auction.condition] }}</span>
+                        </div>
+                        <div>
+                            <span class="text-sm text-[#707070]">{{ isInWatchlist ? 'Seller' : 'Sold by' }}: </span>
                             <span class="underline text-[#3665f3]">{{ auction.user.fullName }}</span>
                         </div>
                     </div>
@@ -63,7 +63,10 @@
                             </div>
                         </div>
 
-                        <button class="bg-white border rounded-xl py-[7px] w-[200px] mt-14 hover:bg-[#409EFF] hover:text-white transition">View Detail</button>
+                        <div class="flex flex-col mt-14 gap-2">
+                            <button v-show="isInWatchlist" class="bg-[#3665f3] text-white border rounded-xl py-[7px] w-[200px] hover:bg-[#409EFF] transition">Buy It Now</button>
+                            <button class="bg-white border rounded-xl py-[7px] w-[200px] hover:bg-[#409EFF] hover:text-white transition" @click="viewDetailAuction(auction.id)">View Detail</button>    
+                        </div>
                     </div>
                 </div>
 
@@ -78,9 +81,17 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+
 defineProps({
     auction: Object,
+    isInWatchlist: {
+        type: Boolean,
+        default: false
+    }
 })
+
+const router = useRouter()
 
 const url = 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
 const srcList = [
@@ -100,6 +111,10 @@ const ProductStatusNames = {
     3: 'Deleted',
     4: 'Canceled',
     5: 'Pending Publish',
+}
+
+const viewDetailAuction = (auctionId) => {
+    router.push({ path: `auctions/${auctionId}` })
 }
 
 const icons = {

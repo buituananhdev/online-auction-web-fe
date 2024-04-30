@@ -1,7 +1,7 @@
 <template>
     <div v-loading="loading" class="w-full">
         <div class="w-full">
-            <div class="flex justify-between gap-5 pt-[25px] pb-8 border-b-[1px] border-gray-300">
+            <div class="flex justify-between gap-5 pt-[25px] pb-8">
                 <span class="font-bold text-2xl flex items-center justify-center">My eBay - Watchlist</span>
                 <div class="w-1/2">
                     <div class="w-full flex items-center justify-center">
@@ -22,16 +22,21 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-4 my-4 pb-4 border-b-[1px] border-gray-300">
-                <div v-for="item in listProductStatus" :key="item.value" class="">
-                    <span
-                        :class="{ 'bg-[#ededed]': selectedItem === item.value }"
-                        class="px-4 py-1 flex items-center justify-center border-gray-600 border-[1px] rounded-full bg-[#f7f7f7] hover:cursor-pointer hover:bg-[#ededed]"
-                        @click="filterStatus(item.value)"
-                    >
-                        {{ item.text }}
-                    </span>
-                </div>
+            <div class="flex items-center gap-4 my-2 pb-4 border-b-[1px] border-gray-300">
+                <el-select
+                    v-model="status"
+                    placeholder="Filter by status"
+                    size="large"
+                    style="width: 240px"
+                    @change="filterStatus"
+                >
+                <el-option
+                    v-for="item in listProductStatus"
+                    :key="item.value"
+                    :label="item.text"
+                    :value="item.value"
+                />
+                </el-select>
             </div>
 
             <div class="flex flex-col mt-8">
@@ -42,7 +47,7 @@
                         class="w-full flex items-center justify-center"
                     >
                         <!-- <history-card :auction="item" /> -->
-                        <watchlist-card :auction="item" />
+                        <history-card :auction="item" :isInWatchlist="true"/>
                     </div>
                     <div class="flex justify-end w-full absolute bottom-0 right-0">
                         <el-pagination
@@ -123,10 +128,6 @@ const filterStatus = async (value) => {
     selectedItem.value = value
     status.value = value
     await SearchHistory()
-}
-
-const createAuction = () => {
-    router.push({ path: '/create-auction' })
 }
 
 const handleClickSearch = () => {
