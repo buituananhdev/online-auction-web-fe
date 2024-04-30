@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" class="w-full">
-        <div class="w-full mt-6 ml-2">
+        <div class="mt-6 ml-2">
             <div class="flex justify-between gap-5 my-[42px]">
                 <span class="font-bold text-2xl flex items-center justify-center">Sold</span>
                 <div class="w-1/2">
@@ -47,8 +47,7 @@
                         :key="item.id"
                         class="w-full flex items-center justify-center"
                     >
-                        <!-- <history-card :auction="item" /> -->
-                        <sold-card :auction="item" />
+                        <history-card :auction="item" />
                     </div>
                     <div class="flex justify-end w-full absolute bottom-0 right-0">
                         <el-pagination
@@ -74,6 +73,7 @@ import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getSellerHistory } from '../../../services/auction.service'
 
+// const props = isLoading
 const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()

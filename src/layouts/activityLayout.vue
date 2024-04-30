@@ -26,13 +26,13 @@
                         <div class="min-h-[800px] w-[18.75%] pr-8 my-8 flex flex-col">
                             <ul class="text-[#363636] font-bold">
                                 <li class="py-[10px] pl-4">
-                                    <a href="seller-history">Seller history</a>
+                                    <RouterLink to="/seller-history">Seller history</RouterLink>
                                 </li>
                                 <li class="py-[10px] pl-4">
-                                    <a href="recently-viewed">Recently viewed</a>
+                                    <RouterLink to="/recently-viewed">Recently viewed</RouterLink>
                                 </li>
                                 <li class="py-[10px] pl-4">
-                                    <a href="">Bids & offers</a>
+                                    <RouterLink to="/buyer-history">Bids & offers</RouterLink>
                                 </li>
                                 <li class="py-[10px] pl-4">
                                     <a href="">Watchlist</a>

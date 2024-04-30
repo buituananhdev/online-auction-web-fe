@@ -1,46 +1,32 @@
 <template>
-    <div
-        v-loading="loading"
-        full-screen="false"
-        class="flex justify-start gap-[16px] min-h-[80vh] overfolw-hidden min-w-[800px]"
-    >
+    <div v-loading="loading" full-screen="false"
+        class="flex justify-start gap-[16px] min-h-[80vh] overfolw-hidden min-w-[800px]">
         <div class="w-[200px] grow-0 shrink-0" v-show="!loading">
-            <el-form @change="refreshData" :model="filter" label="Filter by" class="">
+            <el-form @change="refreshData" :model="filter" label="Filter by" class="relative">
                 <el-form-item label="Category" class="border-b" prop="type">
                     <el-checkbox-group class="flex flex-col gap-1 mt-2 pb-2" v-model="filter.categories">
-                        <el-checkbox
-                            class="pl-2"
-                            v-for="item in listCategories"
-                            :key="item.id"
-                            :value="item.id"
-                            name="type"
-                            >{{ item.categoryName }}</el-checkbox
-                        >
+                        <el-checkbox class="pl-2" v-for="item in listCategories" :key="item.id" :value="item.id"
+                            name="type">{{ item.categoryName }}</el-checkbox>
                     </el-checkbox-group>
+                    <div class="flex justify-end w-full gap-2">
+                        <span class="text-xs text-[#505050] cursor-pointer pb-2 hover:underline" @click="categoryMeta.pageSize = 3"
+                            v-show="categoryMeta.pageSize > 3">Collapse</span>
+                        <span class="text-xs text-[#409EFF] cursor-pointer pb-2 hover:underline" @click="categoryMeta.pageSize += 3"
+                            v-show="categoryMeta.pageSize < categoryMeta.totalPages * categoryMeta.pageSize">Load more</span>
+                    </div>
                 </el-form-item>
                 <el-form-item label="Condition" prop="type" class="mt-3 border-b">
                     <el-checkbox-group class="flex flex-col gap-1 mt-2 pb-2" v-model="filter.conditions">
-                        <el-checkbox
-                            class="pl-2"
-                            v-for="item in conditionsList"
-                            :key="item.id"
-                            :value="item.id"
-                            name="type"
-                            >{{ item.text }}</el-checkbox
-                        >
+                        <el-checkbox class="pl-2" v-for="item in conditionsList" :key="item.id" :value="item.id"
+                            name="type">{{ item.text }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
             </el-form>
             <el-form style="position: relative" class="border-b">
                 <el-form-item label="Current Price Range" prop="type" class="mt-3">
                     <div class="mt-3 flex gap-2">
-                        <el-input
-                            type="number"
-                            controls="false"
-                            style="border-radius: 30px"
-                            v-model="filter.currentPrice.min"
-                            placeholder="Min"
-                        />
+                        <el-input type="number" controls="false" style="border-radius: 30px"
+                            v-model="filter.currentPrice.min" placeholder="Min" />
                         to
                         <el-input type="number" v-model="filter.currentPrice.max" placeholder="Max" />
                     </div>
@@ -49,25 +35,15 @@
                     </p>
                 </el-form-item>
                 <el-form-item class="border-b">
-                    <el-button
-                        type="primary"
-                        style="width: 200px"
-                        :disabled="isEnableCurrentButton"
-                        @click="appyPriceFilter"
-                        >Apply</el-button
-                    >
+                    <el-button type="primary" style="width: 200px" :disabled="isEnableCurrentButton"
+                        @click="appyPriceFilter">Apply</el-button>
                 </el-form-item>
             </el-form>
             <el-form style="position: relative" class="border-b">
                 <el-form-item label="Instant Purchase Price Range" prop="type" class="mt-3">
                     <div class="mt-3 flex gap-2">
-                        <el-input
-                            type="number"
-                            controls="false"
-                            style="border-radius: 30px"
-                            v-model="filter.sellPrice.min"
-                            placeholder="Min"
-                        />
+                        <el-input type="number" controls="false" style="border-radius: 30px"
+                            v-model="filter.sellPrice.min" placeholder="Min" />
                         to
                         <el-input type="number" v-model="filter.sellPrice.max" placeholder="Max" />
                     </div>
@@ -76,9 +52,8 @@
                     </p>
                 </el-form-item>
                 <el-form-item class="border-b">
-                    <el-button type="primary" style="width: 200px" :disabled="isEnableButton" @click="appyPriceFilter"
-                        >Apply</el-button
-                    >
+                    <el-button type="primary" style="width: 200px" :disabled="isEnableButton"
+                        @click="appyPriceFilter">Apply</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -88,13 +63,8 @@
                     <product-card :auction="item" />
                 </div>
                 <div class="flex justify-end w-full absolute bottom-[-40px] right-0">
-                    <el-pagination
-                        v-show="meta.totalPages > 1"
-                        v-model:current-page="meta.currentPage"
-                        background
-                        layout="prev, pager, next"
-                        :total="meta.totalPages * meta.pageSize"
-                    />
+                    <el-pagination v-show="meta.totalPages > 1" v-model:current-page="meta.currentPage" background
+                        layout="prev, pager, next" :total="meta.totalPages * meta.pageSize" />
                 </div>
             </div>
             <div v-else class="w-full">
@@ -144,6 +114,12 @@ const meta = ref({
     totalPages: 1,
     pageSize: 9,
 })
+
+const categoryMeta = ref({
+    currentPage: 1,
+    totalPages: 1,
+    pageSize: 3,
+})
 const listProducts = ref([])
 const listCategories = ref([])
 const loading = computed(() => {
@@ -172,6 +148,12 @@ watch(searchValue, async () => {
 watch(() => meta.value.currentPage, async (newValue, oldValue) => {
     if (newValue !== oldValue) {
         await Search()
+    }
+})
+
+watch(() => categoryMeta.value.pageSize, async (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+        await getAllCategories()
     }
 })
 const handleFilterchange = async (modelData) => {
@@ -214,8 +196,9 @@ const getListProduct = async (
 }
 const getAllCategories = async () => {
     try {
-        const res = await getListCategories(meta.value.currentPage, meta.value.pageSize)
+        const res = await getListCategories(categoryMeta.value.currentPage, categoryMeta.value.pageSize)
         listCategories.value = res.data.data
+        categoryMeta.value = res.data.meta
         console.log(res.data.data)
     } catch (error) {
         console.log(error)
