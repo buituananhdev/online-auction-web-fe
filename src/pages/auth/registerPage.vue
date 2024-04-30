@@ -4,7 +4,8 @@
             <h1 class="text-center text-2xl font-bold text-gray-800 mb-6">Create an account</h1>
             <div class="my-3 flex items-center text-sm gap-20 w-full justify-center">
                 <label class="flex items-center gap-2">
-                    <input validate-event="true" type="radio" :value="options[0]" v-model="user.role" name="radio" checked />
+                    <input validate-event="true" type="radio" :value="options[0]" v-model="user.role" name="radio"
+                        checked />
                     <b>Buyer account</b>
                 </label>
                 <label class="flex items-center gap-2">
@@ -13,48 +14,23 @@
                 </label>
             </div>
             <div class="my-4 flex flex-col justify-center items-center gap-6">
-                <el-form
-                    ref="userRef"
-                    :rules="rules"
-                    style="max-width: 600px; margin-bottom: -20px"
-                    :model="user"
-                    label-width="auto"
-                >
+                <el-form ref="userRef" :rules="rules" style="max-width: 600px; margin-bottom: -20px" :model="user"
+                    label-width="auto">
                     <el-form-item prop="email">
-                        <el-input
-                            v-model="user.email"
-                            type="email"
-                            style="width: 340px"
-                            size="large"
-                            class="cursor-pointer"
-                            placeholder="Please input your email"
-                        />
+                        <el-input v-model="user.email" type="email" style="width: 340px" size="large"
+                            class="cursor-pointer" placeholder="Please input your email" />
                     </el-form-item>
                     <el-form-item prop="password">
-                        <el-input
-                            v-model="user.password"
-                            style="width: 340px"
-                            type="password"
-                            autocomplete="off"
-                            size="large"
-                            placeholder="Please input your password"
-                            show-password
-                        />
+                        <el-input v-model="user.password" style="width: 340px" type="password" autocomplete="off"
+                            size="large" placeholder="Please input your password" show-password />
                     </el-form-item>
                     <el-form-item prop="confirmPassword">
-                        <el-input
-                            v-model="user.confirmPassword"
-                            style="width: 340px"
-                            type="password"
-                            size="large"
-                            placeholder="Please confirm your password"
-                            show-password
-                        />
+                        <el-input v-model="user.confirmPassword" style="width: 340px" type="password" size="large"
+                            placeholder="Please confirm your password" show-password />
                     </el-form-item>
                     <el-form-item>
-                        <el-button size="large" color="#3665f3" class="w-[340px]" @click="submit(userRef)" round
-                            >Create account</el-button
-                        >
+                        <el-button size="large" class="w-[340px]" type="primary" @click="submit(userRef)" round>Create an
+                            account</el-button>
                     </el-form-item>
                 </el-form>
                 <div class="relative">
@@ -141,7 +117,7 @@ const rules = reactive({
 
 const submit = async (formEl) => {
     if (!formEl) return
-    formEl.validate((valid)=> {
+    formEl.validate((valid) => {
         console.log("Not input information.")
     })
     if (isValids.value.includes(false)) {
@@ -157,6 +133,7 @@ const submit = async (formEl) => {
                 const data = res.data.data
             })
             router.push({ name: 'login' })
+            localStorage.setItem('isAuthPage', true)
             ElNotification({
                 title: 'Success',
                 message: 'Log in successfully!',

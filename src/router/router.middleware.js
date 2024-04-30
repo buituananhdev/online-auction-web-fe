@@ -4,9 +4,10 @@ export const authMiddleware = () => {
         console.log('beforeEach aa', to, from)
         const isLoggedIn = localStorage.getItem('access_token')
         if (to.matched.some((record) => record.meta.requiresAuth)) {
-            console.log('!isLoggedIn ', !isLoggedIn);
+            console.log('!isLoggedIn ', !isLoggedIn)
             if (!isLoggedIn) {
                 next({ name: 'login' })
+                localStorage.setItem('isAuthPage', true)
             } else {
                 next()
             }
@@ -16,6 +17,13 @@ export const authMiddleware = () => {
             } else {
                 next()
             }
+        }
+        if(to.path === '/login' || to.path === '/register') {
+            console.log('1');
+            localStorage.setItem('isAuthPage', true)
+        } else {
+            console.log('2');
+            localStorage.setItem('isAuthPage', false)
         }
     })
 }
