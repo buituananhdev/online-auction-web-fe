@@ -74,7 +74,7 @@ export const getRecentlyViewedList = async () => {
 }
 
 export const getSellerHistory = async (page = 1, pageSize = 10, searchQuery = '', status = '') => {
-    let url = `/auctions/?pageNumber=${page}&pageSize=${pageSize}`
+    let url = `/auctions/seller-history?pageNumber=${page}&pageSize=${pageSize}`
     if(searchQuery) {
         url += `&searchQuery=${searchQuery}`
     }

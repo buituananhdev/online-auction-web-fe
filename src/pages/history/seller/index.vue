@@ -41,7 +41,7 @@
                         >Create Auction</el-button
                     >
                 </div>
-                <div v-if="listSellerHistorys.length" class="w-full flex flex-col items-center justify-center gap-4">
+                <div v-if="listSellerHistorys.length" class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
                     <div
                         v-for="item in listSellerHistorys"
                         :key="item.id"
@@ -49,6 +49,15 @@
                     >
                         <!-- <history-card :auction="item" /> -->
                         <sold-card :auction="item" />
+                    </div>
+                    <div class="flex justify-end w-full absolute bottom-0 right-0">
+                        <el-pagination
+                            v-show="meta.totalPages > 1"
+                            v-model:current-page="meta.currentPage"
+                            background
+                            layout="prev, pager, next"
+                            :total="meta.totalPages * meta.pageSize"
+                        />
                     </div>
                 </div>
                 <div v-else class="w-full">
@@ -73,8 +82,8 @@ const status = ref('')
 const selectedItem = ref(null)
 
 const meta = ref({
-    pageNumber: 1,
-    totalPage: 1,
+    currentPage: 1,
+    totalPages: 1,
     pageSize: 8,
 })
 
@@ -96,9 +105,15 @@ watch(searchValue, async () => {
     await SearchHistory()
 })
 
-const getHistory = async (pageNumber, pageSize, searchQuery, status) => {
+watch(() => meta.value.currentPage, async (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+        await SearchHistory()
+    }
+})
+
+const getHistory = async (currentPage, pageSize, searchQuery, status) => {
     try {
-        const res = await getSellerHistory(pageNumber, pageSize, searchQuery, status)
+        const res = await getSellerHistory(currentPage, pageSize, searchQuery, status)
         console.log(res)
         listSellerHistorys.value = res.data.data
         meta.value = res.data.meta
@@ -135,7 +150,7 @@ const handleClickSearch = () => {
 
 const SearchHistory = async () => {
     try {
-        const res = await getSellerHistory(meta.value.pageNumber, meta.value.pageSize, searchValue.value, status.value)
+        const res = await getSellerHistory(meta.value.currentPage, meta.value.pageSize, searchValue.value, status.value)
         meta.value = res.data.meta
         listSellerHistorys.value = res.data.data
 
@@ -144,7 +159,7 @@ const SearchHistory = async () => {
             query.search = searchValue.value
         }
         if (status.value) {
-            query.status = status.value.join(',')
+            query.status = status.value
         }
         console.log('query1', query)
         router.push({ path: `/seller-history`, query })
@@ -158,7 +173,7 @@ const refreshData = async () => {
     if (searchValue.value || status.value) {
         await SearchHistory()
     } else {
-        await getHistory(meta.value.pageNumber, meta.value.pageSize)
+        await getHistory(meta.value.currentPage, meta.value.pageSize)
     }
 }
 
