@@ -36,7 +36,7 @@
                         />
                     </el-form-item>
                     <el-form-item>
-                        <el-button size="large" color="#3665f3" class="w-[340px]" @click="submit(userRef)" round
+                        <el-button size="large" type="primary" class="w-[340px]" @click="submit(userRef)" round
                             >Sign in</el-button
                         >
                     </el-form-item>
@@ -69,6 +69,7 @@ const useAuction = useAuctionStore()
 const googleLoginBtn = ref()
 const auth = authStore()
 onMounted(() => {
+    console.log('hehehehhe', router.path);
     console.log('onBeforeMount')
     const gClientId = '666131485042-hnsv2co3gq2dg5g8hc77e4p1fto5rell.apps.googleusercontent.com'
     window.google.accounts.id.initialize({
