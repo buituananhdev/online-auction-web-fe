@@ -18,7 +18,7 @@
             </el-header>
             <el-main style="background-color: #ffff; margin: 0 120px;  overflow: hidden; min-width: 1100px">
                 <div class="flex flex-col">
-                    <div class="flex items-end justify-between pb-4 border-b-[1px] border-gray-400">
+                    <div class="flex items-end justify-between pb-4 border-b-[1px] border-gray-300">
                         <h1 class="text-[#363636] text-3xl font-bold my-[19px]">My eBay</h1>
                         <a href="" class="text-[13px] mb-4 underline text-[#3665f3] font-medium"> Tell us what you think</a>
                     </div>
@@ -35,7 +35,7 @@
                                     <a href="">Bids & offers</a>
                                 </li>
                                 <li class="py-[10px] pl-4">
-                                    <a href="">Watchlist</a>
+                                    <a href="watchlist">Watchlist</a>
                                 </li>
                                 <li class="py-[10px] pl-4">
                                     <a href="">Saved searches</a>

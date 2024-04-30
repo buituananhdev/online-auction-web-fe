@@ -31,6 +31,12 @@ const routes = [
         meta: { layout: 'activity', requiresAuth: true },
     },
     {
+        path: '/watchlist',
+        name: 'watchlist',
+        component: () => import('../pages/watchlist/index.vue'),
+        meta: { layout: 'activity', requiresAuth: true },
+    },
+    {
         path: '/buyer-history',
         name: 'buyer-history',
         component: () => import('../pages/history/seller/index.vue'),
