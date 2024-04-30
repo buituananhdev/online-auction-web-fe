@@ -62,8 +62,7 @@
                         :key="item.id"
                         class="w-full flex items-center justify-center"
                     >
-                        <!-- <history-card :auction="item" /> -->
-                        <sold-card :auction="item" />
+                        <history-card :auction="item" />
                     </div>
                     <div class="flex justify-end w-full absolute bottom-0 right-0">
                         <el-pagination
@@ -89,6 +88,7 @@ import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getSellerHistory } from '../../../services/auction.service'
 
+// const props = isLoading
 const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()

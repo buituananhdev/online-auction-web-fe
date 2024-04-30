@@ -9,12 +9,12 @@ import { authMiddleware } from './router/router.middleware'
 import authLayout from './layouts/authLayout.vue'
 import emptyLayout from './layouts/emptyLayout.vue'
 import activityLayout from './layouts/activityLayout.vue'
-import ProductCard from './components/product/ProductCard.vue'
-import FilterProduct from './components/product/FilterProduct.vue'
-import SkeletonCard from './components/product/SkeletonCard.vue'
+import ProductCard from './components/Product/ProductCard.vue'
+import FilterProduct from './components/Product/FilterProduct.vue'
+import SkeletonCard from './components/Product/SkeletonCard.vue'
 import CategoryCard from './components/Category/CategoryCard.vue'
-import HistoryCard from './components/product/HistoryCard.vue'
-import SoldCard from './components/product/SoldCard.vue'
+import HistoryCard from './components/Product/HistoryCard.vue'
+import HistoryProductList from './components/Product/HistoryProduct/HistoryProductList.vue'
 import WatchlistCard from './components/product/WatchlistCard.vue'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -38,7 +38,8 @@ const initApp = async () => {
     app.component('category-card', CategoryCard)
     app.component('VueDatePicker', VueDatePicker)
     app.component('Icon', Icon)
-    app.component('sold-card', SoldCard)
+    app.component('history-card', HistoryCard)
+    app.component('history-product-list', HistoryProductList)
     app.component('watchlist-card', WatchlistCard)
     app.component('QuillEditor', QuillEditor)
     app.mount('#app')

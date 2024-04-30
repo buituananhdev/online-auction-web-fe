@@ -39,7 +39,7 @@ const routes = [
     {
         path: '/buyer-history',
         name: 'buyer-history',
-        component: () => import('../pages/history/seller/index.vue'),
+        component: () => import('../pages/history/buyer/index.vue'),
         meta: { layout: 'activity', requiresAuth: true },
     },
     // Auth router
