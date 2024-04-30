@@ -18,7 +18,8 @@ import SoldCard from './components/product/SoldCard.vue'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { Icon } from '@iconify/vue';
-
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 const initApp = async () => {
     authMiddleware()
@@ -37,6 +38,7 @@ const initApp = async () => {
     app.component('VueDatePicker', VueDatePicker)
     app.component('Icon', Icon)
     app.component('sold-card', SoldCard)
+    app.component('QuillEditor', QuillEditor)
     app.mount('#app')
 }
 initApp()
