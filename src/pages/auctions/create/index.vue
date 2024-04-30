@@ -69,8 +69,14 @@
             >
             </textarea>
         </div> -->
-        <div class="">
-            <div id="description"></div>
+        <div class="mx-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+            <h2 class="font-bold mb-[10px]">DESCRIPTION</h2>
+            <QuillEditor 
+                theme="snow" 
+                v-model:content="currentAuction.description" 
+                contentType="text" 
+                placeholder="Write a detailed description of your item, or save time and let Al draft it for you"
+            />
         </div>
         <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
             <h2 class="font-bold mb-[10px]">PRICING</h2>
@@ -155,35 +161,19 @@ import { onBeforeMount, onMounted, ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { getListCategories } from '../../../services/category.service'
 import { addAuction } from '../../../services/auction.service'
-import Quill from 'quill';
 
 // import { UploadProps, UploadUserFile } from 'element-plus'
 import { useRouter } from 'vue-router'
 
 const listCategories = ref([])
 
-const descriptionContent = ref(null);
-
-// Khởi tạo Quill sau khi DOM đã sẵn sàng
-onMounted(() => {
-    const quill = new Quill('#description', {
-        theme: 'snow',
-        placeholder: "Write a detailed description of your item, or save time and let Al draft it for you"
-    });
-    
-    // Lắng nghe sự kiện thay đổi nội dung của Quill
-    quill.on('text-change', () => {
-        descriptionContent.value = quill.getContents();
-    });
-});
-
 const currentAuction = ref({
     productName: '',
     categoryId: null,
     condition: 1,
-    description: descriptionContent.value,
-    startingPrice: 0,
-    maxPrice: 9999,
+    description: '',
+    startingPrice: null,
+    maxPrice: null,
     endTime: new Date(),
     canReturn: false,
 })
@@ -305,6 +295,7 @@ const createAuction = async () => {
     try {
         const res = await addAuction(currentAuction.value)
         router.push({ name: 'seller-history' })
+        console.log(111111111111111111, currentAuction.description);
         ElNotification({
             title: 'Create Auction',
             message: 'Create Auction Successfully!',
