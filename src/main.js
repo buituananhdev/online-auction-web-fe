@@ -15,6 +15,7 @@ import SkeletonCard from './components/product/SkeletonCard.vue'
 import CategoryCard from './components/Category/CategoryCard.vue'
 import HistoryCard from './components/product/HistoryCard.vue'
 import SoldCard from './components/product/SoldCard.vue'
+import WatchlistCard from './components/product/WatchlistCard.vue'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { Icon } from '@iconify/vue';
@@ -38,6 +39,7 @@ const initApp = async () => {
     app.component('VueDatePicker', VueDatePicker)
     app.component('Icon', Icon)
     app.component('sold-card', SoldCard)
+    app.component('watchlist-card', WatchlistCard)
     app.component('QuillEditor', QuillEditor)
     app.mount('#app')
 }
