@@ -54,7 +54,7 @@
 
             <div class="flex flex-col">
                 <div class="pb-8 flex items-center">
-                    <span class="font-bold text-xl">Orders</span>
+                    <span class="font-bold text-xl">{{ getTitle(status) }}</span>
                 </div>
                 <div v-if="listSellerHistorys.length" class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
                     <div
@@ -94,7 +94,6 @@ const router = useRouter()
 const route = useRoute()
 const searchValue = ref('')
 const status = ref('')
-const selectedItem = ref(null)
 
 const meta = ref({
     currentPage: 1,
@@ -111,6 +110,23 @@ const listProductStatus = ref([
     { value: 4, text: 'Canceled' },
     { value: 5, text: 'Pending Publish' },
 ])
+
+const getTitle = (status) => {
+    switch (status) {
+        case 1:
+            return 'Available'
+        case 2:
+            return 'Sold'
+        case 3:
+            return 'Deleted'
+        case 4:
+            return 'Canceled'
+        case 5:
+            return 'Pending Publish'
+        default: 
+            return 'Orders'
+    }
+}
 
 const loading = computed(() => {
     return !Boolean(listSellerHistorys.value.length > 0)
