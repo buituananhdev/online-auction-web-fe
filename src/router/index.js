@@ -67,6 +67,13 @@ const routes = [
         meta: { layout: 'auth', requiresAuth: true },
         component: () => import('../pages/auctions/[id].vue'),
     },
+    // Payments route
+    {
+        path: '/payments',
+        name: 'payments',
+        meta: { layout: 'activity', requiresAuth: true },
+        component: () => import('../pages/payments/index.vue'),
+    },
 ]
 const router = createRouter({
     history: createWebHistory(),

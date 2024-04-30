@@ -19,7 +19,8 @@ import WatchlistCard from './components/product/WatchlistCard.vue'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { Icon } from '@iconify/vue';
-
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 const initApp = async () => {
     authMiddleware()
@@ -39,6 +40,7 @@ const initApp = async () => {
     app.component('Icon', Icon)
     app.component('sold-card', SoldCard)
     app.component('watchlist-card', WatchlistCard)
+    app.component('QuillEditor', QuillEditor)
     app.mount('#app')
 }
 initApp()
