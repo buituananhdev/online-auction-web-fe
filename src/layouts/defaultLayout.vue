@@ -1,6 +1,7 @@
 <template>
-    <div class="rounded">
-        <el-header>
+    <div v-if="!authStore.isLoggedIn" class="rounded">
+        <el-container>
+            <el-header>
                 <the-header>
                     <el-input v-model="searchValue" style="width: 35%; border-radius: 30px" placeholder="Search..."
                         class="input-with-select" @keyup.enter="handleClickSearch">
@@ -10,12 +11,17 @@
                     </el-input>
                 </the-header>
             </el-header>
-        <slot/>
+            <el-main
+                style="padding-top: 60px;background-color: #ffff; margin: auto; max-width: 1140px; overflow: hidden; min-width: 1100px">
+                <slot />
+            </el-main>
+            <el-footer style="padding: 0;"><the-footer /></el-footer>
+        </el-container>
     </div>
 </template>
-
 <script setup>
-import { onMounted, ref } from 'vue'
+import {  onMounted, ref } from 'vue'
+import { authStore } from '../stores/auth.store'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 

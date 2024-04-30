@@ -1,22 +1,33 @@
 import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs'
 import { createRouter, createWebHistory } from 'vue-router'
 
+const getLayout = () => {
+    let res;
+    const token = localStorage.getItem('access_token');
+    res = token ? {
+        layout: 'auth',
+        requiresAuth: true
+    } :  {
+        layout: 'default'
+    } 
+    return res
+}
 
 const routes = [
     {
         path: '/',
         name: 'dashboard',
         component: () => import('../pages/dashboard/index.vue'),
-        // meta: { layout: 'auth', requiresAuth: true },
-        meta: { layout: 'empty' },
+        // meta: { layout: , requiresAuth: true },
+        meta: getLayout(),
     },
     {
         path: '/auctions',
         name: 'list-auctions',
         component: () => import('../pages/auctions/index.vue'),
         // meta: { layout: 'auth', requiresAuth: true },
-        meta: { layout: 'empty' },
-        children: []
+        meta: getLayout(),
+        children: [],
     },
     {
         path: '/create-auction',
@@ -52,7 +63,7 @@ const routes = [
     {
         path: '/test',
         name: 'test',
-        meta: { layout: 'empty' },
+        meta: { layout: 'default' },
         component: () => import('../pages/auctions/test.vue'),
     },
     {
@@ -64,7 +75,7 @@ const routes = [
     {
         path: '/auctions/:id',
         name: 'singleAuction',
-        meta: { layout: 'auth', requiresAuth: true },
+        meta: getLayout(),
         component: () => import('../pages/auctions/[id].vue'),
     },
     // Payments route

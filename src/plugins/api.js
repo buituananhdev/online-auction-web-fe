@@ -18,7 +18,7 @@ axiosApiInstance.interceptors.request.use(
     },
     (error) => {
         Promise.reject(error)
-    }
+    },
 )
 // Response interceptor for API calls
 axiosApiInstance.interceptors.response.use(
@@ -54,9 +54,10 @@ axiosApiInstance.interceptors.response.use(
                 // })
                 localStorage.clear()
                 window.location.href = '/login'
+                localStorage.setItem('isAuthPage', true)
             }
         }
         return Promise.reject(error)
-    }
+    },
 )
 export default axiosApiInstance

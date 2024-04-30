@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed z-99 top-0 left-0 z-50 w-full flex flex-col">
+    <div class="absolute z-99 top-0 left-0 z-50 w-full flex flex-col">
         <div
             class="h-[65px] bg-white flex items-center justify-around px-5 border-b border-gray-300"
         >
@@ -10,16 +10,16 @@
                     src="https://scontent.fdad3-6.fna.fbcdn.net/v/t39.30808-6/426587256_1430509044210042_7946706195478323343_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGJAwy2cy3ozNO6_7jEhyDyXu52TFDhi9Ve7nZMUOGL1VpuR-3ErXuUitueR_3NPEQEtrYu0xsOzygnsODxm_yg&_nc_ohc=mYaPYCfznu4AX9xv_jp&_nc_ht=scontent.fdad3-6.fna&oh=00_AfB9VxyP9nHo5xo_XgDip71TokS9kjdKrUIKxyIf8EQOQw&oe=6602BD50"
                     alt=""
                 />
-                <p>Web Name</p>
+                <router-link to="/">Web Name</router-link>
             </div>
             <slot />
-            <div class="flex gap-6">
+            <div class="flex gap-6"  v-if="useAuth.isLoggedIn">
                 <el-select v-model="value" placeholder="WatchList" style="width: 110px">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
                 <img src="../../assets/icons/bell-icon.svg" class="cursor-pointer" width="20" alt="" />
             </div>
-            <div class="container flex justify-end items-center gap-4 w-fit">
+            <div v-if="useAuth.isLoggedIn" class="container flex justify-end items-center gap-4 w-fit">
                 <span>{{ user.name }} | </span>
                 <el-popover placement="bottom-end" :width="200" trigger="click" class="p-0">
                     <ul>
@@ -34,11 +34,15 @@
                     </template>
                 </el-popover>
             </div>
+            <div v-else>
+                <el-button type="primary" @click="router.push('/register')">Sign up</el-button>
+                <el-button @click="router.push('/login')">Sign in</el-button>
+            </div>
         </div>
-        <div class="h-[30px] w-full py-2 flex justify-center bg-white">
+        <div class="h-[30px] w-full py-2 flex justify-center bg-white border-b">
             <ul class="justify-center text-center flex items-center gap-6">
                 <li v-for="(item, index) in categories" :key="index" class="text-xs text-[#505050] cursor-pointer py-1 px-2 rounded-lg hover:bg-[#EEEEEE]">
-                    {{ item.categoryName }}
+                    <a :href="'/auctions?categories=' + item.id">{{ item.categoryName }}</a> 
                 </li>
             </ul>
         </div>
@@ -82,6 +86,7 @@ const options = [
         label: 'Option5',
     },
 ]
+const useAuth = authStore()
 const router = useRouter()
 const user = ref({
     name: 'hehehhe',
@@ -101,6 +106,7 @@ const exitPopupEdit = () => {
 const logout = () => {
     localStorage.clear()
     window.location.href = '/login'
+    localStorage.setItem('isAuthPage', true)
 }
 
 const handleOutsideClick = (event) => {
@@ -115,8 +121,9 @@ const handleOutsideClick = (event) => {
 const signOut = () => {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
-    authStore().isLoggedIn = false
+    useAuth.isLoggedIn = false
     router.push({ name: 'login' })
+    localStorage.setItem('isAuthPage', true)
 }
 
 const getCategoryList = async () => {

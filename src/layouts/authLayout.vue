@@ -17,6 +17,7 @@
                 </the-header>
             </el-header>
             <el-main style="padding-top: 40px;background-color: #ffff; margin: auto; max-width: 1140px; overflow: hidden; min-width: 1100px">
+                hehehehhhhhhhhh
                 <slot />
             </el-main>
             <el-footer style="padding: 0;"><the-footer/></el-footer>
@@ -48,6 +49,8 @@ const handleClickSearch = () => {
     }
 }
 onMounted(() => {
+    console.log('hehehehhe', router.path);
+
     if (route.query.search) {
         searchValue.value = route.query.search.toString()
     }
