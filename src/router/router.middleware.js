@@ -18,12 +18,5 @@ export const authMiddleware = () => {
                 next()
             }
         }
-        if(to.path === '/login' || to.path === '/register') {
-            console.log('1');
-            localStorage.setItem('isAuthPage', true)
-        } else {
-            console.log('2');
-            localStorage.setItem('isAuthPage', false)
-        }
     })
 }

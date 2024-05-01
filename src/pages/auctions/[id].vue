@@ -68,16 +68,36 @@ const convertISOToRegularTime = (isoTimeString) => {
 
     return `${hours}:${minutes} -  ${month} ${day}, ${year}`
 }
+const isBuyAvailble = ref(false)
 const bidAmount = ref()
 const countdown = ref()
 const bidPopUpTitle = ref('Place your bid')
 const isReviewBid = ref(false)
 
-const handlePlaceBid = () => {
-    if(!auth.isLoggedIn) {
-        router.push('/login')
-    } else dialogFormVisible.value = true
+const handlePlaceBid = (data = false) => {
+    if (!auth.isLoggedIn) {
+        return router.push('/login')
+    }
+    if (data === true) {
+        isBuyAvailble.value = true
+        bidPopUpTitle.value = 'Review your order'
+        bidAmount.value = auction.value.maxPrice
+        isReviewBid.value = true
+    } else {
+        isReviewBid.value = false
+        isBuyAvailble.value = false
+    }
+    dialogFormVisible.value = true
 }
+
+const handleEditBid = () => {
+    if(isBuyAvailble.value) {
+        dialogFormVisible.value = false
+    } else {
+        isReviewBid.value = false
+    }
+}
+
 const converConditionText = (id) => {
     switch (id) {
         case 1:
@@ -92,7 +112,7 @@ const converConditionText = (id) => {
 }
 
 function reviewBid() {
-    if(!bidAmount.value || bidAmount.value < auction.value.currentPrice) return
+    if (!bidAmount.value || bidAmount.value < auction.value.currentPrice) return
     isReviewBid.value = true
     bidPopUpTitle.value = 'Review your bid'
 }
@@ -209,36 +229,25 @@ onMounted(async () => {
                 <span class="text-xs text-[#a2a2a2] underline">Add to Watchlist</span>
             </template>
         </el-page-header>
-        <el-dialog
-            v-model="dialogFormVisible"
-            :title="bidPopUpTitle"
-            width="500"
-            style="border-radius: 20px; padding: 24px; font-weight: 600"
-            class="rounded-xl"
-        >
+        <el-dialog v-model="dialogFormVisible" :title="bidPopUpTitle" width="500"
+            style="border-radius: 20px; padding: 24px; font-weight: 600" class="rounded-xl">
             <div v-if="!isReviewBid" class="flex flex-col gap-2">
                 <p class="inline-block font-bold text-xl">${{ auction.currentPrice }}</p>
                 <div class="flex items-center justify-between">
                     <span class="inline-block">{{ auction.bidCount }} {{ auction.bidCount < 2 ? 'bid' : 'bids' }}</span>
-                    <span class="inline-block text-sx">Time left: {{ countdown }}</span>
+                            <span class="inline-block text-sx">Time left: {{ countdown }}</span>
                 </div>
                 <div class="flex items-center justify-between gap-3">
-                    <button
-                        @click="addBidMount(auction.currentPrice + 5)"
-                        class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]"
-                    >
+                    <button @click="addBidMount(auction.currentPrice + 5)"
+                        class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
                         Bid {{ auction.currentPrice + 5 }}$
                     </button>
-                    <button
-                        @click="addBidMount(auction.currentPrice + 10)"
-                        class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]"
-                    >
+                    <button @click="addBidMount(auction.currentPrice + 10)"
+                        class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
                         Bid {{ auction.currentPrice + 10 }}$
                     </button>
-                    <button
-                        @click="addBidMount(auction.currentPrice + 15)"
-                        class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]"
-                    >
+                    <button @click="addBidMount(auction.currentPrice + 15)"
+                        class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
                         Bid {{ auction.currentPrice + 15 }}$
                     </button>
                 </div>
@@ -251,10 +260,8 @@ onMounted(async () => {
                     <div class="flex items-center justify-between gap-3 relative">
                         <input v-model="bidAmount" type="number" class="w-2/3 border py-1 pl-8 rounded-xl" />
                         <span class="font-bold absolute left-[15px]">$</span>
-                        <button
-                            @click="reviewBid"
-                            class="flex-1 border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]"
-                        >
+                        <button @click="reviewBid"
+                            class="flex-1 border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
                             Review bid
                         </button>
                     </div>
@@ -268,7 +275,7 @@ onMounted(async () => {
                     <p class="w-1/3 text-base">Current bid</p>
                     <p class="text-base">
                         ${{ auction.currentPrice }} - {{ auction.bidCount }} {{ auction.bidCount < 2 ? 'bid' : 'bids' }}
-                    </p>
+                            </p>
                 </div>
                 <div class="flex items-center">
                     <p class="w-1/3 text-base">Your max bid</p>
@@ -294,8 +301,8 @@ onMounted(async () => {
             <template #footer>
                 <div v-show="isReviewBid">
                     <div class="dialog-footer">
-                        <el-button @click="isReviewBid = false">Edit Bid</el-button>
-                        <el-button type="primary" @click="handleBidAuction"> Confirm bid </el-button>
+                        <el-button @click="handleEditBid">{{ isBuyAvailble? 'Close' : 'Edit Bid'}}</el-button>
+                        <el-button type="primary" @click="handleBidAuction">{{ isBuyAvailble? 'Confirm order' : 'Confirm bid' }}</el-button>
                     </div>
                     <div class="text-xs text-[#5B5252] pt-6 text-left">
                         When you confirm your bid, it means you’re committing to buy this item if you’re the winning
@@ -312,52 +319,32 @@ onMounted(async () => {
                     <img :src="imageList[imageOverIndex]" alt="" class="w-[500px] h-[500px] rounded-xl" />
                 </div>
                 <div class="auction-detail-list w-full h-fit">
-                    <Icon
-                        @click="scrollToLeft(scrollBox)"
+                    <Icon @click="scrollToLeft(scrollBox)"
                         class="auction-detail-arrow-icon auction-detail-left-icon w-[300px]"
-                        icon="ic:round-keyboard-arrow-left"
-                    />
+                        icon="ic:round-keyboard-arrow-left" />
                     <div ref="scrollBox" class="flex scroll-column-custom h-[100px] w-[500px] overflow-auto">
-                        <p
-                            v-for="(item, index) in imageList"
-                            :key="index"
-                            class="scrollbar-demo-item image-box"
-                            @mouseleave="imageOverIndex = imageActiveIndex"
-                            @mouseover="imageOverIndex = index"
-                            @click="imageActiveIndex = index"
-                        >
-                            <img
-                                :src="item"
-                                alt=""
-                                width="80"
-                                height="80"
-                                :class="{ 'image-active': imageActiveIndex === index, 'image-item rounded-lg': true }"
-                            />
+                        <p v-for="(item, index) in imageList" :key="index" class="scrollbar-demo-item image-box"
+                            @mouseleave="imageOverIndex = imageActiveIndex" @mouseover="imageOverIndex = index"
+                            @click="imageActiveIndex = index">
+                            <img :src="item" alt="" width="80" height="80"
+                                :class="{ 'image-active': imageActiveIndex === index, 'image-item rounded-lg': true }" />
                         </p>
                     </div>
-                    <Icon
-                        @click="scrollRight(scrollBox)"
+                    <Icon @click="scrollRight(scrollBox)"
                         class="auction-detail-arrow-icon auction-detail-right-icon w-[300px]"
-                        icon="ic:round-keyboard-arrow-right"
-                    />
+                        icon="ic:round-keyboard-arrow-right" />
                 </div>
             </div>
             <div v-show="auction.user" class="auction-detail-information flex flex-col gap-2 items-start w-[43%] py-4">
                 <span class="text-xl font-semibold">{{ auction.productName }}</span>
                 <div class="flex items-center gap-2 p-2 border rounded-lg w-full">
-                    <img
-                        class="w-[35px] h-[35px] object-contain rounded-full"
+                    <img class="w-[35px] h-[35px] object-contain rounded-full"
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8xme21WZD0--nyHf-4B90Lmycw0tCNGjld7D1l4edsQ&s"
-                        alt=""
-                    />
+                        alt="" />
                     <div class="flex flex-col">
                         <span>{{ auction.user && auction.user.fullName }}</span>
-                        <el-rate
-                            disabled
-                            style="height: 15px"
-                            :colors="colors"
-                            score-template="({auction.user && auction.user.ratings.totalRatings})"
-                        />
+                        <el-rate disabled style="height: 15px" :colors="colors"
+                            score-template="({auction.user && auction.user.ratings.totalRatings})" />
                     </div>
                 </div>
                 <div class="bg-[#FFF0DF] w-full p-3 flex items-center gap-3">
@@ -375,32 +362,24 @@ onMounted(async () => {
                     <span class="inline-block text-[#8B96A5] w-1/3">Condition:</span>
                     <span class="text-[#505050]">{{ converConditionText(auction.condition) }}</span>
                 </div>
-                <button
-                    @click="handlePlaceBid"
-                    class="w-full bg-[#409EFF] text-white font-bold rounded-3xl py-2 text-lg hover:bg-[#3A8EE4]"
-                >
+                <button @click="handlePlaceBid"
+                    class="w-full bg-[#409EFF] text-white font-bold rounded-3xl py-2 text-lg hover:bg-[#3A8EE4]">
                     Place bid
                 </button>
                 <div class="flex items-center w-full gap-4">
                     <button
                         class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white"
-                    >
+                        @click="handlePlaceBid(true)">
                         Buy it now
                     </button>
                     <button
-                        class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white"
-                    >
+                        class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white">
                         Add to Watchlist
                     </button>
                 </div>
                 <div v-show="auction.canReturn" class="bg-[#F7F7F7] rounded-lg w-full p-2 flex items-center gap-2">
-                    <img
-                        class="p-2 rounded-full bg-white"
-                        src="../../assets/icons/return-icon.svg"
-                        width="32"
-                        height="32"
-                        alt=""
-                    />
+                    <img class="p-2 rounded-full bg-white" src="../../assets/icons/return-icon.svg" width="32"
+                        height="32" alt="" />
                     <b>Breathe east.</b>
                     <span>Returns accepted.</span>
                 </div>
@@ -410,42 +389,32 @@ onMounted(async () => {
                 </span>
                 <div class="flex items-center gap-2">
                     <span>Payment:</span>
-                    <img
-                        class="border px-2 rounded-lg"
-                        src="../../assets/images/vnpay-logo.jpg"
-                        width="70"
-                        height="40"
-                        alt=""
-                    />
+                    <img class="border px-2 rounded-lg" src="../../assets/images/vnpay-logo.jpg" width="70" height="40"
+                        alt="" />
                 </div>
             </div>
         </div>
         <div class="mt-10 mx-4">
             <span class="font-bold text-2xl">Explore related Items</span>
             <div class="auction-detail-explored-list">
-                <Icon
-                    @click="scrollToLeft(scrollBox2)"
+                <Icon @click="scrollToLeft(scrollBox2)"
                     class="auction-detail-arrow-icon auction-detail-left-icon w-[300px]"
-                    icon="ic:round-keyboard-arrow-left"
-                />
+                    icon="ic:round-keyboard-arrow-left" />
                 <div ref="scrollBox2" class="scrollbar-flex-content scroll-custom">
                     <p v-for="item in exploredAuctionList" :key="item" class="scrollbar-demo-item">
                         <product-card :auction="item" />
                     </p>
                 </div>
-                <Icon
-                    @click="scrollRight(scrollBox2)"
+                <Icon @click="scrollRight(scrollBox2)"
                     class="auction-detail-arrow-icon auction-detail-right-icon w-[300px]"
-                    icon="ic:round-keyboard-arrow-right"
-                />
+                    icon="ic:round-keyboard-arrow-right" />
             </div>
         </div>
         <el-tabs type="border-card" class="auction-detail-description">
             <el-tab-pane label="About this item" class="flex flex-col">
                 <span class="text-xs py-2">Seller assumes all responsibility for this listing.</span>
-                <span class="text-xs py-2"
-                    >Last updated on {{ convertISOToRegularTime(auction.lastModifiedDate) }}</span
-                >
+                <span class="text-xs py-2">Last updated on {{ convertISOToRegularTime(auction.lastModifiedDate)
+                    }}</span>
                 <span class="my-3 text-xl font-semibold">Item specifics</span>
                 <div class="w-full py-2">
                     <span class="inline-block w-1/4 text-xs">Condition:</span>
@@ -484,13 +453,8 @@ onMounted(async () => {
                     <p class="text-xl font-semibold py-4">Payment details</p>
                     <div class="w-full">
                         <p class="text-xs font-medium bg-[#E8E8E8] leading-8 pl-2 w-full">Payment</p>
-                        <img
-                            class="border px-2 rounded-lg mt-2"
-                            src="../../assets/images/vnpay-logo.jpg"
-                            width="70"
-                            height="40"
-                            alt=""
-                        />
+                        <img class="border px-2 rounded-lg mt-2" src="../../assets/images/vnpay-logo.jpg" width="70"
+                            height="40" alt="" />
                     </div>
                 </div>
             </el-tab-pane>
@@ -499,8 +463,7 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.auction-detail-container {
-}
+.auction-detail-container {}
 
 .scrollbar-flex-content {
     display: flex;

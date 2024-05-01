@@ -48,14 +48,14 @@
                 <skeleton-card v-for="item in 4" :key="item" style="padding-right: 20px;" />
             </div>
             <div class="dashboard-list">
-                <Icon @click="scrollToLeft(scrollBox)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
+                <Icon v-show="topAuctionsList.length > 3" @click="scrollToLeft(scrollBox)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-left" />
                 <div ref="scrollBox" class="scrollbar-flex-content scroll-custom">
                     <p v-for="item in topAuctionsList" :key="item" class="scrollbar-demo-item">
                         <product-card :auction="item" />
                     </p>
                 </div>
-                <Icon @click="scrollRight(scrollBox)" class="dashboard-arrow-icon dashboard-right-icon w-[300px]"
+                <Icon v-show="topAuctionsList.length > 3" @click="scrollRight(scrollBox)" class="dashboard-arrow-icon dashboard-right-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-right" />
             </div>
         </div>

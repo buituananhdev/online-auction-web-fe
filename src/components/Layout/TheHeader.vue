@@ -20,7 +20,7 @@
                 <img src="../../assets/icons/bell-icon.svg" class="cursor-pointer" width="20" alt="" />
             </div>
             <div v-if="useAuth.isLoggedIn" class="container flex justify-end items-center gap-4 w-fit">
-                <span>{{ user.name }} | </span>
+                <span>{{ useAuth.user.fullName }} | </span>
                 <el-popover placement="bottom-end" :width="200" trigger="click" class="p-0">
                     <ul>
                         <li class="border-b py-2 cursor-pointer">My account</li>
