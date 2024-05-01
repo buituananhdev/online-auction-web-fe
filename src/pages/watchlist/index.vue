@@ -84,7 +84,7 @@ watch(searchValue, async () => {
 
 watch(() => meta.value.pageSize, async (newValue, oldValue) => {
     if (newValue !== oldValue) {
-        await SearchHistory()
+        await SearchWatchlist()
     }
 })
 

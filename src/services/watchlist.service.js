@@ -17,3 +17,7 @@ export const getWatchlist = async (page = 1, pageSize = 10, searchQuery = '', ty
 export const addWatchlist = async (data) => {
     return await axiosApiInstance.post('/watchlist', data)
 }
+
+export const deleteWatchlist = async (id) => {
+    return axiosApiInstance.delete(`/watchlist/${id}`)
+}
