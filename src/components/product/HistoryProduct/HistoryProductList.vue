@@ -2,13 +2,14 @@
     <div class="flex flex-col border-b py-8">
         <div class="pb-8 flex justify-between items-center">
             <span class="font-semibold text-xl">{{ title }}</span>
-            <div class="p-1 rounded-full cursor-pointer" @click="toggleHiddenData">
+            <div class="p-1 rounded-full cursor-pointer" @click="toggleHiddenData" v-show="dataList.length">
                 <Icon
                     :icon="!isCollapse ? 'material-symbols:keyboard-arrow-down-rounded' : 'material-symbols:keyboard-arrow-up-rounded'"
                     class="w-[24px] h-[24px]" 
                 />
             </div>
         </div>
+        <p class="text-center font-semibold">{{ title === 'Bidding' ? 'You are not bidding on any items.' : title === 'Offers' ? 'You don\'t have any offers now.' : 'You don\'t have any items to display.' }}</p>
         <div v-show="!isCollapse" class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
             <div v-for="item in dataList" :key="item.id" class="w-full flex items-center justify-center">
                 <history-card :auction="item" />

@@ -156,9 +156,11 @@ watch(() => categoryMeta.value.pageSize, async (newValue, oldValue) => {
         await getAllCategories()
     }
 })
+
 const handleFilterchange = async (modelData) => {
     await Search()
 }
+
 const getListProduct = async (
     currentPage,
     pageSize,
@@ -194,6 +196,7 @@ const getListProduct = async (
         console.log(error)
     }
 }
+
 const getAllCategories = async () => {
     try {
         const res = await getListCategories(categoryMeta.value.currentPage, categoryMeta.value.pageSize)

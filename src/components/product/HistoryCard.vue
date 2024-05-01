@@ -69,12 +69,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- <div class="flex justify-end flex-auto mr-5">
-                    <el-button style="min-width: 196px; padding: 18px 0" class="my-auto" type="primary"
-                        >More actions</el-button
-                    >
-                </div> -->
             </div>
         </div>
     </div>
