@@ -22,41 +22,19 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-4 my-2 pb-4 border-b-[1px] border-gray-300">
-                <el-select
-                    v-model="status"
-                    placeholder="Filter by status"
-                    size="large"
-                    style="width: 240px"
-                    @change="filterStatus"
-                >
-                <el-option
-                    v-for="item in listProductStatus"
-                    :key="item.value"
-                    :label="item.text"
-                    :value="item.value"
-                />
-                </el-select>
-            </div>
-
             <div class="flex flex-col mt-8">
-                <div v-if="listSellerHistorys.length" class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
+                <div v-if="watchlist.length" class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
                     <div
-                        v-for="item in listSellerHistorys"
+                        v-for="item in watchlist"
                         :key="item.id"
                         class="w-full flex items-center justify-center"
                     >
                         <!-- <history-card :auction="item" /> -->
                         <history-card :auction="item" :isInWatchlist="true"/>
                     </div>
-                    <div class="flex justify-end w-full absolute bottom-0 right-0">
-                        <el-pagination
-                            v-show="meta.totalPages > 1"
-                            v-model:current-page="meta.currentPage"
-                            background
-                            layout="prev, pager, next"
-                            :total="meta.totalPages * meta.pageSize"
-                        />
+                    <div class="flex justify-end w-full absolute bottom-0 right-0 gap-3">
+                        <span class="text-sm underline text-[#409EFF] cursor-pointer" @click="meta.pageSize += size"
+                            v-show="meta.pageSize < meta.totalPages * meta.pageSize">Load more</span>
                     </div>
                 </div>
                 <div v-else class="w-full">
@@ -71,22 +49,22 @@
 import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getSellerHistory } from '../../services/auction.service'
+import { getWatchlist } from '../../services/watchlist.service'
 
 const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()
 const searchValue = ref('')
 const status = ref('')
-const selectedItem = ref(null)
+const size = 5
 
 const meta = ref({
     currentPage: 1,
     totalPages: 1,
-    pageSize: 8,
+    pageSize: 5,
 })
 
-const listSellerHistorys = ref([])
+const watchlist = ref([])
 const listProductStatus = ref([
     { value: null, text: 'All Sold' },
     { value: 1, text: 'Available' },
@@ -97,57 +75,52 @@ const listProductStatus = ref([
 ])
 
 const loading = computed(() => {
-    return !Boolean(listSellerHistorys.value.length > 0)
+    return !Boolean(watchlist.value.length > 0)
 })
 
 watch(searchValue, async () => {
-    await SearchHistory()
+    await SearchWatchlist()
 })
 
-watch(() => meta.value.currentPage, async (newValue, oldValue) => {
+watch(() => meta.value.pageSize, async (newValue, oldValue) => {
     if (newValue !== oldValue) {
         await SearchHistory()
     }
 })
 
-const getHistory = async (currentPage, pageSize, searchQuery, status) => {
+const getWatchedList = async (currentPage, pageSize, searchQuery, type) => {
     try {
-        const res = await getSellerHistory(currentPage, pageSize, searchQuery, status)
-        console.log(res)
-        listSellerHistorys.value = res.data.data
+        const res = await getWatchlist(currentPage, pageSize, searchQuery, type)
+        watchlist.value = res.data.data
         meta.value = res.data.meta
-        console.log('list', listSellerHistorys.value)
-
-        // console.log('meta', meta)
     } catch (error) {
         console.log(error)
     }
 }
 
 const filterStatus = async (value) => {
-    selectedItem.value = value
     status.value = value
-    await SearchHistory()
+    await SearchWatchlist()
 }
 
 const handleClickSearch = () => {
     if (searchValue.value.trim() !== '') {
         console.log(searchValue.value)
         router.push({
-            path: '/seller-history',
+            path: '/watchlist',
             query: { search: searchValue.value.trim() },
         })
     } else {
         const { search, ...queryWithoutSearch } = route.query
-        router.push({ path: '/seller-history', query: queryWithoutSearch })
+        router.push({ path: '/watchlist', query: queryWithoutSearch })
     }
 }
 
-const SearchHistory = async () => {
+const SearchWatchlist = async () => {
     try {
-        const res = await getSellerHistory(meta.value.currentPage, meta.value.pageSize, searchValue.value, status.value)
+        const res = await getWatchlist(meta.value.currentPage, meta.value.pageSize, searchValue.value, status.value)
         meta.value = res.data.meta
-        listSellerHistorys.value = res.data.data
+        watchlist.value = res.data.data
 
         const query = {}
         if (searchValue.value) {
@@ -157,7 +130,7 @@ const SearchHistory = async () => {
             query.status = status.value
         }
         console.log('query1', query)
-        router.push({ path: `/seller-history`, query })
+        router.push({ path: `/watchlist`, query })
         console.log('query2', query)
     } catch (error) {
         console.log(error)
@@ -166,9 +139,9 @@ const SearchHistory = async () => {
 
 const refreshData = async () => {
     if (searchValue.value || status.value) {
-        await SearchHistory()
+        await SearchWatchlist()
     } else {
-        await getHistory(meta.value.currentPage, meta.value.pageSize)
+        await getWatchedList(meta.value.currentPage, meta.value.pageSize)
     }
 }
 
