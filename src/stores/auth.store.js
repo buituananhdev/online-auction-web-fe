@@ -6,6 +6,9 @@ export const authStore = defineStore('auth', {
         isLoggedIn: false,
         user: null, // Add a user property to your state
     }),
+    getters: {
+        roleUser: (state) => state.user.role,
+    },
     actions: {
         async initAuthStore() {
             if (localStorage.getItem('access_token')) {

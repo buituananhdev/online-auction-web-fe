@@ -1,4 +1,5 @@
 import router from '.'
+import { authStore } from '../stores/auth.store'
 export const authMiddleware = () => {
     router.beforeEach((to, from, next) => {
         console.log('beforeEach aa', to, from)
@@ -9,6 +10,13 @@ export const authMiddleware = () => {
                 next({ name: 'login' })
                 localStorage.setItem('isAuthPage', true)
             } else {
+                if (to.matched.some((record) => record.meta.sellerPermission)) {
+                    if (authStore().roleUser !== 2) {
+                        next({ name: 'dashboard' })
+                    } else {
+                        next()
+                    }
+                }
                 next()
             }
         } else {
@@ -18,5 +26,7 @@ export const authMiddleware = () => {
                 next()
             }
         }
+
+        console.log('huhuu');
     })
 }
