@@ -1,7 +1,7 @@
 <template>
     <div class="w-full">
         <div class="w-full mt-6 ml-2">
-            <div class="flex justify-between gap-5 my-[42px]">
+            <div class="flex justify-between gap-5 my-4">
                 <span class="font-semibold text-2xl flex items-center justify-center">Bids & Offers</span>
                 <div class="w-1/2">
                     <div class="w-full flex items-center justify-center">
@@ -14,13 +14,15 @@
                     </div>
                 </div>
             </div>
+            <div class="flex justify-end">
+                <el-select v-model="status" placeholder="Filter by status" style="width: 150px" @change="filterStatus">
+                    <el-option v-for="item in listProductStatus" :key="item.value" :label="item.text"
+                        :value="item.value" />
+                </el-select>
+            </div>
             <div>
-                <history-product-list :meta="meta" :dataList="listBuyerHistorys" :size="size" title="Bidding"
+                <history-product-list :meta="meta" :dataList="listBuyerHistorys" :size="size" :title="getTitle(status)"
                     :isCollapse="isBiddingCollapse" />
-                <history-product-list :meta="meta" :dataList="listBuyerHistorys" :size="size" title="Offers"
-                    :isCollapse="isOffersCollapse" />
-                <history-product-list :meta="meta" :dataList="listBuyerHistorys" :size="size" title="Didn't Win"
-                    :isCollapse="isNotWinCollapse" />
             </div>
         </div>
     </div>
@@ -30,13 +32,13 @@
 import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getListAuctions } from '../../../services/auction.service'
+import { getBuyerHistoryList } from '../../../services/auction.service'
 
 const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()
 const searchValue = ref('')
-const status = ref('')
+const status = ref(1)
 const selectedItem = ref(null)
 
 const meta = ref({
@@ -44,22 +46,28 @@ const meta = ref({
     totalPages: 1,
     pageSize: 5,
 })
-const isBiddingCollapse = ref(false)
-const isOffersCollapse = ref(false)
-const isNotWinCollapse = ref(false)
 
-const size = 5
 
 const listBuyerHistorys = ref([])
+
 const listProductStatus = ref([
-    { value: null, text: 'All Sold' },
-    { value: 1, text: 'Available' },
-    { value: 2, text: 'Sold' },
-    { value: 3, text: 'Deleted' },
-    { value: 4, text: 'Canceled' },
-    { value: 5, text: 'Pending Publish' },
+    { value: 1, text: 'Bidding' },
+    { value: 2, text: 'Offers' },
+    { value: 3, text: 'Didn\'t win' },
 ])
 
+const getTitle = (data) => {
+    switch (data) {
+        case 1:
+            return 'Bidding'
+        case 2:
+            return 'Offers'
+        case 3:
+            return 'Didn\'t win'
+        default:
+            return
+    }
+}
 
 watch(searchValue, async () => {
     await SearchHistory()
@@ -74,13 +82,11 @@ watch(() => meta.value.pageSize, async (newValue, oldValue) => {
 
 const getHistory = async (currentPage, pageSize, searchQuery, status) => {
     try {
-        const res = await getListAuctions(currentPage, pageSize)
+        const res = await getBuyerHistoryList(currentPage, pageSize, searchQuery, status)
         console.log(res)
         listBuyerHistorys.value = res.data.data
         meta.value = res.data.meta
         console.log('list', listBuyerHistorys.value)
-
-        // console.log('meta', meta)
     } catch (error) {
         console.log(error)
     }
@@ -107,7 +113,7 @@ const handleClickSearch = () => {
 
 const SearchHistory = async () => {
     try {
-        const res = await getListAuctions(meta.value.currentPage, meta.value.pageSize)
+        const res = await getBuyerHistoryList(meta.value.currentPage, meta.value.pageSize, searchValue.value, status.value)
         meta.value = res.data.meta
         listBuyerHistorys.value = res.data.data
 
@@ -129,7 +135,7 @@ const refreshData = async () => {
     if (searchValue.value || status.value) {
         await SearchHistory()
     } else {
-        await getHistory(meta.value.currentPage, meta.value.pageSize)
+        await getHistory(meta.value.currentPage, meta.value.pageSize, searchValue.value, status.value)
     }
 }
 

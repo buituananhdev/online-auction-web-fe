@@ -39,12 +39,12 @@
                     style="width: 240px"
                     @change="filterStatus"
                 >
-                <el-option
-                    v-for="item in listProductStatus"
-                    :key="item.value"
-                    :label="item.text"
-                    :value="item.value"
-                />
+                    <el-option
+                        v-for="item in listProductStatus"
+                        :key="item.value"
+                        :label="item.text"
+                        :value="item.value"
+                    />
                 </el-select>
 
                 <el-button color="#626aef" style="font-size: medium" round size="large" @click="createAuction"

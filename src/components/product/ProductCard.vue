@@ -92,12 +92,14 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuctionStore } from '../../stores/auction.store';
 defineProps({
     auction: Object,
 })
 
 const router = useRouter()
 const isLike = ref(false)
+const useAuction = useAuctionStore() 
 
 const convertISOToRegularTime = (isoTimeString) => {
     const date = new Date(isoTimeString)
@@ -142,7 +144,6 @@ const converConditionText = (id) => {
     }
 }
 const goToDetail = (id) => {
-    console.log('hehehe')
     router.push(`/auctions/${id}`)
 }
 </script>

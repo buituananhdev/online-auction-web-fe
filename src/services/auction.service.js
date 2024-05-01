@@ -83,3 +83,14 @@ export const getSellerHistory = async (page = 1, pageSize = 10, searchQuery = ''
     }
     return axiosApiInstance.get(url)
 }
+
+export const getBuyerHistoryList = async (page = 1, pageSize = 10, searchQuery = '', status = 1) => {
+    let url = `/auctions/buyer-history?pageNumber=${page}&pageSize=${pageSize}`
+    if(searchQuery) {
+        url += `&searchQuery=${searchQuery}`
+    }
+    if(status) {
+        url += `&status=${status}`
+    }
+    return axiosApiInstance.get(url)
+}

@@ -80,10 +80,10 @@ const routes = [
     },
     // Payments route
     {
-        path: '/payments',
+        path: '/payments/:id',
         name: 'payments',
-        meta: { layout: 'activity', requiresAuth: true },
-        component: () => import('../pages/payments/index.vue'),
+        meta: { layout: 'auth', requiresAuth: true },
+        component: () => import('../pages/payments/[id].vue'),
     },
 ]
 const router = createRouter({

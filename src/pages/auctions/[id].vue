@@ -1,10 +1,9 @@
 <script setup>
 import { ArrowLeft } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ref, defineProps, onMounted } from 'vue'
+import { ref, defineProps, computed, onBeforeMount, watch, watchEffect } from 'vue'
 import { getListAuctions, getSingleAuction } from '../../services/auction.service'
 import { bidAuction } from '../../services/bid.service'
-import CallHub from '../../services/hub.service'
 import { useAuctionStore } from '../../stores/auction.store'
 import { authStore } from '../../stores/auth.store'
 
@@ -27,6 +26,10 @@ const imageList = [
     'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfjkg93j3f',
     'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfgskbfn58',
 ]
+const id = computed(() => {
+    console.log(route.params.id);
+    return route.params.id
+})
 const scrollBox = ref()
 const scrollBox2 = ref()
 const colors = ref(['#99A9BF', '#F7BA2A', '#FF9900'])
@@ -92,6 +95,7 @@ const handlePlaceBid = (data = false) => {
 
 const handleEditBid = () => {
     if(isBuyAvailble.value) {
+        isBuyAvailble.value = false
         dialogFormVisible.value = false
     } else {
         isReviewBid.value = false
@@ -149,11 +153,19 @@ async function handleBidAuction() {
         })
         dialogFormVisible.value = false
         isReviewBid.value = false
-        ElNotification({
-            title: 'Bid auction',
-            message: 'Bid successfully!',
-            type: 'success',
-        })
+        bidAmount.value = null
+        await useAuction.getDetailAuction()
+        auction.value = useAuction.detailAuction
+        if(isBuyAvailble.value) {
+            router.push(`/payments/${auction.value.id}`)
+            isBuyAvailble.value = false
+        } else {
+            ElNotification({
+                title: 'Bid auction',
+                message: 'Bid successfully!',
+                type: 'success',
+            })
+        }
     } catch (error) {
         console.log(error)
         ElNotification({
@@ -175,17 +187,13 @@ function scrollToDown(scrollBox) {
 }
 
 function scrollRight(scrollBox) {
-    console.log('1')
     if (scrollBox) {
-        console.log('2')
         scrollBox.scrollLeft += 400 // Kéo sang phải 400px
     }
 }
 
 function scrollToLeft(scrollBox) {
-    console.log('1')
     if (scrollBox) {
-        console.log('2')
         scrollBox.scrollLeft -= 400 // Kéo sang phải 400px
     }
 }
@@ -212,13 +220,18 @@ function startCountdown(dateTime) {
     }, 1000)
 }
 
-onMounted(async () => {
-    useAuction.setCurrentAuctionId(route.params.id)
+watch(id, async () => {
+    useAuction.setCurrentAuctionId(id)
+    await useAuction.getDetailAuction()
+    auction.value = useAuction.detailAuction    
+})
+
+onBeforeMount(async () => {
+    useAuction.setCurrentAuctionId(id)
     await useAuction.getDetailAuction()
     auction.value = useAuction.detailAuction
     await getExploreAuctionList()
     startCountdown(auction.value.endTime)
-
 })
 </script>
 
@@ -363,17 +376,17 @@ onMounted(async () => {
                     <span class="text-[#505050]">{{ converConditionText(auction.condition) }}</span>
                 </div>
                 <button @click="handlePlaceBid"
-                    class="w-full bg-[#409EFF] text-white font-bold rounded-3xl py-2 text-lg hover:bg-[#3A8EE4]">
+                    class="w-full bg-[#409EFF] text-white font-bold rounded-3xl py-2 text-lg hover:bg-[#3A8EE4] transition-all">
                     Place bid
                 </button>
                 <div class="flex items-center w-full gap-4">
                     <button
-                        class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white"
+                        class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white transition-all"
                         @click="handlePlaceBid(true)">
                         Buy it now
                     </button>
                     <button
-                        class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white">
+                        class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white transition-all">
                         Add to Watchlist
                     </button>
                 </div>
