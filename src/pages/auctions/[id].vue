@@ -3,12 +3,14 @@ import { ArrowLeft } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ref, defineProps, computed, onBeforeMount, watch, watchEffect } from 'vue'
 import { getListAuctions, getSingleAuction } from '../../services/auction.service'
+import { addWatchlist, deleteWatchlist } from '../../services/watchlist.service'
 import { bidAuction } from '../../services/bid.service'
 import { useAuctionStore } from '../../stores/auction.store'
 import { authStore } from '../../stores/auth.store'
 
 const auth = authStore()
 const auctionId = ref()
+const hover = ref(false)
 const useAuction = useAuctionStore()
 const auction = ref({})
 const exploredAuctionList = ref([])
@@ -39,6 +41,11 @@ const imagesList = [
     'https://scontent.fdad3-1.fna.fbcdn.net/v/t39.30808-6/340874930_3549881278566824_2254323086146147866_n.jpg?stp=cp6_dst-jpg&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFVtaQikjX9aJL3NXfJ46vneRxc8mUnGY15HFzyZScZjcq5qIiMaWLdQY7-AxpNK7_4o-IPN6wF_vrHYQxf7GL3&_nc_ohc=rDFJQJX2gbcAb6OMZh2&_nc_ht=scontent.fdad3-1.fna&oh=00_AfBnyW05dQ3TzPE0F4qWsQ1XpibS3ltEkkGsapH7uQFftg&oe=66277A5C',
     'https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-6/340485851_961472368192020_3917253428352392180_n.jpg?stp=cp6_dst-jpg&_nc_cat=100&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEeR2sq1N1LqX1DL70CZLruFBB41F-48ekUEHjUX7jx6VP4GG83TFI4ECN7UdbiRtvpblVnOCX17zTK8mejOHrJ&_nc_ohc=GG0CtmTaQEQAb5tLTmM&_nc_oc=Adjm9f39DbNVW8-mVdf8j-mSDLyEYPnUMFVExCyXKzq42sJ13cWs7EQdSgU-NOtowbs&_nc_ht=scontent.fdad3-4.fna&oh=00_AfAx3W7pY9LfTN8MD0wu5PPC3loGNMM617sXoBmqIN1teA&oe=662787F6',
 ]
+
+const currentAuction = ref({
+    auctionId: null,
+    type: 2,
+})
 const imageActiveIndex = ref(0)
 const imageOverIndex = ref(0)
 const dialogFormVisible = ref(false)
@@ -115,6 +122,14 @@ const converConditionText = (id) => {
     }
 }
 
+const handleSetWatchlist = () => {
+    if (auction.value.isWatched ) {
+        removeWatchlist()
+    } else {
+        addToWatchlist()
+    }
+}
+
 function reviewBid() {
     if (!bidAmount.value || bidAmount.value < auction.value.currentPrice) return
     isReviewBid.value = true
@@ -126,10 +141,48 @@ async function getDetailAuction() {
         // const id = route.params.id
         const res = await getSingleAuction(auctionId.value)
         auction.value = res.data
+        console.log(auction.value);
     } catch (error) {
         console.log(error)
     }
 }
+
+const addToWatchlist = async () => {
+    try {
+        await addWatchlist(currentAuction.value)
+        ElNotification({
+            title: 'Add To Watchlist',
+            message: 'Add To Watchlist Successfully!',
+            type: 'success',
+        })
+    } catch (error) {
+        ElNotification({
+            title: 'Add To Watchlist',
+            message: 'Add To Watchlist Failed!',
+            type: 'error',
+        })
+        console.log(error)
+    }
+}
+
+const removeWatchlist = async () => {
+    try {
+        await deleteWatchlist(currentAuction.value.auctionId)
+        ElNotification({
+            title: 'Unwatch',
+            message: 'Unwatch Successfully!',
+            type: 'success',
+        })
+    } catch (error) {
+        ElNotification({
+            title: 'Unwatch',
+            message: 'Unwatch Failed!',
+            type: 'error',
+        })
+        console.log(error)
+    }
+}
+
 
 async function getExploreAuctionList() {
     try {
@@ -230,6 +283,7 @@ onBeforeMount(async () => {
     useAuction.setCurrentAuctionId(id)
     await useAuction.getDetailAuction()
     auction.value = useAuction.detailAuction
+    currentAuction.value.auctionId = auction.value.id
     await getExploreAuctionList()
     startCountdown(auction.value.endTime)
 })
@@ -386,8 +440,12 @@ onBeforeMount(async () => {
                         Buy it now
                     </button>
                     <button
-                        class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white transition-all">
-                        Add to Watchlist
+                        class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white transition-all"  
+                        @click="handleSetWatchlist"
+                        @mouseenter="hover = true"
+                        @mouseleave="hover = false"
+                    >
+                        {{ auction.isWatched && hover ? 'Unwatch' : auction.isWatched ? 'Watching'  : 'Add to watchlist' }}
                     </button>
                 </div>
                 <div v-show="auction.canReturn" class="bg-[#F7F7F7] rounded-lg w-full p-2 flex items-center gap-2">

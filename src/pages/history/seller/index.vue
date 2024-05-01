@@ -22,39 +22,23 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-4 pb-[10px] my-4 justify-between">
-                <!-- <div v-for="item in listProductStatus" :key="item.value" class="">
-                    <span
-                        :class="{ 'bg-[#ededed]': selectedItem === item.value }"
-                        class="px-4 py-1 flex items-center justify-center border-gray-600 border-[1px] rounded-full bg-[#f7f7f7] hover:cursor-pointer hover:bg-[#ededed]"
-                        @click="filterStatus(item.value)"
+            <div class="flex flex-col">
+                <div class="pb-8 flex items-center justify-between">
+                    <span class="font-bold text-xl">{{ getTitle(status) }}</span>
+                    <el-select
+                        v-model="status"
+                        placeholder="Filter by status"
+                        size="large"
+                        style="width: 240px"
+                        @change="filterStatus"
                     >
-                        {{ item.text }}
-                    </span>
-                </div> -->
-                <el-select
-                    v-model="status"
-                    placeholder="Filter by status"
-                    size="large"
-                    style="width: 240px"
-                    @change="filterStatus"
-                >
                     <el-option
                         v-for="item in listProductStatus"
                         :key="item.value"
                         :label="item.text"
                         :value="item.value"
                     />
-                </el-select>
-
-                <el-button color="#626aef" style="font-size: medium" round size="large" @click="createAuction"
-                        >Create Auction</el-button
-                    >
-            </div>
-
-            <div class="flex flex-col">
-                <div class="pb-8 flex items-center">
-                    <span class="font-bold text-xl">{{ getTitle(status) }}</span>
+                    </el-select>
                 </div>
                 <div v-if="listSellerHistorys.length" class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
                     <div
@@ -64,14 +48,9 @@
                     >
                         <history-card :auction="item" />
                     </div>
-                    <div class="flex justify-end w-full absolute bottom-0 right-0">
-                        <el-pagination
-                            v-show="meta.totalPages > 1"
-                            v-model:current-page="meta.currentPage"
-                            background
-                            layout="prev, pager, next"
-                            :total="meta.totalPages * meta.pageSize"
-                        />
+                    <div class="flex justify-end w-full absolute bottom-0 right-0 gap-3">
+                        <span class="text-sm underline text-[#409EFF] cursor-pointer" @click="meta.pageSize += size"
+                            v-show="meta.pageSize < meta.totalPages * meta.pageSize">Load more</span>
                     </div>
                 </div>
                 <div v-else class="w-full">
@@ -94,11 +73,12 @@ const router = useRouter()
 const route = useRoute()
 const searchValue = ref('')
 const status = ref('')
+const size  = 5
 
 const meta = ref({
     currentPage: 1,
     totalPages: 1,
-    pageSize: 8,
+    pageSize: 5,
 })
 
 const listSellerHistorys = ref([])
@@ -136,7 +116,7 @@ watch(searchValue, async () => {
     await SearchHistory()
 })
 
-watch(() => meta.value.currentPage, async (newValue, oldValue) => {
+watch(() => meta.value.pageSize, async (newValue, oldValue) => {
     if (newValue !== oldValue) {
         await SearchHistory()
     }
@@ -158,10 +138,6 @@ const getHistory = async (currentPage, pageSize, searchQuery, status) => {
 
 const filterStatus = async () => {
     await SearchHistory()
-}
-
-const createAuction = () => {
-    router.push({ path: '/create-auction' })
 }
 
 const handleClickSearch = () => {
