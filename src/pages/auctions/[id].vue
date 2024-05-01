@@ -150,6 +150,7 @@ async function getDetailAuction() {
 const addToWatchlist = async () => {
     try {
         await addWatchlist(currentAuction.value)
+        auction.value.isWatched = !auction.value.isWatched
         ElNotification({
             title: 'Add To Watchlist',
             message: 'Add To Watchlist Successfully!',
@@ -168,6 +169,7 @@ const addToWatchlist = async () => {
 const removeWatchlist = async () => {
     try {
         await deleteWatchlist(currentAuction.value.auctionId)
+        auction.value.isWatched = !auction.value.isWatched
         ElNotification({
             title: 'Unwatch',
             message: 'Unwatch Successfully!',
