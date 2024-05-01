@@ -12,7 +12,7 @@
                 </the-header>
             </el-header>
             <el-main
-                style="padding-top: 60px;background-color: #ffff; margin: auto; max-width: 1140px; overflow: hidden; min-width: 1100px">
+                style="padding-top: 60px; height: auto; background-color: #ffff; margin: auto; max-width: 1140px; overflow: hidden; min-width: 1100px">
                 <slot />
             </el-main>
             <el-footer style="padding: 0;"><the-footer /></el-footer>
