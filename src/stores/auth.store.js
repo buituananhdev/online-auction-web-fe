@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { getMe } from '../services/user.service';
 
 export const authStore = defineStore('auth', {
     state: () => ({
@@ -9,8 +10,8 @@ export const authStore = defineStore('auth', {
         async initAuthStore() {
             if (localStorage.getItem('access_token')) {
                 console.log("heheheheheehhh");
-                // const { data } = await getInfo()
-                // authStore.user = data; // Assuming 'data' contains user information
+                const { data } = await getMe()
+                this.user = data; // Assuming 'data' contains user information
                 this.isLoggedIn = true;
                 console.log('initAuthStore', this.$state);
             }
