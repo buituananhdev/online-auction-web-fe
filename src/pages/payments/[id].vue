@@ -1,8 +1,7 @@
 <template>
-    <div v-loading="loading" class="">
-        <!-- <h3>{{ title }}</h3> -->
+    <div class="h-full">
         <div class="payment-address"></div>
-        <div class="w-full p-4 border-b">
+        <div class="w-full p-3 border-b">
             <div class="flex items-center gap-2">
                 <el-icon color="#409efc" :size="20">
                     <LocationFilled />
@@ -42,7 +41,7 @@
                                 alt="">
                             <div class="flex flex-col gap-0.5">
                                 <el-text truncated class="font-bold text-base">{{ auction &&
-                                    auction.productName}}</el-text>
+                                    auction.productName }}</el-text>
                                 <span class="text-[8px] w-fit text-[red] p-[4px] border border-[red] rounded-lg">{{
                                     auction.canReturn && 'You can return item' }}</span>
                             </div>
@@ -54,25 +53,31 @@
                 <span class="w-1/6">$ {{ auction.currentPrice }}</span>
             </div>
         </div>
-        <div class="table-responsive">
-            <el-form ref="createOrder" :model="formData" :rules="rules" method="post" action="create_payment_url"
-                @submit.prevent="handleSubmit">
-                <el-form-item label="Chọn Phương thức thanh toán:" prop="bankCode">
-                    <el-radio v-model="formData.bankCode" label="">Cổng thanh toán VNPAYQR</el-radio>
-                    <el-radio v-model="formData.bankCode" label="VNBANK">Thanh toán qua ATM-Tài khoản ngân hàng nội
-                        địa</el-radio>
-                    <el-radio v-model="formData.bankCode" label="INTCARD">Thanh toán qua thẻ quốc tế</el-radio>
-                </el-form-item>
-
-                <el-form-item label="Ngôn ngữ" prop="language">
-                    <el-radio v-model="formData.language" label="vn">Tiếng việt</el-radio>
-                    <el-radio v-model="formData.language" label="en">Tiếng anh</el-radio>
-                </el-form-item>
-
-                <el-form-item>
-                    <el-button type="primary" native-type="submit">Thanh toán</el-button>
-                </el-form-item>
-            </el-form>
+        <div class="p-3 w-full border-b flex flex-col gap-3 h-[32%]">
+            <span class="w-3/5 font-semibold">Payment Methods</span>
+            <div class="flex gap-2 py-2 items-center justify-between h-[96%]">
+                <el-radio-group v-model="formData.bankCode" class="ml-4">
+                    <el-radio label="">
+                        <el-text color="#409EFF">VNPAYQR payment gateway</el-text>
+                        <img width="170" class="border rounded-xl h-[80px] my-2"
+                            src="https://www.namabank.com.vn/Data/Sites/1/News/4227/vnpay-tra-gop.png" alt="">
+                    </el-radio>
+                    <el-radio label="VNBANK">
+                        <el-text color="#409EFF">Payment via ATM - Domestic bank</el-text>
+                        <img width="170" class="border h-[80px] rounded-xl px-6 py-4 my-2"
+                            src="https://oopy.lazyrockets.com/api/v2/notion/image?src=https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F75bbed86-61b3-4c3a-87e9-88e0acaf059b%2FUntitled.png&blockId=e1bda4f2-531a-4105-88e9-02a359918c23"
+                            alt="">
+                    </el-radio>
+                    <el-radio label="INTCARD">
+                        <el-text color="#409EFF">Payment via international card</el-text>
+                        <img width="170" class="border rounded-xl h-[80px] my-2"
+                            src="https://damme.io/wp-content/uploads/2018/08/lam-the-visa-mastercard-0.png" alt="">
+                    </el-radio>
+                </el-radio-group>
+            </div>
+        </div>
+        <div class="flex justify-end py-4">
+            <el-button @click="handleSubmit" type="primary" class="w-[200px]" size="large" native-type="submit">Thanh toán</el-button>
         </div>
         <p>&nbsp;</p>
     </div>
