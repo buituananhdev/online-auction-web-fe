@@ -3,7 +3,7 @@ import { ArrowLeft } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ref, defineProps, onMounted } from 'vue'
 import { getListAuctions, getSingleAuction } from '../../services/auction.service'
-import { addWatchlist } from '../../services/watchlist.service'
+import { addWatchlist, deleteWatchlist } from '../../services/watchlist.service'
 import { bidAuction } from '../../services/bid.service'
 import CallHub from '../../services/hub.service'
 import { useAuctionStore } from '../../stores/auction.store'
@@ -118,6 +118,14 @@ const converConditionText = (id) => {
     }
 }
 
+const handleSetWatchlist = () => {
+    if (auction.value.isWatched ) {
+        removeWatchlist()
+    } else {
+        addToWatchlist()
+    }
+}
+
 function reviewBid() {
     if (!bidAmount.value || bidAmount.value < auction.value.currentPrice) return
     isReviewBid.value = true
@@ -147,6 +155,24 @@ const addToWatchlist = async () => {
         ElNotification({
             title: 'Add To Watchlist',
             message: 'Add To Watchlist Failed!',
+            type: 'error',
+        })
+        console.log(error)
+    }
+}
+
+const removeWatchlist = async () => {
+    try {
+        await deleteWatchlist(currentAuction.value.auctionId)
+        ElNotification({
+            title: 'Unwatch',
+            message: 'Unwatch Successfully!',
+            type: 'success',
+        })
+    } catch (error) {
+        ElNotification({
+            title: 'Unwatch',
+            message: 'Unwatch Failed!',
             type: 'error',
         })
         console.log(error)
@@ -401,10 +427,9 @@ onMounted(async () => {
                     </button>
                     <button
                         class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white"  
-                        @click="addToWatchlist"
+                        @click="handleSetWatchlist"
                         @mouseenter="hover = true"
                         @mouseleave="hover = false"
-                        :class="{ 'watching': auction.isWatched }"
                     >
                         {{ auction.isWatched && hover ? 'Unwatch' : auction.isWatched ? 'Watching'  : 'Add to watchlist' }}
                     </button>
