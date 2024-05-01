@@ -32,7 +32,7 @@
                         <li class="text-[14px]">
                             {{ auction.canReturn ? 'Can be returned' : ' Cannot be returned ' }}
                         </li>
-                        <li class="text-[14px]">{{ auction.description }}</li>
+                        <li v-html="auction.description" class="text-[14px]"></li>
                     </ul>
                 </div>
                 <div class="footer flex gap-3 items-center">

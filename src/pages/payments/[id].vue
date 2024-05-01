@@ -65,13 +65,13 @@
                     <el-radio label="VNBANK">
                         <el-text color="#409EFF">Payment via ATM - Domestic bank</el-text>
                         <img width="170" class="border h-[80px] rounded-xl px-6 py-4 my-2"
-                            src="https://oopy.lazyrockets.com/api/v2/notion/image?src=https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F75bbed86-61b3-4c3a-87e9-88e0acaf059b%2FUntitled.png&blockId=e1bda4f2-531a-4105-88e9-02a359918c23"
+                            src="../../assets/images/noidia.png"
                             alt="">
                     </el-radio>
                     <el-radio label="INTCARD">
                         <el-text color="#409EFF">Payment via international card</el-text>
                         <img width="170" class="border rounded-xl h-[80px] my-2"
-                            src="https://damme.io/wp-content/uploads/2018/08/lam-the-visa-mastercard-0.png" alt="">
+                            src="../../assets/images/visa.png" alt="">
                     </el-radio>
                 </el-radio-group>
             </div>
