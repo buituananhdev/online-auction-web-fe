@@ -29,6 +29,9 @@
                                     <RouterLink to="/seller-history">Seller history</RouterLink>
                                 </li>
                                 <li class="py-[10px] pl-4">
+                                    <RouterLink to="/create-auction">Create auction</RouterLink>
+                                </li>
+                                <li class="py-[10px] pl-4">
                                     <RouterLink to="/recently-viewed">Recently viewed</RouterLink>
                                 </li>
                                 <li class="py-[10px] pl-4">
