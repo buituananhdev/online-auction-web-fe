@@ -74,7 +74,7 @@
             <QuillEditor 
                 theme="snow" 
                 v-model:content="currentAuction.description" 
-                contentType="text" 
+                contentType="html" 
                 placeholder="Write a detailed description of your item, or save time and let Al draft it for you"
             />
         </div>
@@ -176,6 +176,7 @@ const currentAuction = ref({
     maxPrice: null,
     endTime: new Date(),
     canReturn: false,
+    mediasUrl: []
 })
 
 const meta = ref({
