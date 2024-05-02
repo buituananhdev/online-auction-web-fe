@@ -12,10 +12,11 @@ const auth = authStore()
 const auctionId = ref()
 const hover = ref(false)
 const useAuction = useAuctionStore()
-const auction = ref({})
+const auction = computed(() => useAuction.watchingAuction);
 const exploredAuctionList = ref([])
 const router = useRouter()
 const route = useRoute()
+
 const imageList = [
     'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfdqorxj85',
     'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfgskb1t44',
@@ -209,9 +210,8 @@ async function handleBidAuction() {
         dialogFormVisible.value = false
         isReviewBid.value = false
         bidAmount.value = null
-        await useAuction.getDetailAuction()
-        auction.value = useAuction.detailAuction
-        if (isBuyAvailble.value) {
+        await useAuction.syncAuction(id)
+        if(isBuyAvailble.value) {
             router.push(`/payments/${auction.value.id}`)
             isBuyAvailble.value = false
         } else {
@@ -276,15 +276,12 @@ function startCountdown(dateTime) {
 }
 
 watch(id, async () => {
-    useAuction.setCurrentAuctionId(id)
-    await useAuction.getDetailAuction()
-    auction.value = useAuction.detailAuction
+    await useAuction.syncAuction(id.value)
+    window.scrollTo(0, 0)
 })
 
 onBeforeMount(async () => {
-    useAuction.setCurrentAuctionId(id)
-    await useAuction.getDetailAuction()
-    auction.value = useAuction.detailAuction
+    await useAuction.syncAuction(id.value)
     currentAuction.value.auctionId = auction.value.id
     await getExploreAuctionList()
     startCountdown(auction.value.endTime)
