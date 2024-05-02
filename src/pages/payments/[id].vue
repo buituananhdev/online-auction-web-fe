@@ -1,8 +1,7 @@
 <template>
-    <div v-loading="loading" class="">
-        <!-- <h3>{{ title }}</h3> -->
+    <div class="h-full">
         <div class="payment-address"></div>
-        <div class="w-full p-4 border-b">
+        <div class="w-full p-3 border-b">
             <div class="flex items-center gap-2">
                 <el-icon color="#409efc" :size="20">
                     <LocationFilled />
@@ -20,60 +19,65 @@
                 </div>
             </div>
         </div>
-        <div v-show="auction" class="p-4 w-full border-b flex flex-col gap-3">
+        <div v-show="auction.user" class="p-4 w-full border-b flex flex-col gap-3">
             <div class="flex gap-2 items-center justify-between">
-                <span class="w-3/5 font-semibold">Product Ordered</span>
-                <span class="text-[#bbb]">Unit price</span>
-                <span class="text-[#bbb]">Amount</span>
-                <span class="text-[#bbb]">Item Subtotal</span>
+                <p class="w-3/5 font-semibold">Product Ordered</p>
+                <p class="text-[#bbb] w-1/6">Unit price</p>
+                <p class="text-[#bbb] w-1/6">Amount</p>
+                <p class="text-[#bbb] w-1/6">Item Subtotal</p>
             </div>
             <div class="flex gap-2 items-center justify-between">
                 <div class="py-3 w-3/5">
-                    <div class="flex items-center gap-3 mb-3">
-                        <img class="w-[30px] h-[30px] rounded-full"
+                    <div class="flex items-center gap-2 mb-3">
+                        <img class="w-[24px] h-[24px] rounded-full"
                             src="https://scontent.fhan2-5.fna.fbcdn.net/v/t39.30808-6/426587256_1430509044210042_7946706195478323343_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGJAwy2cy3ozNO6_7jEhyDyXu52TFDhi9Ve7nZMUOGL1VpuR-3ErXuUitueR_3NPEQEtrYu0xsOzygnsODxm_yg&_nc_ohc=0e39l21fNvAQ7kNvgGJVPV2&_nc_ht=scontent.fhan2-5.fna&oh=00_AfC4aQbwZPNwmoW1ZcWkMCwJk87XqG726tgRAPTIcKnLsQ&oe=6637E9D0"
                             alt="">
-                        <span>{{ auction && auction.user.fullName }}</span>
+                        <span>{{ auction.user && auction.user.fullName }}</span>
                     </div>
                     <div>
                         <div class="flex items-center gap-3">
-                            <img class="w-[40px] h-[40px] rounded"
+                            <img class="w-[45px] h-[45px] rounded"
                                 src="https://s3-alpha.figma.com/hub/file/2785854380/baef8be6-906e-4d6f-b619-6cf457aba1f0-cover.png"
                                 alt="">
-                            <div class="flex flex-col gap-1">
+                            <div class="flex flex-col gap-0.5">
                                 <el-text truncated class="font-bold text-base">{{ auction &&
-                                    auction.productName}}</el-text>
+                                    auction.productName }}</el-text>
                                 <span class="text-[8px] w-fit text-[red] p-[4px] border border-[red] rounded-lg">{{
                                     auction.canReturn && 'You can return item' }}</span>
                             </div>
-
                         </div>
                     </div>
                 </div>
-                <span>{{ auction.currentPrice }}</span>
-                <span>1</span>
-                <span>Item Subtotal</span>
+                <p class="w-1/6">$ {{ auction.currentPrice }}</p>
+                <p class="w-1/6">1</p>
+                <span class="w-1/6">$ {{ auction.currentPrice }}</span>
             </div>
         </div>
-        <div class="table-responsive">
-            <el-form ref="createOrder" :model="formData" :rules="rules" method="post" action="create_payment_url"
-                @submit.prevent="handleSubmit">
-                <el-form-item label="Chọn Phương thức thanh toán:" prop="bankCode">
-                    <el-radio v-model="formData.bankCode" label="">Cổng thanh toán VNPAYQR</el-radio>
-                    <el-radio v-model="formData.bankCode" label="VNBANK">Thanh toán qua ATM-Tài khoản ngân hàng nội
-                        địa</el-radio>
-                    <el-radio v-model="formData.bankCode" label="INTCARD">Thanh toán qua thẻ quốc tế</el-radio>
-                </el-form-item>
-
-                <el-form-item label="Ngôn ngữ" prop="language">
-                    <el-radio v-model="formData.language" label="vn">Tiếng việt</el-radio>
-                    <el-radio v-model="formData.language" label="en">Tiếng anh</el-radio>
-                </el-form-item>
-
-                <el-form-item>
-                    <el-button type="primary" native-type="submit">Thanh toán</el-button>
-                </el-form-item>
-            </el-form>
+        <div class="p-3 w-full border-b flex flex-col gap-3 h-[32%]">
+            <span class="w-3/5 font-semibold">Payment Methods</span>
+            <div class="flex gap-2 py-2 items-center justify-between h-[96%]">
+                <el-radio-group v-model="formData.bankCode" class="ml-4">
+                    <el-radio label="">
+                        <el-text color="#409EFF">VNPAYQR payment gateway</el-text>
+                        <img width="170" class="border rounded-xl h-[80px] my-2"
+                            src="https://www.namabank.com.vn/Data/Sites/1/News/4227/vnpay-tra-gop.png" alt="">
+                    </el-radio>
+                    <el-radio label="VNBANK">
+                        <el-text color="#409EFF">Payment via ATM - Domestic bank</el-text>
+                        <img width="170" class="border h-[80px] rounded-xl px-6 py-4 my-2"
+                            src="../../assets/images/noidia.png"
+                            alt="">
+                    </el-radio>
+                    <el-radio label="INTCARD">
+                        <el-text color="#409EFF">Payment via international card</el-text>
+                        <img width="170" class="border rounded-xl h-[80px] my-2"
+                            src="../../assets/images/visa.png" alt="">
+                    </el-radio>
+                </el-radio-group>
+            </div>
+        </div>
+        <div class="flex justify-end py-4">
+            <el-button @click="handleSubmit" type="primary" class="w-[200px]" size="large" native-type="submit">Thanh toán</el-button>
         </div>
         <p>&nbsp;</p>
     </div>
@@ -94,7 +98,7 @@ const formData = ref({
 });
 
 const loading = computed(() => {
-    return !Boolean(auction.value)
+    return !Boolean(auction.value.user)
 })
 
 const rules = ref({
@@ -182,7 +186,7 @@ const sortObject = (obj) => {
 
 onBeforeMount(() => {
     auction.value = useAuction.detailAuction
-    console.log('auction', auction.value)
+    console.log('auction', useAuction.detailAuction)
 })
 </script>
 

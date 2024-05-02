@@ -19,5 +19,5 @@ export const addWatchlist = async (data) => {
 }
 
 export const deleteWatchlist = async (id) => {
-    return axiosApiInstance.delete(`/watchlist/${id}`)
+    return axiosApiInstance.delete(`/watchlist?auctionID=${id}`)
 }

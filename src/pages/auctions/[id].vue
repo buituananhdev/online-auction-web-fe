@@ -102,7 +102,7 @@ const handlePlaceBid = (data = false) => {
 }
 
 const handleEditBid = () => {
-    if(isBuyAvailble.value) {
+    if (isBuyAvailble.value) {
         isBuyAvailble.value = false
         dialogFormVisible.value = false
     } else {
@@ -124,7 +124,7 @@ const converConditionText = (id) => {
 }
 
 const handleSetWatchlist = () => {
-    if (auction.value.isWatched ) {
+    if (auction.value.isWatched) {
         removeWatchlist()
     } else {
         addToWatchlist()
@@ -151,6 +151,7 @@ async function getDetailAuction() {
 const addToWatchlist = async () => {
     try {
         await addWatchlist(currentAuction.value)
+        auction.value.isWatched = !auction.value.isWatched
         ElNotification({
             title: 'Add To Watchlist',
             message: 'Add To Watchlist Successfully!',
@@ -169,6 +170,7 @@ const addToWatchlist = async () => {
 const removeWatchlist = async () => {
     try {
         await deleteWatchlist(currentAuction.value.auctionId)
+        auction.value.isWatched = !auction.value.isWatched
         ElNotification({
             title: 'Unwatch',
             message: 'Unwatch Successfully!',
@@ -272,6 +274,12 @@ function startCountdown(dateTime) {
         countdown.value = `${days}d, ${hours}h, ${minutes}m, ${seconds}s  `
     }, 1000)
 }
+
+watch(id, async () => {
+    await useAuction.syncAuction(id.value)
+    window.scrollTo(0, 0)
+})
+
 onBeforeMount(async () => {
     await useAuction.syncAuction(id.value)
     currentAuction.value.auctionId = auction.value.id
@@ -359,8 +367,9 @@ onBeforeMount(async () => {
             <template #footer>
                 <div v-show="isReviewBid">
                     <div class="dialog-footer">
-                        <el-button @click="handleEditBid">{{ isBuyAvailble? 'Close' : 'Edit Bid'}}</el-button>
-                        <el-button type="primary" @click="handleBidAuction">{{ isBuyAvailble? 'Confirm order' : 'Confirm bid' }}</el-button>
+                        <el-button @click="handleEditBid">{{ isBuyAvailble ? 'Close' : 'Edit Bid' }}</el-button>
+                        <el-button type="primary" @click="handleBidAuction">{{ isBuyAvailble ? 'Confirm order' :
+                            'Confirm bid' }}</el-button>
                     </div>
                     <div class="text-xs text-[#5B5252] pt-6 text-left">
                         When you confirm your bid, it means you’re committing to buy this item if you’re the winning
@@ -431,12 +440,10 @@ onBeforeMount(async () => {
                         Buy it now
                     </button>
                     <button
-                        class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white transition-all"  
-                        @click="handleSetWatchlist"
-                        @mouseenter="hover = true"
-                        @mouseleave="hover = false"
-                    >
-                        {{ auction.isWatched && hover ? 'Unwatch' : auction.isWatched ? 'Watching'  : 'Add to watchlist' }}
+                        class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white transition-all"
+                        @click="handleSetWatchlist" @mouseenter="hover = true" @mouseleave="hover = false">
+                        {{ auction.isWatched && hover ? 'Unwatch' : auction.isWatched ? 'Watching' : 'Add to watchlist'
+                        }}
                     </button>
                 </div>
                 <div v-show="auction.canReturn" class="bg-[#F7F7F7] rounded-lg w-full p-2 flex items-center gap-2">
@@ -477,14 +484,20 @@ onBeforeMount(async () => {
                 <span class="text-xs py-2">Seller assumes all responsibility for this listing.</span>
                 <span class="text-xs py-2">Last updated on {{ convertISOToRegularTime(auction.lastModifiedDate)
                     }}</span>
-                <span class="my-3 text-xl font-semibold">Item specifics</span>
-                <div class="w-full py-2">
-                    <span class="inline-block w-1/4 text-xs">Condition:</span>
-                    <span class="text-xs font-semibold">{{ auction.condition }}</span>
+                <div class="mt-4">
+                    <span class="my-3 text-xl font-semibold">Item specifics</span>
+                    <div class="w-full py-2">
+                        <span class="inline-block w-1/4 text-xs">Condition:</span>
+                        <span class="text-xs font-semibold">{{ auction.condition }}</span>
+                    </div>
+                    <div>
+                        <span class="inline-block w-1/4 text-xs">Warranty:</span>
+                        <span class="text-xs font-semibold">12 Months Seller Warranty</span>
+                    </div>
                 </div>
-                <div>
-                    <span class="inline-block w-1/4 text-xs">Warranty:</span>
-                    <span class="text-xs font-semibold">12 Months Seller Warranty</span>
+                <div class="mt-4">
+                    <span class="inline-block my-3 text-xl font-semibold pb-2">Item description from the seller</span>
+                    <div v-html="auction.description"></div>
                 </div>
             </el-tab-pane>
             <el-tab-pane label="Returns and payments">
@@ -515,8 +528,11 @@ onBeforeMount(async () => {
                     <p class="text-xl font-semibold py-4">Payment details</p>
                     <div class="w-full">
                         <p class="text-xs font-medium bg-[#E8E8E8] leading-8 pl-2 w-full">Payment</p>
-                        <img class="border px-2 rounded-lg mt-2" src="../../assets/images/vnpay-logo.jpg" width="70"
-                            height="40" alt="" />
+                        <div class="flex items-center gap-6">
+                            <img class="border px-2 rounded-lg mt-2 h-[50px]" src="../../assets/images/vnpay-logo.jpg" width="70" alt="" />
+                            <img class="border px-2 rounded-lg mt-2 h-[50px] py-4" src="../../assets/images/noidia.png" width="70" alt="" />
+                            <img class="border px-2 rounded-lg mt-2 h-[50px] py-2" src="../../assets/images/visa.png" width="70" alt="" />
+                        </div>
                     </div>
                 </div>
             </el-tab-pane>
