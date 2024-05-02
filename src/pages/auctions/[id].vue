@@ -193,7 +193,7 @@ async function handleBidAuction() {
         isReviewBid.value = false
         bidAmount.value = null
         await useAuction.syncAuction(id)
-        if(isBuyAvailble.value) {
+        if (isBuyAvailble.value) {
             router.push(`/payments/${auction.value.id}`)
             isBuyAvailble.value = false
         } else {
@@ -396,14 +396,15 @@ onBeforeMount(async () => {
                     <div class="flex flex-col">
                         <span>{{ auction.user && auction.user.fullName }}</span>
                         <el-rate disabled style="height: 15px" :colors="colors"
+                            v-model="auction.user.ratings.avarageRating"
                             score-template="({auction.user && auction.user.ratings.totalRatings})" />
                     </div>
                 </div>
                 <div class="bg-[#FFF0DF] w-full p-3 flex items-center gap-3">
-                    <p class="font-semibold w-[50px] border-r border-black">${{ auction.currentPrice }}</p>
+                    <p class="font-semibold min-w-[50px] pr-2 border-r border-black">${{ auction.currentPrice }}</p>
                     <div class="flex items-center gap-2">
                         <p class="text-xs">Buy it now with:</p>
-                        <p class="font-semibold">${{ auction.maxPrice }}</p>
+                        <p class="font-semibold text-sm text-[#505050]">${{ auction.maxPrice }}</p>
                     </div>
                 </div>
                 <div class="flex gap-2 items-center">
@@ -418,7 +419,7 @@ onBeforeMount(async () => {
                     class="w-full bg-[#409EFF] text-white font-bold rounded-3xl py-2 text-lg hover:bg-[#3A8EE4] transition-all">
                     Place bid
                 </button>
-                <div class="flex items-center w-full gap-4">
+                <div class="flex items-center w-full gap-2">
                     <button
                         class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white transition-all"
                         @click="handlePlaceBid(true)">
@@ -443,8 +444,14 @@ onBeforeMount(async () => {
                 </span>
                 <div class="flex items-center gap-2">
                     <span>Payment:</span>
-                    <img class="border px-2 rounded-lg" src="../../assets/images/vnpay-logo.jpg" width="70" height="40"
-                        alt="" />
+                    <div class="flex items-center gap-2">
+                        <img class="border px-2 rounded-lg mt-2 h-[50px]" src="../../assets/images/vnpay-logo.jpg"
+                            width="70" alt="" />
+                        <img class="border px-2 rounded-lg mt-2 h-[50px] py-4" src="../../assets/images/noidia.png"
+                            width="70" alt="" />
+                        <img class="border px-2 rounded-lg mt-2 h-[50px] py-2" src="../../assets/images/visa.png"
+                            width="70" alt="" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -514,9 +521,12 @@ onBeforeMount(async () => {
                     <div class="w-full">
                         <p class="text-xs font-medium bg-[#E8E8E8] leading-8 pl-2 w-full">Payment</p>
                         <div class="flex items-center gap-6">
-                            <img class="border px-2 rounded-lg mt-2 h-[50px]" src="../../assets/images/vnpay-logo.jpg" width="70" alt="" />
-                            <img class="border px-2 rounded-lg mt-2 h-[50px] py-4" src="../../assets/images/noidia.png" width="70" alt="" />
-                            <img class="border px-2 rounded-lg mt-2 h-[50px] py-2" src="../../assets/images/visa.png" width="70" alt="" />
+                            <img class="border px-2 rounded-lg mt-2 h-[50px]" src="../../assets/images/vnpay-logo.jpg"
+                                width="70" alt="" />
+                            <img class="border px-2 rounded-lg mt-2 h-[50px] py-4" src="../../assets/images/noidia.png"
+                                width="70" alt="" />
+                            <img class="border px-2 rounded-lg mt-2 h-[50px] py-2" src="../../assets/images/visa.png"
+                                width="70" alt="" />
                         </div>
                     </div>
                 </div>
