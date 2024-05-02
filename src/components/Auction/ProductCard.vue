@@ -63,7 +63,7 @@
         >
             <div class="p-6">
                 <img
-                    :src="auction.mediaUrls[0]"
+                    :src="auction.mediaUrls[0] || 'https://as1.ftcdn.net/v2/jpg/04/62/93/66/1000_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg'"
                     class="object-cover"
                     style="width: 230px; height: 230px"
                 />
