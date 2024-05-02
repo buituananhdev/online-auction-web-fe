@@ -374,8 +374,8 @@ onBeforeMount(async () => {
                 <div class="border p-3 rounded-lg">
                     <img :src="listImage[imageOverIndex] || 'https://as1.ftcdn.net/v2/jpg/04/62/93/66/1000_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg'" alt="" class="w-[500px] h-[500px] rounded-xl object-cover" />
                 </div>
-                <div class="auction-detail-list w-full h-fit">
-                    <Icon @click="scrollToLeft(scrollBox)"
+                <div v-show="listImage.length" class="auction-detail-list w-full h-fit">
+                    <Icon v-show="listImage.length > 6" @click="scrollToLeft(scrollBox)"
                         class="auction-detail-arrow-icon auction-detail-left-icon w-[300px]"
                         icon="ic:round-keyboard-arrow-left" />
                     <div ref="scrollBox" class="flex scroll-column-custom h-[100px] w-[500px] overflow-auto">
@@ -387,7 +387,7 @@ onBeforeMount(async () => {
                                 :class="{ 'image-active': imageActiveIndex === index, 'image-item rounded-lg': true }" />
                         </p>
                     </div>
-                    <Icon @click="scrollRight(scrollBox)"
+                    <Icon v-show="listImage.length >6" @click="scrollRight(scrollBox)"
                         class="auction-detail-arrow-icon auction-detail-right-icon w-[300px]"
                         icon="ic:round-keyboard-arrow-right" />
                 </div>
@@ -463,7 +463,7 @@ onBeforeMount(async () => {
         <div class="mt-10 mx-4">
             <span class="font-bold text-2xl">Explore related Items</span>
             <div class="auction-detail-explored-list">
-                <Icon @click="scrollToLeft(scrollBox2)"
+                <Icon v-show="exploredAuctionList.length > 3" @click="scrollToLeft(scrollBox2)"
                     class="auction-detail-arrow-icon auction-detail-left-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-left" />
                 <div ref="scrollBox2" class="scrollbar-flex-content scroll-custom">
@@ -471,7 +471,7 @@ onBeforeMount(async () => {
                         <product-card :auction="item" />
                     </p>
                 </div>
-                <Icon @click="scrollRight(scrollBox2)"
+                <Icon v-show="exploredAuctionList.length > 3" @click="scrollRight(scrollBox2)"
                     class="auction-detail-arrow-icon auction-detail-right-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-right" />
             </div>
