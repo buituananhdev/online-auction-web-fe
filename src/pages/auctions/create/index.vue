@@ -1,129 +1,136 @@
 <template>
     <div class="w-full flex flex-col px-[72px] text-[#191919] z-0">
         <h1 class="font-bold text-2xl mt-[50px] px-6 w-full flex justify-start">Complete your listing</h1>
-        <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-            <h2 class="font-bold mb-[10px]">PHOTOS & VIDEO</h2>
-            <span class="text-sm font-semibold">Buyers want to see all details and angles.</span>
-            <div class="mt-6">
-                <el-upload
-                    v-model:file-list="fileList"
-                    action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-                    list-type="picture-card"
-                    :on-preview="handlePictureCardPreview"
-                    :on-remove="handleRemove"
-                >
-                    <el-icon><Plus /></el-icon>
-                </el-upload>
+        <el-form
+            ref="auctionRef"
+            :rules="rules"
+            :model="currentAuction"
+            label-width="auto"
+        >
+            <!-- <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+                <h2 class="font-bold mb-[10px]">PHOTOS & VIDEO</h2>
+                <span class="text-sm font-semibold">Buyers want to see all details and angles.</span>
+                <div class="mt-6">
+                    <el-upload
+                        v-model:file-list="fileList"
+                        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                        list-type="picture-card"
+                        :on-preview="handlePictureCardPreview"
+                        :on-remove="handleRemove"
+                    >
+                        <el-icon><Plus /></el-icon>
+                    </el-upload>
 
-                <el-dialog v-model="dialogVisible">
-                    <img w-full :src="dialogImageUrl" alt="Preview Image" />
-                </el-dialog>
+                    <el-dialog v-model="dialogVisible">
+                        <img w-full :src="dialogImageUrl" alt="Preview Image" />
+                    </el-dialog>
+                </div>
+            </div> -->
+            <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+                <h2 class="font-bold mb-[10px]">TITLE</h2>
+                <div class="w-full">
+                    <el-form-item prop="productName">
+                        <el-input
+                            v-model="currentAuction.productName"
+                            maxlength="100"
+                            placeholder="Please input"
+                            show-word-limit
+                            clearable
+                            type="text"
+                            size="large"
+                            style="width: 908px;"
+                        />
+                    </el-form-item>
+                </div>
             </div>
-        </div>
-        <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-            <h2 class="font-bold mb-[10px]">TITLE</h2>
-            <div class="w-full">
-                <el-input
-                    v-model="currentAuction.productName"
-                    maxlength="100"
-                    placeholder="Please input"
-                    show-word-limit
-                    clearable
-                    type="text"
-                    size="large"
+            <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+                <h2 class="font-bold mb-[10px]">ITEM CATEGORY</h2>
+                <div class="w-full flex gap-10 justify-center items-center">
+                    <span class="text-sm">Please select the product's category type!</span>
+                    <el-form-item prop="categoryId" style="margin-bottom: 0;">
+                        <el-select v-model="currentAuction.categoryId" placeholder="Select" size="large" style="width: 500px;">
+                            <el-option
+                                v-for="item in listCategories"
+                                :key="item.id"
+                                :label="item.categoryName"
+                                :value="item.id"
+                            />
+                        </el-select>
+                    </el-form-item>
+                </div>
+            </div>
+            <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+                <h2 class="font-bold mb-[10px]">CONDITION</h2>
+                <h3 class="font-semibold mt-4 mb-1">Item condition</h3>
+                <button class="underline w-fit cursor-default hover:opacity-50" @click="handleSelectCondition">
+                    {{ getConditionText(currentAuction.condition) }}
+                </button>
+                <span class="text-sm mt-4">Disclose all defects to prevent returns and earn better feedback.</span>
+            </div>
+            <div class="mx-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+                <h2 class="font-bold mb-[10px]">DESCRIPTION</h2>
+                <QuillEditor 
+                    theme="snow" 
+                    v-model:content="currentAuction.description" 
+                    contentType="html" 
+                    placeholder="Write a detailed description of your item, or save time and let Al draft it for you"
                 />
             </div>
-        </div>
-        <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-            <h2 class="font-bold mb-[10px]">ITEM CATEGORY</h2>
-            <div class="w-full flex gap-10 justify-center items-center">
-                <span class="text-sm">Please select the product's category type!</span>
-                <el-select v-model="currentAuction.categoryId" placeholder="Select" size="large" style="width: 60%">
-                    <el-option
-                        v-for="item in listCategories"
-                        :key="item.id"
-                        :label="item.categoryName"
-                        :value="item.id"
-                    />
-                </el-select>
-            </div>
-        </div>
-        <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-            <h2 class="font-bold mb-[10px]">CONDITION</h2>
-            <h3 class="font-semibold mt-4 mb-1">Item condition</h3>
-            <button class="underline w-fit cursor-default hover:opacity-50" @click="handleSelectCondition">
-                {{ getConditionText(currentAuction.condition) }}
-            </button>
-            <span class="mt-4 text-sm">Disclose all defects to prevent returns and earn better feedback.</span>
-        </div>
-        <!-- <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-            <h2 class="font-bold mb-[10px]">DESCRIPTION</h2>
-            <textarea
-                v-model="currentAuction.description"
-                name="description"
-                id="description"
-                cols="30"
-                rows="10"
-                class="border-[1px] border-gray-400 rounded-lg px-4 py-2"
-                placeholder="Write a detailed description of your item, or save time and let Al draft it for you"
-            >
-            </textarea>
-        </div> -->
-        <div class="mx-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-            <h2 class="font-bold mb-[10px]">DESCRIPTION</h2>
-            <QuillEditor 
-                theme="snow" 
-                v-model:content="currentAuction.description" 
-                contentType="html" 
-                placeholder="Write a detailed description of your item, or save time and let Al draft it for you"
-            />
-        </div>
-        <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-            <h2 class="font-bold mb-[10px]">PRICING</h2>
-            <div class="flex gap-5">
-                <div class="flex flex-col">
-                    <span class="mb-1 font-medium">Starting bid</span>
-                    <el-input
-                        v-model="currentAuction.startingPrice"
-                        style="width: 240px"
-                        placeholder="Please input"
-                        :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                        :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
-                    />
+            <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+                <h2 class="font-bold mb-[10px]">PRICING</h2>
+                <div class="flex gap-5">
+                    <div class="flex flex-col">
+                        <span class="mb-1 font-medium">Starting bid</span>
+                        <el-form-item prop="startingPrice">
+                            <el-input
+                                v-model="currentAuction.startingPrice"
+                                style="width: 240px"
+                                placeholder="Please input"
+                                :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+                            />
+                        </el-form-item>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="mb-1 font-medium">Buy It Now(optional)</span>
+                        <el-form-item prop="maxPrice">
+                            <el-input
+                                v-model="currentAuction.maxPrice"
+                                style="width: 240px"
+                                placeholder="Please input"
+                                :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+                            />
+                        </el-form-item>
+                    </div>
                 </div>
-                <div class="flex flex-col">
-                    <span class="mb-1 font-medium">Buy It Now(optional)</span>
-                    <el-input
-                        v-model="currentAuction.maxPrice"
-                        style="width: 240px"
-                        placeholder="Please input"
-                        :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                        :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
-                    />
+                <div class="flex flex-col mt-4">
+                    <span class="mb-1 font-medium">Auction End Time</span>
+                    <el-form-item prop="endTime" style="display: flex; flex-direction: row;">
+                        <div class="block">
+                            <el-date-picker
+                                v-model="currentAuction.endTime"
+                                type="datetime"
+                                placeholder="Select date and time"
+                            />
+                        </div>
+                    </el-form-item>
+                </div>
+                <div class="w-full mt-4">
+                    <el-checkbox v-model="currentAuction.canReturn" label="After receipt, returns allowed" size="large" />
                 </div>
             </div>
-            <div class="flex flex-col mt-4">
-                <span class="mb-1 font-medium">Auction End Time</span>
-                <div class="block">
-                    <el-date-picker
-                        v-model="currentAuction.endTime"
-                        type="datetime"
-                        placeholder="Select date and time"
-                    />
-                </div>
+            <div class="w-full my-10">
+                <el-form-item style="display: flex; flex-direction: row">
+                    <button
+                        class="py-[13px] px-5 my-2 mx-auto bg-[#3665f3] text-white font-bold rounded-full min-w-[343px] flex justify-center items-center"
+                        @click="submit(auctionRef)"
+                    >
+                        List it
+                    </button>
+                </el-form-item>
             </div>
-            <div class="w-full mt-4">
-                <el-checkbox v-model="currentAuction.canReturn" label="After receipt, returns allowed" size="large" />
-            </div>
-        </div>
-        <div class="w-full my-10">
-            <button
-                class="py-[13px] px-5 my-2 mx-auto bg-[#3665f3] text-white font-bold rounded-full min-w-[343px] flex justify-center items-center"
-                @click="createAuction"
-            >
-                List it
-            </button>
-        </div>
+        </el-form>
     </div>
     <div
         v-if="isShowSelectCondition"
@@ -157,7 +164,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, onMounted, ref } from 'vue'
+import { onBeforeMount, onMounted, ref, reactive } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { getListCategories } from '../../../services/category.service'
 import { addAuction } from '../../../services/auction.service'
@@ -166,8 +173,12 @@ import { addAuction } from '../../../services/auction.service'
 import { useRouter } from 'vue-router'
 
 const listCategories = ref([])
+const isValids = ref([])
+const auctionRef = ref()
+const isShowSelectCondition = ref(false)
+const router = useRouter()
 
-const currentAuction = ref({
+const currentAuction = reactive({
     productName: '',
     categoryId: null,
     condition: 1,
@@ -184,8 +195,15 @@ const meta = ref({
     totalPage: 1,
     pageSize: 16,
 })
-const isShowSelectCondition = ref(false)
-const router = useRouter()
+
+const handleSelectCondition = () => {
+    isShowSelectCondition.value = true
+}
+
+const handleCloseModel = () => {
+    isShowSelectCondition.value = false
+}
+
 const radioList = ref([
     {
         value: 1,
@@ -219,6 +237,85 @@ function getConditionText(id) {
             return
     }
 }
+
+const validateProductName = (rule, value, callback) => {
+    if (!value) {
+        isValids.value[0] = false
+        return callback(new Error('Auction Name is required'))
+    }
+    callback()
+    isValids.value[0] = true
+}
+
+const validateCategoryId = (rule, value, callback) => {
+    if (!value) {
+        isValids.value[1] = false
+        return callback(new Error('Category is required'))
+    }
+    callback()
+    isValids.value[1] = true
+}
+
+const validateStartingPrice = (rule, value, callback) => {
+    if (!value) {
+        isValids.value[2] = false
+        return callback(new Error('Starting Price is required'))
+    } else if (value<0) {
+        isValids.value[2] = false
+        return callback(new Error('Starting Price must be greater than or equal to 0'))
+    }
+    callback()
+    isValids.value[2] = true
+}
+
+const validateMaxPrice = (rule, value, callback) => {
+    if (!value) {
+        isValids.value[3] = false
+        return callback(new Error('Max Price is required'))
+    } else if (value<0) {
+        isValids.value[3] = false
+        return callback(new Error('Max Price must be greater than or equal to 0'))
+    }
+    callback()
+    isValids.value[3] = true
+}
+
+const isFutureTime = (timeString) => {
+    // Chuyển đổi chuỗi thời gian thành đối tượng Date
+    const inputDate = new Date(timeString);
+
+    // Kiểm tra xem đối tượng Date đã được tạo thành công chưa
+    if (isNaN(inputDate.getTime())) {
+        // Nếu không thể chuyển đổi thành công, trả về false
+        return false;
+    }
+
+    // Lấy thời gian hiện tại
+    const now = new Date();
+
+    // So sánh thời gian nhập vào với thời gian hiện tại
+    return inputDate > now;
+}
+
+const validateEndTime = (rule, value, callback) => {
+    if (!value) {
+        isValids.value[4] = false
+        return callback(new Error('End Time is required'))
+    } else if (!isFutureTime(value)) {
+        isValids.value[4] = false
+        return callback(new Error('End Time must be a future date'))
+    }
+    callback()
+    isValids.value[4] = true
+}
+
+const rules = reactive({
+    productName: [{ validator: validateProductName, trigger: 'blur' }],
+    categoryId: [{ validator: validateCategoryId, required: true, trigger: 'blur' }],
+    startingPrice: [{ validator: validateStartingPrice, trigger: 'blur' }],
+    maxPrice: [{ validator: validateMaxPrice, trigger: 'blur' }],
+    endTime: [{ validator: validateEndTime, trigger: 'blur' }],
+})
 
 const fileList = ref([
     {
@@ -255,9 +352,6 @@ const fileList = ref([
     },
 ])
 
-const handleCloseModel = () => {
-    isShowSelectCondition.value = false
-}
 
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
@@ -292,28 +386,64 @@ const getAllCategories = async () => {
     }
 }
 
-const createAuction = async () => {
-    try {
-        const res = await addAuction(currentAuction.value)
-        router.push({ name: 'seller-history' })
-        console.log(111111111111111111, currentAuction.description);
-        ElNotification({
-            title: 'Create Auction',
-            message: 'Create Auction Successfully!',
-            type: 'success',
-        })
-    } catch (error) {
+// const createAuction = async () => {
+//     try {
+//         const res = await addAuction(currentAuction.value)
+//         router.push({ name: 'seller-history' })
+//         console.log(111111111111111111, currentAuction.description);
+//         ElNotification({
+//             title: 'Create Auction',
+//             message: 'Create Auction Successfully!',
+//             type: 'success',
+//         })
+//     } catch (error) {
+//         ElNotification({
+//             title: 'Create Auction',
+//             message: 'Create Auction Failed!',
+//             type: 'error',
+//         })
+//         console.log(error)
+//     }
+// }
+
+const submit = async (formEl) => {
+    if (!formEl) return
+    await formEl.validate((valid) => {
+        if (!valid) {
+            console.log('error submit!')
+            return false
+        }
+        console.log('Not input information.')
+        console.log('formEl',formEl);
+    })
+    if (isValids.value.includes(false)) {
+        console.log(333333333333333333333);
         ElNotification({
             title: 'Create Auction',
             message: 'Create Auction Failed!',
             type: 'error',
         })
-        console.log(error)
+    } else {
+        try {
+            console.log('success');
+            console.log(currentAuction);
+            await addAuction(currentAuction)
+            // router.push({ name: 'seller-history' })
+            ElNotification({
+                title: 'Create Auction',
+                message: 'Create Auction Successfully!',
+                type: 'success',
+            })
+        } catch (error) {
+            console.log('error');
+            ElNotification({
+                title: 'Create Auction',
+                message: 'Create Auction Failed!',
+                type: 'error',
+            })
+            console.log(error)
+        }
     }
-}
-
-const handleSelectCondition = () => {
-    isShowSelectCondition.value = true
 }
 
 onBeforeMount(async () => {
