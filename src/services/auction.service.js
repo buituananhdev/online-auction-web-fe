@@ -17,6 +17,7 @@ export const getListAuctions = async (
     maxEndTime=''
 ) => {
     const currentDate = new Date()
+    currentDate.setHours(currentDate.getHours() + 7)
     console.log('hi nhan ne');
     //&searchQuery=1231&condition=1&minCurrentPrice=122&maxCurrentPrice=1234&minMaxPrice=12345&maxMaxPrice=123456&minEndTime=2024-05-07T14%3A56%3A00.000Z&maxEndTime=2024-05-15T14%3A56%3A00.000Z&categoryIds=%5B1%5D'
     let url = `/auctions?pageNumber=${page}&pageSize=${pageSize}`

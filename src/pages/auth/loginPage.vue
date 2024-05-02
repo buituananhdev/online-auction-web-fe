@@ -156,13 +156,16 @@ const submit = async (formEl) => {
         try {
             const data = await loginApi(user)
             
-            console.log('data', data)
             localStorage.setItem('access_token', data.data.accessToken)
             localStorage.setItem('refresh_token', data.data.refreshToken)
             localStorage.setItem('role', data.data.role)
             await auth.initAuthStore()
             !useAuction.connection && useAuction.initializeConnection(data.data.accessToken)
-            router.push({ name: 'dashboard' })
+            if(auth.user.role === 2) {
+                router.push({ name: 'seller-history' })
+            } else {
+                router.push({ name: 'dashboard' })
+            }
             ElNotification({
                 title: 'Success',
                 message: 'Log in successfully!',

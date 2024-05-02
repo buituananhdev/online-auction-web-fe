@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        <div v-show="auction.user" class="p-4 w-full border-b flex flex-col gap-3">
+        <div class="p-4 w-full border-b flex flex-col gap-3">
             <div class="flex gap-2 items-center justify-between">
                 <p class="w-3/5 font-semibold">Product Ordered</p>
                 <p class="text-[#bbb] w-1/6">Unit price</p>
@@ -43,7 +43,7 @@
                                 <el-text truncated class="font-bold text-base">{{ auction &&
                                     auction.productName }}</el-text>
                                 <span class="text-[8px] w-fit text-[red] p-[4px] border border-[red] rounded-lg">{{
-                                    auction.canReturn && 'You can return item' }}</span>
+                                    auction.canReturn ? 'You can return item' : ' Item cannot return' }}</span>
                             </div>
                         </div>
                     </div>
@@ -65,19 +65,19 @@
                     <el-radio label="VNBANK">
                         <el-text color="#409EFF">Payment via ATM - Domestic bank</el-text>
                         <img width="170" class="border h-[80px] rounded-xl px-6 py-4 my-2"
-                            src="../../assets/images/noidia.png"
-                            alt="">
+                            src="../../assets/images/noidia.png" alt="">
                     </el-radio>
                     <el-radio label="INTCARD">
                         <el-text color="#409EFF">Payment via international card</el-text>
-                        <img width="170" class="border rounded-xl h-[80px] my-2"
-                            src="../../assets/images/visa.png" alt="">
+                        <img width="170" class="border rounded-xl h-[80px] my-2" src="../../assets/images/visa.png"
+                            alt="">
                     </el-radio>
                 </el-radio-group>
             </div>
         </div>
         <div class="flex justify-end py-4">
-            <el-button @click="handleSubmit" type="primary" class="w-[200px]" size="large" native-type="submit">Thanh toán</el-button>
+            <el-button @click="handleSubmit" type="primary" class="w-[200px]" size="large" native-type="submit">Thanh
+                toán</el-button>
         </div>
         <p>&nbsp;</p>
     </div>
@@ -90,7 +90,10 @@ import querystring from 'qs';
 import CryptoJS from 'crypto-js';
 import { LocationFilled } from '@element-plus/icons-vue'
 import { useAuctionStore } from '../../stores/auction.store'
+import { useRoute } from 'vue-router';
+import { getSingleAuction } from '../../services/auction.service'
 
+const route = useRoute()
 const formData = ref({
     amount: '200000',
     bankCode: '',
@@ -184,9 +187,23 @@ const sortObject = (obj) => {
     return sorted;
 }
 
-onBeforeMount(() => {
-    auction.value = useAuction.detailAuction
-    console.log('auction', useAuction.detailAuction)
+async function getDetailAuction() {
+    try {
+        const id = route.params.id
+        const res = await getSingleAuction(id)
+        auction.value = res.data
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+onBeforeMount(async () => {
+    if (useAuction.watchingAuction.id) {
+        auction.value = useAuction.watchingAuction
+    } else {
+        await getDetailAuction()
+    }
+    localStorage.setItem('auctionId', route.params.id)
 })
 </script>
 
