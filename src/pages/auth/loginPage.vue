@@ -88,7 +88,7 @@ const handleCredentialResponse = async (res) => {
         localStorage.setItem('access_token', data.data.accessToken)
         localStorage.setItem('refresh_token', data.data.refresh_token)
         await auth.initAuthStore()
-        await useAuction.initializeConnection(data.data.accessToken)
+        !useAuction.connection && useAuction.initializeConnection(data.data.accessToken)
         ElNotification({
             title: 'Success',
             message: 'Log in successfully!',
@@ -159,7 +159,7 @@ const submit = async (formEl) => {
             localStorage.setItem('refresh_token', data.data.refreshToken)
             localStorage.setItem('role', data.data.role)
             await auth.initAuthStore()
-            await useAuction.initializeConnection(data.data.accessToken)
+            !useAuction.connection && useAuction.initializeConnection(data.data.accessToken)
             router.push({ name: 'dashboard' })
             ElNotification({
                 title: 'Success',

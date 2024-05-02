@@ -1,53 +1,54 @@
-// stores/counter.js
 import { defineStore } from 'pinia'
 import { HubConnectionBuilder } from '@microsoft/signalr'
 import { getSingleAuction } from '../services/auction.service'
 
-let connection
-
 export const useAuctionStore = defineStore('auctions', {
     state: () => ({
-        auctionList: [],
-        detailAuction: {},
-        currentAuctionId: 0
+        watchingAuction: {},
+        connection: null,
     }),
     actions: {
         initializeConnection(token) {
-            console.log('token', token);
-            connection = new HubConnectionBuilder()
+            this.connection = new HubConnectionBuilder()
                 .withUrl(`${import.meta.env.VITE_APP_HUB}/hubs/auction`, {
                     accessTokenFactory: () => token,
                     withCredentials: true,
                 })
                 .build()
 
-            connection.on('RECEIVE_NOTIFICATION', (data) => {
-                console.log('heeeeeeeeeeeeee tesst',data)
-
-            })
-            connection
+            this.connection.on('RECEIVE_NOTIFICATION', this.syncAuctionIfWatching)
+            this.connection
                 .start()
-                .then(() => {
-                    console.log('SignalR Connected.')
-                    this.onListenEvent() // Start listening to events after connection is established
-                })
-                .catch((error) => {
-                    console.error('SignalR Connection Error: ', error)
-                })
+                .then(this.onConnectionEstablished)
+                .catch(this.onConnectionError)
+            console.log('this connect', this.connection);
         },
         onListenEvent() {
             console.log('Listening to events...')
         },
-        async setCurrentAuctionId(id) {
-            this.currentAuctionId = id
+        async setWatchingAuction(auction) {
+            this.watchingAuction = auction
         },
-        async getDetailAuction() {
+        async syncAuction(id) {
             try {
-                const res = await getSingleAuction(this.currentAuctionId)
-                this.detailAuction = res.data
-            } catch (error) {
-                console.error(error);
+                const res = await getSingleAuction(id)
+                this.setWatchingAuction(res.data)
+            } catch (err) {
+                console.error(err)
             }
-        }
+        },
+        syncAuctionIfWatching(data) {
+            if (data.relatedID === this.watchingAuction.id) {
+                this.syncAuction(data.relatedID)
+                
+            }
+        },
+        onConnectionEstablished() {
+            console.log('SignalR Connected.')
+            this.onListenEvent()
+        },
+        onConnectionError(error) {
+            console.error('SignalR Connection Error: ', error)
+        },
     },
 })

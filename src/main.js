@@ -32,7 +32,7 @@ const initApp = async () => {
     const auth = authStore()
     const useAuction = useAuctionStore()
     await auth.initAuthStore()
-    token && useAuction.initializeConnection(token)
+    !useAuction.connection && useAuction.initializeConnection(token)
     app.use(router)
     app.component('auth-layout', authLayout)
     app.component('default-layout', defaultLayout)
