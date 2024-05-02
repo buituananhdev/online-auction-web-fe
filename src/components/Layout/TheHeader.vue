@@ -17,6 +17,23 @@
                 <el-select v-model="value" placeholder="WatchList" style="width: 110px">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
+                <el-dropdown>
+                    <span class="flex items-center" @click="handleClickMyEbay">
+                        My eBay
+                        <el-icon class="el-icon--right">
+                            <arrow-down />
+                        </el-icon>
+                    </span>
+                    <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item v-if="role=='Seller'" @click="router.push('/seller-history')">Seller History</el-dropdown-item>
+                        <el-dropdown-item v-if="role=='Seller'" @click="router.push('/create-auction')">Create Auction</el-dropdown-item>
+                        <el-dropdown-item v-if="role=='Buyer'" @click="router.push('/auctions')">Auctions</el-dropdown-item>
+                        <el-dropdown-item v-if="role=='Buyer'" @click="router.push('/buyer-history')">Bids & Offers</el-dropdown-item>
+                        <el-dropdown-item v-if="role=='Buyer'" @click="router.push('/watchlist')">Watchlist</el-dropdown-item>
+                    </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
                 <img src="../../assets/icons/bell-icon.svg" class="cursor-pointer" width="20" alt="" />
             </div>
             <div v-if="useAuth.isLoggedIn" class="container flex justify-end items-center gap-4 w-fit">
@@ -54,6 +71,9 @@ import { useRouter } from 'vue-router'
 import { authStore } from '../../stores/auth.store'
 import { getListCategories } from '../../services/category.service'
 import { useCategoryStore } from '../../stores/category.store'
+import { ArrowDown } from '@element-plus/icons-vue'
+
+const role = localStorage.getItem('role')
 
 
 const props = defineProps({
@@ -107,6 +127,14 @@ const logout = () => {
     localStorage.clear()
     window.location.href = '/login'
     localStorage.setItem('isAuthPage', true)
+}
+
+const handleClickMyEbay = () => {
+    if (role == 'Seller') {
+        router.push('/seller-history')
+    } else if ( role == 'Buyer') {
+        router.push('/buyer-history')
+    }
 }
 
 const handleOutsideClick = (event) => {
