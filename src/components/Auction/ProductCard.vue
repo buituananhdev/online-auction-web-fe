@@ -40,12 +40,12 @@
                         >Place bid</el-button
                     >
                     <div
-                        @click="() => (isLike = !isLike)"
-                        class="image border rounded-full p-2 border-black border-[0.7px] cursor-pointer"
+                        @click="handleSetWatchlist(auction)"
+                        class="image rounded-full p-2 border-black border-[0.7px] cursor-pointer"
                     >
                         <img
                             class="hover:opacity-40"
-                            v-if="isLike"
+                            v-if="!auction.isWatched"
                             src="../../assets/icons/heart-icon.svg"
                             width="25"
                             alt=""
@@ -93,13 +93,19 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuctionStore } from '../../stores/auction.store';
+import { addWatchlist, deleteWatchlist } from '../../services/watchlist.service'
+
 defineProps({
     auction: Object,
 })
 
 const router = useRouter()
-const isLike = ref(false)
 const useAuction = useAuctionStore() 
+
+const currentAuction = ref({
+    auctionId: '',
+    type: 2,
+})
 
 const convertISOToRegularTime = (isoTimeString) => {
     const date = new Date(isoTimeString)
@@ -145,6 +151,55 @@ const converConditionText = (id) => {
 }
 const goToDetail = (id) => {
     router.push(`/auctions/${id}`)
+}
+
+const addToWatchlist = async (auction) => {
+    try {
+        console.log(auction);
+        currentAuction.value.auctionId = auction.id
+        await addWatchlist(currentAuction.value)
+        auction.isWatched = !auction.isWatched
+        ElNotification({
+            title: 'Add To Watchlist',
+            message: 'Add To Watchlist Successfully!',
+            type: 'success',
+        })
+    } catch (error) {
+        ElNotification({
+            title: 'Add To Watchlist',
+            message: 'Add To Watchlist Failed!',
+            type: 'error',
+        })
+        console.log(error)
+    }
+}
+
+const removeWatchlist = async (auction) => {
+    try {
+        await deleteWatchlist(auction.id)
+        auction.isWatched = !auction.isWatched
+        ElNotification({
+            title: 'Unwatch',
+            message: 'Unwatch Successfully!',
+            type: 'success',
+        })
+    } catch (error) {
+        ElNotification({
+            title: 'Unwatch',
+            message: 'Unwatch Failed!',
+            type: 'error',
+        })
+        console.log(error)
+    }
+}
+
+const handleSetWatchlist = (auction) => {
+    console.log(auction);
+    if (auction.isWatched) {
+        removeWatchlist(auction)
+    } else {
+        addToWatchlist(auction)
+    }
 }
 </script>
 <style>
