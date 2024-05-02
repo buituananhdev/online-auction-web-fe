@@ -26,7 +26,7 @@
                     </el-dialog>
                 </div>
             </div> -->
-            <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+            <div class="px-6 pt-8 flex flex-col pb-5 border-b-[1px]">
                 <h2 class="font-bold mb-[10px]">TITLE</h2>
                 <div class="w-full">
                     <el-form-item prop="productName">
