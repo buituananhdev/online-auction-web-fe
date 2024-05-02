@@ -34,17 +34,15 @@
                             alt="">
                         <span>{{ auction.user && auction.user.fullName }}</span>
                     </div>
-                    <div>
-                        <div class="flex items-center gap-3">
-                            <img class="w-[45px] h-[45px] rounded"
-                                src="https://s3-alpha.figma.com/hub/file/2785854380/baef8be6-906e-4d6f-b619-6cf457aba1f0-cover.png"
-                                alt="">
-                            <div class="flex flex-col gap-0.5">
-                                <el-text truncated class="font-bold text-base">{{ auction &&
-                                    auction.productName }}</el-text>
-                                <span class="text-[8px] w-fit text-[red] p-[4px] border border-[red] rounded-lg">{{
-                                    auction.canReturn ? 'You can return item' : ' Item cannot return' }}</span>
-                            </div>
+                    <div class="flex items-center gap-3">
+                        <img class="w-[45px] h-[45px] rounded"
+                            src="https://s3-alpha.figma.com/hub/file/2785854380/baef8be6-906e-4d6f-b619-6cf457aba1f0-cover.png"
+                            alt="">
+                        <div class="flex flex-col gap-0.5">
+                            <el-text truncated class="font-bold text-base">{{ auction &&
+                                auction.productName }}</el-text>
+                            <span class="text-[8px] w-fit text-[red] p-[4px] border border-[red] rounded-lg">{{
+                                auction.canReturn ? 'You can return item' : ' Item cannot return' }}</span>
                         </div>
                     </div>
                 </div>
