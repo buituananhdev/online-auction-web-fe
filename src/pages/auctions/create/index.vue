@@ -1,8 +1,10 @@
 <script setup>
-import { onBeforeMount, ref, reactive } from 'vue'
+import { onBeforeMount, ref, reactive, computed } from 'vue'
 import { getListCategories } from '../../../services/category.service'
 import { addAuction } from '../../../services/auction.service'
 import { useRouter } from 'vue-router'
+import { Plus } from '@element-plus/icons-vue'
+import { uploadImage } from "../../../plugins/uploadImage.js";
 
 const listCategories = ref([])
 const isValids = ref([false, false, false, false, false])
@@ -18,7 +20,7 @@ const currentAuction = reactive({
     maxPrice: null,
     endTime: new Date(),
     canReturn: false,
-    mediasUrl: []
+    mediaUrls: computed(() => fileList.value.map(x => x.url)),
 })
 
 const meta = ref({
@@ -139,40 +141,7 @@ const rules = reactive({
     endTime: [{ validator: validateEndTime, trigger: 'blur' }],
 })
 
-const fileList = ref([
-    {
-        name: 'food.jpeg',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-        name: 'plant-1.png',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-        name: 'food.jpeg',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-        name: 'plant-2.png',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-        name: 'food.jpeg',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-        name: 'figure-1.png',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-        name: 'food.jpeg',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-    {
-        name: 'figure-2.png',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-    },
-])
+const fileList = ref([]);
 
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
@@ -237,13 +206,40 @@ const submit = async () => {
 onBeforeMount(async () => {
     await getAllCategories()
 })
+
+const upload = async (file) => {
+    fileList.value = fileList.value.filter(x => x.name !== file.file.name);
+    try {
+        const imageUrl = await uploadImage(file.file);
+        fileList.value.push({ name: file.file.name, url: imageUrl });
+        console.log("Upload successful:", fileList.value);
+    } catch (error) {
+        ElNotification.error({
+            title: 'Upload Error',
+            message: 'Failed to upload image!',
+        });
+        console.error("Upload error:", error);
+    }
+}
+
 </script>
 
 <template>
     <div class="w-full flex flex-col px-[72px] text-[#191919] z-0">
         <h1 class="font-bold text-2xl mt-[50px] px-6 w-full flex justify-start">Complete your listing</h1>
-        <el-form @submit.prevent="submit" ref="form" :rules="rules" :model="currentAuction"
-            label-width="auto">
+        <el-form @submit.prevent="submit" ref="form" :rules="rules" :model="currentAuction" label-width="auto">
+            <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
+                <h2 class="font-bold mb-[10px]">PHOTOS & VIDEO</h2>
+                <span class="text-sm font-semibold">Buyers want to see all details and angles.</span>
+                <div class="mt-6">
+                    <el-upload v-model:file-list="fileList" :action="true" :http-request="upload"
+                        list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+                        <el-icon>
+                            <Plus />
+                        </el-icon>
+                    </el-upload>
+                </div>
+            </div>
             <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
                 <h2 class="font-bold mb-[10px]">TITLE</h2>
                 <div class="w-full">
