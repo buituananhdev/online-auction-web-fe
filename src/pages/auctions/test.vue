@@ -1,69 +1,47 @@
 <template>
-    <div>
-        <button @click="updatePrice">Update Price</button>
+    <div class="cl-upload">
+        <h2>Upload an Image to Cloudinary</h2>
+        <form v-on:submit.prevent="upload">
+            <label for="file-input">Upload:</label>
+            <input id="file-input" type="file" accept="image/png, image/jpeg" @change="handleFileChange($event)" />
+
+            <button type="submit" :disabled="filesSelected < 1">Upload</button>
+        </form>
+
+        <section v-if="imageUrl">
+            <img :src="imageUrl" :alt="imageUrl" />
+        </section>
+
+        <section>
+            <ul v-if="errors.length > 0">
+                <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
+            </ul>
+        </section>
     </div>
 </template>
 
-<script>
-import * as signalR from '@microsoft/signalr'
+<script setup>
+import { ref } from "vue";
+import { uploadImage } from "../../plugins/uploadImage.js";
 
-export default {
-    data() {
-        return {
-            connection: null,
-            token: localStorage.getItem('access_token'),
-        }
-    },
-    created() {
-        this.startConnection()
-    },
-    methods: {
-        async startConnection() {
-            this.connection = new signalR.HubConnectionBuilder()
-                .withUrl('https://63nb9hjh-3002.asse.devtunnels.ms/hubs/auction', {
-                    accessTokenFactory: () => this.token,
-                    transport: signalR.HttpTransportType.LongPolling,
-                    withCredentials: false,
-                })
-                // .configureLogging(signalR.LogLevel.Information)
-                .build()
-            this.connection
-                .start()
-                .then(() => {
-                    console.log('SignalR Connected.')
-                })
-                .catch((error) => {
-                    console.log('hihii')
-                    console.error('SignalR Connection Error: ', error)
-                })
-            const auctionId = 13062 // Thay thế bằng id của phiên đấu giá muốn cập nhật
-            const newPrice = 100 // Giá mới của sản phẩm
-            await this.connection.invoke('UpdatePriceAsync', auctionId, newPrice)
-        },
-        // async updatePrice() {
-        //     console.log('Price hehehehehe.')
+const imageUrl = ref(null);
+const errors = ref([]);
+const file = ref();
+const filesSelected = ref(0);
 
-        //     if (this.connection && this.connection.state === signalR.HubConnectionState.Connected) {
-        //         const auctionId = 13062 // Thay thế bằng id của phiên đấu giá muốn cập nhật
-        //         const newPrice = 100 // Giá mới của sản phẩm
-        //         console.log('Price hehehehehe.')
+function handleFileChange(event) {
+    console.log("handlefilechange", event.target.files);
+    file.value = event.target.files[0];
+    filesSelected.value = event.target.files.length;
+}
 
-        //         try {
-        //         console.log('Price hihiiii.')
-
-        //             await this.connection.invoke('UpdatePriceAsync', auctionId, newPrice)
-        //             console.log('Price updated successfully.')
-        //         } catch (error) {
-        //             console.error('Error updating price: ', error)
-        //         }
-        //     } else {
-        //         console.error('SignalR connection is not established.')
-        //     }
-        // },
-    },
+async function upload() {
+    try {
+        imageUrl.value = await uploadImage(file.value);
+        console.log("Upload successful:", imageUrl.value);
+    } catch (error) {
+        errors.value.push(error.response ? error.response.data.error.message : error.message);
+        console.error("Upload error:", error);
+    }
 }
 </script>
-
-<style>
-/* Your styles here */
-</style>

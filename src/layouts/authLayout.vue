@@ -48,8 +48,6 @@ const handleClickSearch = () => {
     }
 }
 onMounted(() => {
-    console.log('hehehehhe', router.path);
-
     if (route.query.search) {
         searchValue.value = route.query.search.toString()
     }

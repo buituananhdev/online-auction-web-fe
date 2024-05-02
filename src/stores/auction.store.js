@@ -10,18 +10,18 @@ export const useAuctionStore = defineStore('auctions', {
     actions: {
         initializeConnection(token) {
             this.connection = new HubConnectionBuilder()
-                .withUrl(`${import.meta.env.VITE_APP_HUB}`, {
+                .withUrl(`${import.meta.env.VITE_APP_HUB}/hubs/auction`, {
                     accessTokenFactory: () => token,
                     withCredentials: true,
                 })
                 .build()
 
             this.connection.on('RECEIVE_NOTIFICATION', this.syncAuctionIfWatching)
-
             this.connection
                 .start()
                 .then(this.onConnectionEstablished)
                 .catch(this.onConnectionError)
+            console.log('this connect', this.connection);
         },
         onListenEvent() {
             console.log('Listening to events...')
