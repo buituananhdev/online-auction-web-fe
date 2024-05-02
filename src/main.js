@@ -5,6 +5,7 @@ import { pinia } from './stores'
 import './assets/scss/tailwind.scss'
 import './assets/scss/global.scss'
 import { authStore } from './stores/auth.store'
+import { useAuctionStore } from './stores/auction.store'
 import { authMiddleware } from './router/router.middleware'
 import authLayout from './layouts/authLayout.vue'
 import emptyLayout from './layouts/emptyLayout.vue'
@@ -24,11 +25,14 @@ import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 const initApp = async () => {
+    const token = localStorage.getItem('access_token')
     authMiddleware()
     const app = createApp(App)
     app.use(pinia)
     const auth = authStore()
+    const useAuction = useAuctionStore()
     await auth.initAuthStore()
+    !useAuction.connection && useAuction.initializeConnection(token)
     app.use(router)
     app.component('auth-layout', authLayout)
     app.component('default-layout', defaultLayout)
@@ -46,4 +50,5 @@ const initApp = async () => {
     app.component('QuillEditor', QuillEditor)
     app.mount('#app')
 }
+
 initApp()

@@ -26,7 +26,5 @@ export const authMiddleware = () => {
                 next()
             }
         }
-
-        console.log('huhuu');
     })
 }
