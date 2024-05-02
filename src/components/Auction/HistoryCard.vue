@@ -64,7 +64,7 @@
                         </div>
 
                         <div class="flex flex-col mt-14 gap-2">
-                            <button v-show="isInWatchlist" class="bg-[#3665f3] text-white border rounded-xl py-[7px] w-[200px] hover:bg-[#409EFF] transition">Buy It Now</button>
+                            <button v-show="isInWatchlist" class="bg-[#3665f3] text-white border rounded-xl py-[7px] w-[200px] hover:bg-[#409EFF] transition">Place Bid Now</button>
                             <button class="bg-white border rounded-xl py-[7px] w-[200px] hover:bg-[#409EFF] hover:text-white transition" @click="viewDetailAuction(auction.id)">View Detail</button>    
                         </div>
                     </div>

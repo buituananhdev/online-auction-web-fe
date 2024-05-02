@@ -327,7 +327,7 @@ onBeforeMount(async () => {
                         <input v-model="bidAmount" type="number" class="w-2/3 border py-1 pl-8 rounded-xl" />
                         <span class="font-bold absolute left-[15px]">$</span>
                         <button @click="reviewBid"
-                            class="flex-1 border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
+                            class="flex-1 border p-2 rounded-3xl bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
                             Review bid
                         </button>
                     </div>
