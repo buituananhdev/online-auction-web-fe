@@ -17,6 +17,10 @@ const exploredAuctionList = ref([])
 const router = useRouter()
 const route = useRoute()
 const listImage = ref([])
+const rating = ref({
+    totalRatings: 0,
+    averageRating: 0,
+})
 const id = computed(() => {
     console.log(route.params.id);
     return route.params.id
@@ -267,6 +271,7 @@ onBeforeMount(async () => {
     currentAuction.value.auctionId = auction.value.id
     console.log(auction.value.mediaUrls);
     listImage.value = auction.value.mediaUrls;
+    rating.value = auction.value.user.ratings.avarageRating
     await getExploreAuctionList()
     startCountdown(auction.value.endTime)
 })
@@ -396,7 +401,7 @@ onBeforeMount(async () => {
                     <div class="flex flex-col">
                         <span>{{ auction.user && auction.user.fullName }}</span>
                         <el-rate disabled style="height: 15px" :colors="colors"
-                            v-model="auction.user.ratings.avarageRating"
+                            v-model="rating"
                             score-template="({auction.user && auction.user.ratings.totalRatings})" />
                     </div>
                 </div>
