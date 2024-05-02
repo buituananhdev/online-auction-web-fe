@@ -144,6 +144,7 @@ const submit = async (formEl) => {
             return false
         }
         console.log('Not input information.')
+        console.log(formEl);
     })
     if (isValids.value.includes(false)) {
         ElNotification({
@@ -154,6 +155,7 @@ const submit = async (formEl) => {
     } else {
         try {
             const data = await loginApi(user)
+            
             console.log('data', data)
             localStorage.setItem('access_token', data.data.accessToken)
             localStorage.setItem('refresh_token', data.data.refreshToken)
