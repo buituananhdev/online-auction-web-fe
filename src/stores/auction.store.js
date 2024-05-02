@@ -15,7 +15,7 @@ export const useAuctionStore = defineStore('auctions', {
         initializeConnection(token) {
             console.log('token', token);
             connection = new HubConnectionBuilder()
-                .withUrl(`${import.meta.env.VITE_APP_HUB}/hub/auction`, {
+                .withUrl(`${import.meta.env.VITE_APP_HUB}/hubs/auction`, {
                     accessTokenFactory: () => token,
                     withCredentials: true,
                 })
@@ -23,8 +23,8 @@ export const useAuctionStore = defineStore('auctions', {
 
             connection.on('RECEIVE_NOTIFICATION', (data) => {
                 console.log('heeeeeeeeeeeeee tesst',data)
-            })
 
+            })
             connection
                 .start()
                 .then(() => {
