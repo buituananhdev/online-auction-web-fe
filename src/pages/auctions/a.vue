@@ -16,7 +16,7 @@ const auction = computed(() => useAuction.watchingAuction);
 const exploredAuctionList = ref([])
 const router = useRouter()
 const route = useRoute()
-const listImage = ref([])
+
 const id = computed(() => {
     console.log(route.params.id);
     return route.params.id
@@ -266,7 +266,6 @@ onBeforeMount(async () => {
     await useAuction.syncAuction(id.value)
     currentAuction.value.auctionId = auction.value.id
     console.log(auction.value.mediaUrls);
-    listImage.value = auction.value.mediaUrls;
     await getExploreAuctionList()
     startCountdown(auction.value.endTime)
 })
@@ -367,14 +366,14 @@ onBeforeMount(async () => {
         <div class="flex items-start gap-10 p-8 border rounded-2xl mt-3">
             <div class="auction-detail-images flex flex-col items-start">
                 <div class="border p-3 rounded-lg">
-                    <img :src="listImage[imageOverIndex] || 'https://as1.ftcdn.net/v2/jpg/04/62/93/66/1000_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg'" alt="" class="w-[500px] h-[500px] rounded-xl object-cover" />
+                    <img :src="auction.mediaUrls[imageOverIndex]" alt="" class="w-[500px] h-[500px] rounded-xl object-cover" />
                 </div>
                 <div class="auction-detail-list w-full h-fit">
                     <Icon @click="scrollToLeft(scrollBox)"
                         class="auction-detail-arrow-icon auction-detail-left-icon w-[300px]"
                         icon="ic:round-keyboard-arrow-left" />
                     <div ref="scrollBox" class="flex scroll-column-custom h-[100px] w-[500px] overflow-auto">
-                        <p v-for="(item, index) in listImage" :key="index" class="scrollbar-demo-item image-box"
+                        <p v-for="(item, index) in auction.mediaUrls" :key="index" class="scrollbar-demo-item image-box"
                             @mouseleave="imageOverIndex = imageActiveIndex" @mouseover="imageOverIndex = index"
                             @click="imageActiveIndex = index">
                             <img :src="item" alt="" width="80" height="80"

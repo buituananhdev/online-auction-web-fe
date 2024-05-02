@@ -10,7 +10,7 @@ export const useAuctionStore = defineStore('auctions', {
     actions: {
         initializeConnection(token) {
             this.connection = new HubConnectionBuilder()
-                .withUrl(`${import.meta.env.VITE_APP_HUB}/hubs/auction`, {
+                .withUrl(`${import.meta.env.VITE_APP_HUB}`, {
                     accessTokenFactory: () => token,
                     withCredentials: true,
                 })
@@ -40,7 +40,6 @@ export const useAuctionStore = defineStore('auctions', {
         syncAuctionIfWatching(data) {
             if (data.relatedID === this.watchingAuction.id) {
                 this.syncAuction(data.relatedID)
-                
             }
         },
         onConnectionEstablished() {
