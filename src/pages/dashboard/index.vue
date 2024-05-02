@@ -14,14 +14,14 @@
                 <skeleton-card v-for="item in 4" :key="item" style="padding-right: 20px;" />
             </div>
             <div v-else class="dashboard-list">
-                <Icon @click="scrollToLeft(scrollBox2)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
+                <Icon v-show="recentlyViewdList.length > 3" @click="scrollToLeft(scrollBox2)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-left" />
                 <div ref="scrollBox2" class="scrollbar-flex-content scroll-custom">
                     <p v-for="item in recentlyViewdList" :key="item" class="scrollbar-demo-item">
                         <product-card :auction="item" />
                     </p>
                 </div>
-                <Icon @click="scrollRight(scrollBox2)" class="dashboard-arrow-icon dashboard-right-icon w-[300px]"
+                <Icon v-show="recentlyViewdList.length > 3" @click="scrollRight(scrollBox2)" class="dashboard-arrow-icon dashboard-right-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-right" />
             </div>
         </div>
@@ -59,12 +59,10 @@
                     icon="ic:round-keyboard-arrow-right" />
             </div>
         </div>
-        <!-- <button class="scroll-btn" @click="scrollRight(scrollBox1)">
-        </button> -->
     </div>
 </template>
 <script setup>
-import { getTopAuctionsList, getRecentlyViewedList } from '../../services/auction.service';
+import { getTopAuctionsList, getRecentlyViewedList, getListAuctions } from '../../services/auction.service';
 import { onMounted, ref } from 'vue';
 
 const listImg = [
@@ -130,6 +128,10 @@ const getAuctionsList = async () => {
     try {
         const res = await getTopAuctionsList()
         topAuctionsList.value = res.data
+        if (topAuctionsList.value) {
+            const res = await getListAuctions()
+            topAuctionsList.value = res.data.data
+        }
     } catch (error) {
         console.log(error);
     }
@@ -138,6 +140,10 @@ const getRecentyViewdAuctionsList = async () => {
     try {
         const res = await getRecentlyViewedList()
         recentlyViewdList.value = res.data
+        if (recentlyViewdList.value) {
+            const res = await getListAuctions()
+            recentlyViewdList.value = res.data.data
+        }
     } catch (error) {
         console.log(error);
     }
@@ -150,7 +156,7 @@ function scrollRight(scrollBox) {
     console.log('1');
     if (scrollBox) {
         console.log('2');
-        scrollBox.scrollLeft += 400; // Kéo sang phải 400px
+        scrollBox.scrollLeft += 400;
     }
 }
 
@@ -158,7 +164,7 @@ function scrollToLeft(scrollBox) {
     console.log('1');
     if (scrollBox) {
         console.log('2');
-        scrollBox.scrollLeft -= 400; // Kéo sang phải 400px
+        scrollBox.scrollLeft -= 400;
     }
 }
 onMounted(() => {
@@ -166,6 +172,7 @@ onMounted(() => {
     getRecentyViewdAuctionsList()
 })
 </script>
+
 <style scoped>
 .demonstration {
     color: var(--el-text-color-secondary);

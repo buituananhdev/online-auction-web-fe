@@ -39,15 +39,22 @@ async function getDetailAuction() {
 async function sendFeedback() {
     try {
         feedback.value.toUserId = auction.value.user.id
-        feedback.value.relatedId = auctionId.value
+        feedback.value.relatedId = parseInt(auctionId.value)
         const res = await feedBack(feedback.value)
+        dialogVisible.value = false
+        router.push('/')
         ElNotification({
             title: 'Feedback',
-            message: 'Feedback Successfully! Thank you so much!',
+            message: 'Feedback Successfully!',
             type: 'success',
         })
     } catch (error) {
         console.error(error);
+        ElNotification({
+            title: 'Feedback',
+            message: 'Feedback Failed!',
+            type: 'error',
+        })
     }
 }
 
