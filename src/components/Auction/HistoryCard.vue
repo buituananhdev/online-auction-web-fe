@@ -76,6 +76,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { productStatus } from '../../utils/Enums/ProductStatus.js'
 
 defineProps({
     auction: Object,
@@ -99,13 +100,7 @@ const srcList = [
     'https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg',
 ]
 
-const ProductStatusNames = {
-    1: 'Available',
-    2: 'Sold',
-    3: 'Deleted',
-    4: 'Canceled',
-    5: 'Pending Publish',
-}
+const ProductStatusNames = productStatus
 
 const viewDetailAuction = (auctionId) => {
     router.push({ path: `auctions/${auctionId}` })
@@ -134,8 +129,8 @@ const getColor = (status) => {
         case 3:
             return '#A52A2A'
         case 4:
-            return '#EE7600'
-        case 5:
+            return '#FFA500'
+        default:
             return '#FFA500'
     }
 }

@@ -33,10 +33,10 @@
                         @change="filterStatus"
                     >
                     <el-option
-                        v-for="item in listProductStatus"
-                        :key="item.value"
-                        :label="item.text"
-                        :value="item.value"
+                        v-for="(item, index) in Object.keys(listProductStatus)"
+                        :key="index"
+                        :label="productStatus[item]"
+                        :value="index + 1"
                     />
                     </el-select>
                 </div>
@@ -66,6 +66,7 @@ import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getSellerHistory } from '../../../services/auction.service'
+import { productStatus } from '../../../utils/Enums/ProductStatus.js'
 
 // const props = isLoading
 const SearchIcon = Search
@@ -82,29 +83,20 @@ const meta = ref({
 })
 
 const listSellerHistorys = ref([])
-const listProductStatus = ref([
-    { value: null, text: 'All Sold' },
-    { value: 1, text: 'Available' },
-    { value: 2, text: 'Sold' },
-    { value: 3, text: 'Deleted' },
-    { value: 4, text: 'Canceled' },
-    { value: 5, text: 'Pending Publish' },
-])
+const listProductStatus = productStatus
 
 const getTitle = (status) => {
     switch (status) {
         case 1:
-            return 'Available'
+            return 'Inprogress'
         case 2:
-            return 'Sold'
+            return 'Ended'
         case 3:
-            return 'Deleted'
-        case 4:
             return 'Canceled'
-        case 5:
+        case 4:
             return 'Pending Publish'
         default: 
-            return 'Orders'
+            return ''
     }
 }
 

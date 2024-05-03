@@ -65,14 +65,6 @@ const meta = ref({
 })
 
 const watchlist = ref([])
-const listProductStatus = ref([
-    { value: null, text: 'All Sold' },
-    { value: 1, text: 'Available' },
-    { value: 2, text: 'Sold' },
-    { value: 3, text: 'Deleted' },
-    { value: 4, text: 'Canceled' },
-    { value: 5, text: 'Pending Publish' },
-])
 
 const loading = computed(() => {
     return !Boolean(watchlist.value.length > 0)
