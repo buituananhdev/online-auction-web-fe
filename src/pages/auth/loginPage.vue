@@ -1,10 +1,10 @@
 <template>
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4" @keyup.enter="submit(userRef)">
         <div class="max-w-md w-full rounded-3xl bg-white py-8 shadow-lg">
-            <h1 class="text-center text-5xl font-bold text-gray-800 mb-6">Hello</h1>
+            <h1 class="text-center text-5xl font-bold text-gray-800 mb-6">Log in</h1>
             <p class="text-center">
                 Sign in to NhanCute or
-                <a href="/register" class="text-[#3665f3] cursor-pointer underline">create an account</a>
+                <a href="/register" class="text-[#409EFF] cursor-pointer underline">create an account</a>
             </p>
             <div class="my-4 flex flex-col justify-center items-center gap-4">
                 <el-form
@@ -144,7 +144,7 @@ const submit = async (formEl) => {
             return false
         }
         console.log('Not input information.')
-        console.log(formEl);
+        console.log(formEl)
     })
     if (isValids.value.includes(false)) {
         ElNotification({
@@ -155,7 +155,7 @@ const submit = async (formEl) => {
     } else {
         try {
             const data = await loginApi(user)
-            
+
             console.log('data', data)
             localStorage.setItem('access_token', data.data.accessToken)
             localStorage.setItem('refresh_token', data.data.refreshToken)
