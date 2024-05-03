@@ -1,7 +1,7 @@
 <script setup>
 import { ArrowLeft } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ref, defineProps, computed, onBeforeMount, watch, watchEffect } from 'vue'
+import { ref, defineProps, computed, onBeforeMount, onMounted, watch, watchEffect } from 'vue'
 import { getListAuctions, getSingleAuction } from '../../services/auction.service'
 import { addWatchlist, deleteWatchlist } from '../../services/watchlist.service'
 import { bidAuction } from '../../services/bid.service'
@@ -16,19 +16,11 @@ const auction = computed(() => useAuction.watchingAuction);
 const exploredAuctionList = ref([])
 const router = useRouter()
 const route = useRoute()
-
-const imageList = [
-    'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfdqorxj85',
-    'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfgskb1t44',
-    'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfgikpp2d9',
-    'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfjkg93j3f',
-    'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfgskbfn58',
-    'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfdqorxj85',
-    'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfgskb1t44',
-    'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfgikpp2d9',
-    'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfjkg93j3f',
-    'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lu63bfgskbfn58',
-]
+const listImage = ref([])
+const rating = ref({
+    totalRatings: 0,
+    averageRating: 0,
+})
 const id = computed(() => {
     console.log(route.params.id);
     return route.params.id
@@ -36,12 +28,6 @@ const id = computed(() => {
 const scrollBox = ref()
 const scrollBox2 = ref()
 const colors = ref(['#99A9BF', '#F7BA2A', '#FF9900'])
-const imagesList = [
-    'https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-6/341674110_216343407690499_4490802910609794754_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeH9vYPtrrdZ-PhaBloln5Y5yF8_iM9aDlLIXz-Iz1oOUqpgulUqWSgA0TGSjuDtvFE8ttbQ4lHfpUnRn71e5Z39&_nc_ohc=NfMFrd7laMQAb7dbmJx&_nc_ht=scontent.fdad3-4.fna&oh=00_AfDOsP-nJruiTzsdmF6nIWr_mOQanORy1wn1W4d_adAtCg&oe=66277DF6',
-    'https://scontent.fdad3-1.fna.fbcdn.net/v/t39.30808-6/340927170_913663319882108_7365446472345452433_n.jpg?stp=cp6_dst-jpg&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFPJzzIuBQY2gBr_ZnoGa3_ay0HKjQ9rexrLQcqND2t7J6oT_fy1QFxAoxr3CihavuNeYfKb8gq8L8Pw6LpEVcr&_nc_ohc=qalkUL7vhvUAb6X30Aq&_nc_ht=scontent.fdad3-1.fna&oh=00_AfDm4j1i_MtPWf-_OXX1XGQlkF0V4jbP1uhSen7BF9Dzag&oe=66279E77',
-    'https://scontent.fdad3-1.fna.fbcdn.net/v/t39.30808-6/340874930_3549881278566824_2254323086146147866_n.jpg?stp=cp6_dst-jpg&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFVtaQikjX9aJL3NXfJ46vneRxc8mUnGY15HFzyZScZjcq5qIiMaWLdQY7-AxpNK7_4o-IPN6wF_vrHYQxf7GL3&_nc_ohc=rDFJQJX2gbcAb6OMZh2&_nc_ht=scontent.fdad3-1.fna&oh=00_AfBnyW05dQ3TzPE0F4qWsQ1XpibS3ltEkkGsapH7uQFftg&oe=66277A5C',
-    'https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-6/340485851_961472368192020_3917253428352392180_n.jpg?stp=cp6_dst-jpg&_nc_cat=100&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEeR2sq1N1LqX1DL70CZLruFBB41F-48ekUEHjUX7jx6VP4GG83TFI4ECN7UdbiRtvpblVnOCX17zTK8mejOHrJ&_nc_ohc=GG0CtmTaQEQAb5tLTmM&_nc_oc=Adjm9f39DbNVW8-mVdf8j-mSDLyEYPnUMFVExCyXKzq42sJ13cWs7EQdSgU-NOtowbs&_nc_ht=scontent.fdad3-4.fna&oh=00_AfAx3W7pY9LfTN8MD0wu5PPC3loGNMM617sXoBmqIN1teA&oe=662787F6',
-]
 
 const currentAuction = ref({
     auctionId: null,
@@ -211,7 +197,7 @@ async function handleBidAuction() {
         isReviewBid.value = false
         bidAmount.value = null
         await useAuction.syncAuction(id)
-        if(isBuyAvailble.value) {
+        if (isBuyAvailble.value) {
             router.push(`/payments/${auction.value.id}`)
             isBuyAvailble.value = false
         } else {
@@ -283,6 +269,9 @@ watch(id, async () => {
 onBeforeMount(async () => {
     await useAuction.syncAuction(id.value)
     currentAuction.value.auctionId = auction.value.id
+    console.log(auction.value.mediaUrls);
+    listImage.value = auction.value.mediaUrls;
+    rating.value = auction.value.user.ratings.avarageRating
     await getExploreAuctionList()
     startCountdown(auction.value.endTime)
 })
@@ -383,21 +372,22 @@ onBeforeMount(async () => {
         <div class="flex items-start gap-10 p-8 border rounded-2xl mt-3">
             <div class="auction-detail-images flex flex-col items-start">
                 <div class="border p-3 rounded-lg">
-                    <img :src="imageList[imageOverIndex]" alt="" class="w-[500px] h-[500px] rounded-xl" />
+                    <img :src="listImage[imageOverIndex] || 'https://as1.ftcdn.net/v2/jpg/04/62/93/66/1000_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg'" alt="" class="w-[500px] h-[500px] rounded-xl object-cover" />
                 </div>
-                <div class="auction-detail-list w-full h-fit">
-                    <Icon @click="scrollToLeft(scrollBox)"
+                <div v-show="listImage.length" class="auction-detail-list w-full h-fit">
+                    <Icon v-show="listImage.length > 6" @click="scrollToLeft(scrollBox)"
                         class="auction-detail-arrow-icon auction-detail-left-icon w-[300px]"
                         icon="ic:round-keyboard-arrow-left" />
                     <div ref="scrollBox" class="flex scroll-column-custom h-[100px] w-[500px] overflow-auto">
-                        <p v-for="(item, index) in imageList" :key="index" class="scrollbar-demo-item image-box"
+                        <p v-for="(item, index) in listImage" :key="index" class="scrollbar-demo-item image-box"
                             @mouseleave="imageOverIndex = imageActiveIndex" @mouseover="imageOverIndex = index"
                             @click="imageActiveIndex = index">
                             <img :src="item" alt="" width="80" height="80"
+                                class="object-cover"
                                 :class="{ 'image-active': imageActiveIndex === index, 'image-item rounded-lg': true }" />
                         </p>
                     </div>
-                    <Icon @click="scrollRight(scrollBox)"
+                    <Icon v-show="listImage.length >6" @click="scrollRight(scrollBox)"
                         class="auction-detail-arrow-icon auction-detail-right-icon w-[300px]"
                         icon="ic:round-keyboard-arrow-right" />
                 </div>
@@ -411,14 +401,15 @@ onBeforeMount(async () => {
                     <div class="flex flex-col">
                         <span>{{ auction.user && auction.user.fullName }}</span>
                         <el-rate disabled style="height: 15px" :colors="colors"
+                            v-model="rating"
                             score-template="({auction.user && auction.user.ratings.totalRatings})" />
                     </div>
                 </div>
                 <div class="bg-[#FFF0DF] w-full p-3 flex items-center gap-3">
-                    <p class="font-semibold w-[50px] border-r border-black">${{ auction.currentPrice }}</p>
+                    <p class="font-semibold min-w-[50px] pr-2 border-r border-black">${{ auction.currentPrice }}</p>
                     <div class="flex items-center gap-2">
                         <p class="text-xs">Buy it now with:</p>
-                        <p class="font-semibold">${{ auction.maxPrice }}</p>
+                        <p class="font-semibold text-sm text-[#505050]">${{ auction.maxPrice }}</p>
                     </div>
                 </div>
                 <div class="flex gap-2 items-center">
@@ -433,7 +424,7 @@ onBeforeMount(async () => {
                     class="w-full bg-[#409EFF] text-white font-bold rounded-3xl py-2 text-lg hover:bg-[#3A8EE4] transition-all">
                     Place bid
                 </button>
-                <div class="flex items-center w-full gap-4">
+                <div class="flex items-center w-full gap-2">
                     <button
                         class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white transition-all"
                         @click="handlePlaceBid(true)">
@@ -458,15 +449,21 @@ onBeforeMount(async () => {
                 </span>
                 <div class="flex items-center gap-2">
                     <span>Payment:</span>
-                    <img class="border px-2 rounded-lg" src="../../assets/images/vnpay-logo.jpg" width="70" height="40"
-                        alt="" />
+                    <div class="flex items-center gap-2">
+                        <img class="border px-2 rounded-lg mt-2 h-[50px]" src="../../assets/images/vnpay-logo.jpg"
+                            width="70" alt="" />
+                        <img class="border px-2 rounded-lg mt-2 h-[50px] py-4" src="../../assets/images/noidia.png"
+                            width="70" alt="" />
+                        <img class="border px-2 rounded-lg mt-2 h-[50px] py-2" src="../../assets/images/visa.png"
+                            width="70" alt="" />
+                    </div>
                 </div>
             </div>
         </div>
         <div class="mt-10 mx-4">
             <span class="font-bold text-2xl">Explore related Items</span>
             <div class="auction-detail-explored-list">
-                <Icon @click="scrollToLeft(scrollBox2)"
+                <Icon v-show="exploredAuctionList.length > 3" @click="scrollToLeft(scrollBox2)"
                     class="auction-detail-arrow-icon auction-detail-left-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-left" />
                 <div ref="scrollBox2" class="scrollbar-flex-content scroll-custom">
@@ -474,7 +471,7 @@ onBeforeMount(async () => {
                         <product-card :auction="item" />
                     </p>
                 </div>
-                <Icon @click="scrollRight(scrollBox2)"
+                <Icon v-show="exploredAuctionList.length > 3" @click="scrollRight(scrollBox2)"
                     class="auction-detail-arrow-icon auction-detail-right-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-right" />
             </div>
@@ -529,9 +526,12 @@ onBeforeMount(async () => {
                     <div class="w-full">
                         <p class="text-xs font-medium bg-[#E8E8E8] leading-8 pl-2 w-full">Payment</p>
                         <div class="flex items-center gap-6">
-                            <img class="border px-2 rounded-lg mt-2 h-[50px]" src="../../assets/images/vnpay-logo.jpg" width="70" alt="" />
-                            <img class="border px-2 rounded-lg mt-2 h-[50px] py-4" src="../../assets/images/noidia.png" width="70" alt="" />
-                            <img class="border px-2 rounded-lg mt-2 h-[50px] py-2" src="../../assets/images/visa.png" width="70" alt="" />
+                            <img class="border px-2 rounded-lg mt-2 h-[50px]" src="../../assets/images/vnpay-logo.jpg"
+                                width="70" alt="" />
+                            <img class="border px-2 rounded-lg mt-2 h-[50px] py-4" src="../../assets/images/noidia.png"
+                                width="70" alt="" />
+                            <img class="border px-2 rounded-lg mt-2 h-[50px] py-2" src="../../assets/images/visa.png"
+                                width="70" alt="" />
                         </div>
                     </div>
                 </div>

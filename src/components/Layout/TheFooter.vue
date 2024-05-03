@@ -1,5 +1,5 @@
 <template>
-    <div class="footer px-[140px] py-8 border-t bg-[#f7f7f7]">
+    <div class="footer relative z-10 px-[140px] py-8 border-t bg-[#f7f7f7]">
         <div class="footer-content flex items-start justify-between gap-4 text-xs">
             <div v-for="item in data" :key="item.id">
                 <p class="font-bold">{{ item.title }}</p>

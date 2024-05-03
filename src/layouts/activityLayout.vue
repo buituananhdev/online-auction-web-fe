@@ -83,8 +83,10 @@ import TheFooter from '../components/Layout/TheFooter.vue'
 import { authStore } from '../stores/auth.store'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuctionStore } from '../stores/auction.store'
 
 const searchValue = ref('')
+const useAuction = useAuctionStore()
 const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()
