@@ -46,7 +46,7 @@
                         </div>
                         <div>
                             <span class="text-sm text-[#707070]">{{ isInWatchlist ? 'Seller' : 'Sold by' }}: </span>
-                            <span class="underline text-[#3665f3]">{{ auction.user.fullName }}</span>
+                            <span class="underline text-[#409EFF]">{{ auction.user.fullName }}</span>
                         </div>
                     </div>
                     <div class="flex flex-col gap-2 items-end">
@@ -64,8 +64,18 @@
                         </div>
 
                         <div class="flex flex-col mt-14 gap-2">
-                            <button v-show="isInWatchlist" class="bg-[#3665f3] text-white border rounded-xl py-[7px] w-[200px] hover:bg-[#409EFF] transition">Place Bid Now</button>
-                            <button class="bg-white border rounded-xl py-[7px] w-[200px] hover:bg-[#409EFF] hover:text-white transition" @click="viewDetailAuction(auction.id)">View Detail</button>    
+                            <button
+                                v-show="isInWatchlist"
+                                class="bg-[#409EFF] text-white border rounded-xl py-[7px] w-[200px] hover:bg-[#3A8EE4] transition"
+                            >
+                                Place Bid Now
+                            </button>
+                            <button
+                                class="bg-white border rounded-xl py-[7px] w-[200px] hover:bg-[#409EFF] hover:text-white transition"
+                                @click="viewDetailAuction(auction.id)"
+                            >
+                                View Detail
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -82,8 +92,8 @@ defineProps({
     auction: Object,
     isInWatchlist: {
         type: Boolean,
-        default: false
-    }
+        default: false,
+    },
 })
 
 const router = useRouter()

@@ -1,5 +1,5 @@
 <template>
-    <div v-loading="loading" class="w-full">
+    <div v-loading="isLoading" class="w-full">
         <div class="w-full">
             <div class="flex justify-between gap-5 pt-[25px] pb-8">
                 <span class="font-bold text-2xl flex items-center justify-center">My eBay - Watchlist</span>
@@ -57,6 +57,7 @@ const route = useRoute()
 const searchValue = ref('')
 const status = ref('')
 const size = 5
+const isLoading = ref(true)
 
 const meta = ref({
     currentPage: 1,
@@ -66,8 +67,8 @@ const meta = ref({
 
 const watchlist = ref([])
 
-const loading = computed(() => {
-    return !Boolean(watchlist.value.length > 0)
+watch(watchlist, () => {
+    isLoading.value = !isLoading.value
 })
 
 watch(searchValue, async () => {

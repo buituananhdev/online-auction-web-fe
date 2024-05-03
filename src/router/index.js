@@ -48,6 +48,12 @@ const routes = [
         meta: { layout: 'activity', requiresAuth: true },
     },
     {
+        path: '/profile',
+        name: 'profile',
+        component: () => import('../pages/profile/index.vue'),
+        meta: { layout: 'activity', requiresAuth: true },
+    },
+    {
         path: '/buyer-history',
         name: 'buyer-history',
         component: () => import('../pages/history/buyer/index.vue'),
