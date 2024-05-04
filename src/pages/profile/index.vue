@@ -48,6 +48,38 @@
             </div>
         </div>
     </div>
+    <div 
+        v-if="isShowChangePassword"
+        class="w-full bg-[rgba(17,24,32,0.7)] fixed top-0 bottom-0 left-0 right-0 h-screen z-10 flex items-center justify-center"
+    >
+        <div class="flex flex-col text-sm bg-white w-[600px] h-[60%] items-center justify-center rounded-lg gap-5">
+            <el-form @submit.prevent="changePassword" ref="passwordForm" :model="changePasswordForm" label-width="auto"  :rules="rules">
+                <h1 class="text-3xl flex items-center justify-center mb-10 font-bold">Change Password</h1>
+                <div class="flex flex-col mb-5">
+                    <span class="text-[#555555CC] pb-[3px]">Old Password</span>
+                    <el-form-item prop="oldPass">
+                        <el-input size="large" v-model="changePasswordForm.oldPass" style="width: 400px; padding-left: 20px; color: #333333;"/>
+                    </el-form-item>
+                </div>
+                <div class="flex flex-col mb-5">
+                    <span class="text-[#555555CC] pb-[3px]">New Password</span>
+                    <el-form-item prop="newPass">
+                        <el-input size="large" v-model="changePasswordForm.newPass" style="width: 400px; padding-left: 20px; color: #333333;"/>
+                    </el-form-item>
+                </div>
+                <div class="flex flex-col mb-10">
+                    <span class="text-[#555555CC] pb-[3px]">Confirm Password</span>
+                    <el-form-item prop="confirmNewPass">
+                        <el-input size="large" v-model="changePasswordForm.confirmNewPass" style="width: 400px; padding-left: 20px; color: #333333;"/>
+                    </el-form-item>
+                </div>
+                <div class="flex">
+                    <button class="px-5 py-2 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-md transition-all" type="submit">Change Password</button>
+                    <button class="px-5 py-2 border border-gray-300 ml-5 text-[#E23F33] hover:bg-[#E23F33] hover:text-white text-base font-semibold rounded-md transition-all">Cancel</button>
+                </div>
+            </el-form>
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -55,8 +87,10 @@ import { reactive, ref } from 'vue'
 import { authStore } from '../../stores/auth.store'
 
 const form = ref(null)
+const passwordForm = ref(null)
 const userAuth = authStore()
 const isValids = ref([false, false, false])
+const isShowChangePassword = ref(true)
 
 
 const currentUser = reactive({
@@ -66,7 +100,11 @@ const currentUser = reactive({
     address: userAuth.user.address,
 })
 
-
+const changePasswordForm  = reactive({
+    oldPass: '',
+    newPass: '',
+    confirmNewPass: '',
+})
 
 const avatar = reactive('')
 
@@ -105,6 +143,10 @@ const rules = reactive({
 })
 const submit = () => {
   console.log('submit!')
+}
+
+const changePassword = () => {
+    console.log('change password!');
 }
 </script>
 

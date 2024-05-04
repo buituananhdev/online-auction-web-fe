@@ -78,12 +78,12 @@ const validateField = (field, value, errorMessage) => {
     } else if (field === 2 || field === 3) {
         if (value < 0) {
             isValids.value[field] = false
-            return new Error(`${errorMessage} must be greater than or equal to 0`)
+            return new Error(`${ field === 2 ? 'Starting Price' : 'Max Price'} must be greater than or equal to 0`)
         }
     } else if (field === 4) {
         if (!isFutureTime(value)) {
             isValids.value[field] = false
-            return new Error(`${errorMessage} must be a future date`)
+            return new Error(`End Time must be a future date`)
         }
     }
     isValids.value[field] = true
