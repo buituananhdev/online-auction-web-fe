@@ -11,7 +11,7 @@ const isValids = ref([false, false, false, false, false])
 const isShowSelectCondition = ref(false)
 const router = useRouter()
 const form = ref(null)
-const currentAuction = reactive({
+let currentAuction = reactive({
     productName: '',
     categoryId: null,
     condition: 1,
