@@ -196,8 +196,21 @@ const handleClose = () => {
     })
 }
 
-const submit = () => {
-  console.log('submit!')
+const submit = async() => {
+    try {
+        await updateProfile(currentUser)
+        ElNotification({
+            title: 'Update Profile',
+            message: 'Update Profile Successfully!',
+            type: 'success',
+        });
+    } catch (error) {
+        ElNotification({
+            title: 'Update Profile',
+            message: 'Update Profile Failed!',
+            type: 'error',
+        });
+    }
 }
 
 const submitChangePassword = async() => {
