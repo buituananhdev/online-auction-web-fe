@@ -27,16 +27,16 @@
                     <div class="flex">
                         <div class="min-h-[800px] w-[18.75%] pr-8 my-8 flex flex-col">
                             <ul class="text-[#363636] font-bold">
-                                <li class="py-[10px] pl-4">
+                                <li v-if="role == 'Seller'" class="py-[10px] pl-4">
                                     <RouterLink to="/seller-history">Seller history</RouterLink>
                                 </li>
-                                <li class="py-[10px] pl-4">
+                                <li v-if="role == 'Seller'" class="py-[10px] pl-4">
                                     <RouterLink to="/create-auction">Create auction</RouterLink>
                                 </li>
-                                <li class="py-[10px] pl-4">
+                                <li v-if="role == 'Buyer'" class="py-[10px] pl-4">
                                     <RouterLink to="/buyer-history">Bids & offers</RouterLink>
                                 </li>
-                                <li class="py-[10px] pl-4">
+                                <li v-if="role == 'Buyer'" class="py-[10px] pl-4">
                                     <a href="watchlist">Watchlist</a>
                                 </li>
                                 <li class="py-[10px] pl-4">
@@ -90,6 +90,7 @@ const useAuction = useAuctionStore()
 const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()
+const role = localStorage.getItem('role')
 const handleClickSearch = () => {
     if (searchValue.value.trim() !== '') {
         router.push({

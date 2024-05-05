@@ -43,7 +43,8 @@
             <div class="min-w-[30%] flex items-center justify-center">
                 <label class="cursor-pointer">
                     <input type="file" hidden ref="fileInput">
-                    <img src="https://gcs.tripi.vn/public-tripi/tripi-feed/img/474090QTs/anh-avatar-vit-ngao-sieu-cute_084403989.jpg" alt="Avatar" height="200" width="200" class="rounded-full" @click="openFileInput">
+                    <img v-if="currentUser.avatar" :src="currentUser.avatar" alt="Avatar" height="200" width="200" class="rounded-full" @click="openFileInput">
+                    <img v-else src="https://gcs.tripi.vn/public-tripi/tripi-feed/img/474090QTs/anh-avatar-vit-ngao-sieu-cute_084403989.jpg" alt="Avatar" height="200" width="200" class="rounded-full" @click="openFileInput">
                 </label>
             </div>
         </div>
@@ -58,19 +59,19 @@
             <el-form @submit.prevent="submitChangePassword" ref="passwordRef" :model="changePasswordForm" label-width="auto"  :rules="rules">
                 <h1 class="text-3xl flex items-center justify-center mb-10 font-bold">Change Password</h1>
                 <div class="flex flex-col mb-5">
-                    <span class="text-[#555555CC] pb-[3px]">Old Password</span>
+                    <span class="pb-[3px]">Old Password</span>
                     <el-form-item prop="oldPass">
                         <el-input size="large" type="password" show-password v-model="changePasswordForm.oldPass" placeholder="Please input your old password" style="width: 400px; padding-left: 20px; color: #333333;"/>
                     </el-form-item>
                 </div>
                 <div class="flex flex-col mb-5">
-                    <span class="text-[#555555CC] pb-[3px]">New Password</span>
+                    <span class="pb-[3px]">New Password</span>
                     <el-form-item prop="newPass">
                         <el-input size="large" type="password" show-password v-model="changePasswordForm.newPass" placeholder="Please input your new password" style="width: 400px; padding-left: 20px; color: #333333;"/>
                     </el-form-item>
                 </div>
                 <div class="flex flex-col mb-10">
-                    <span class="text-[#555555CC] pb-[3px]">Confirm Password</span>
+                    <span class="pb-[3px]">Confirm Password</span>
                     <el-form-item prop="confirmNewPass">
                         <el-input size="large" type="password" show-password v-model="changePasswordForm.confirmNewPass" placeholder="Please confirm your new password" style="width: 400px; padding-left: 20px; color: #333333;"/>
                     </el-form-item>
@@ -108,6 +109,7 @@ const currentUser = reactive({
     email: userAuth.user.email,
     phone: userAuth.user.phone,
     address: userAuth.user.address,
+    avatar: userAuth.user.avatar
 })
 
 const changePasswordForm  = reactive({
