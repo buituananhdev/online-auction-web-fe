@@ -196,7 +196,6 @@ async function handleBidAuction() {
         dialogFormVisible.value = false
         isReviewBid.value = false
         bidAmount.value = null
-        await useAuction.syncAuction(id)
         if (isBuyAvailble.value) {
             router.push(`/payments/${auction.value.id}`)
             isBuyAvailble.value = false
