@@ -67,7 +67,7 @@
                     </div> -->
                         <div>
                             <span class="text-sm text-[#707070]">Sold by: </span>
-                            <span class="underline text-[#3665f3]">{{ auction.user.fullName }}</span>
+                            <span class="underline text-[#409EFF]">{{ auction.user.fullName }}</span>
                         </div>
                     </div>
                     <div class="flex flex-col gap-2 items-end">
@@ -84,7 +84,11 @@
                             </div>
                         </div>
 
-                        <button class="bg-white border rounded-xl py-[7px] w-[200px] mt-14 hover:bg-[#409EFF] hover:text-white transition">View Detail</button>
+                        <button
+                            class="bg-white border rounded-xl py-[7px] w-[200px] mt-14 hover:bg-[#409EFF] hover:text-white transition"
+                        >
+                            View Detail
+                        </button>
                     </div>
                 </div>
 
