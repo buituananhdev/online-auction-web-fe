@@ -6,11 +6,10 @@ export const getMe = async () => {
     return await axiosApiInstance.get('/users/me')
 }
 
-export const updateProfile = async (id, data) => {
-    return await axiosApiInstance.put(`/users/${id}`, data)
+export const updateProfile = async (data) => {
+    return await axiosApiInstance.patch('/users/profile/update-info', data)
 }
 
-export const changePassword = async (id, data) => {
-    return await axiosApiInstance.patch(`/users/${id}/change-password`, data)
+export const changePassword = async (data) => {
+    return await axiosApiInstance.patch(`/users/change-password`, data)
 }
-
