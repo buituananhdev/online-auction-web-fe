@@ -40,7 +40,7 @@
                 <span>{{ useAuth.user.fullName }} | </span>
                 <el-popover placement="bottom-end" :width="200" trigger="click" class="p-0">
                     <ul>
-                        <li class="border-b py-2 cursor-pointer">My account</li>
+                        <li class="border-b py-2 cursor-pointer" @click="router.push('/profile')">My account</li>
                         <li class="pt-2 cursor-pointer" @click="signOut">Sign out</li>
                     </ul>
                     <template #reference>
