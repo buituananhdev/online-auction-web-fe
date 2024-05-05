@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { HubConnectionBuilder } from '@microsoft/signalr'
 import { getSingleAuction } from '../services/auction.service'
+import { useNotificationStore } from './notification.store'
 
 export const useAuctionStore = defineStore('auctions', {
     state: () => ({
@@ -50,6 +51,7 @@ export const useAuctionStore = defineStore('auctions', {
                 this.syncAuction(data.relatedID)
                 console.log(data);
             }
+            useNotificationStore().addNotification(data)
         },
         onConnectionEstablished() {
             console.log('SignalR Connected.')

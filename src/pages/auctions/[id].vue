@@ -7,6 +7,7 @@ import { addWatchlist, deleteWatchlist } from '../../services/watchlist.service'
 import { bidAuction } from '../../services/bid.service'
 import { useAuctionStore } from '../../stores/auction.store'
 import { authStore } from '../../stores/auth.store'
+import { formatNumber } from '../../utils/index.js'
 
 const auth = authStore()
 const auctionId = ref()
@@ -65,7 +66,7 @@ const convertISOToRegularTime = (isoTimeString) => {
 
     return `${hours}:${minutes} -  ${month} ${day}, ${year}`
 }
-const isBuyAvailble = ref(false)
+const isBuyAvailable = ref(false)
 const bidAmount = ref()
 const countdown = ref()
 const bidPopUpTitle = ref('Place your bid')
@@ -76,20 +77,20 @@ const handlePlaceBid = (data = false) => {
         return router.push('/login')
     }
     if (data === true) {
-        isBuyAvailble.value = true
+        isBuyAvailable.value = true
         bidPopUpTitle.value = 'Review your order'
         bidAmount.value = auction.value.maxPrice
         isReviewBid.value = true
     } else {
         isReviewBid.value = false
-        isBuyAvailble.value = false
+        isBuyAvailable.value = false
     }
     dialogFormVisible.value = true
 }
 
 const handleEditBid = () => {
-    if (isBuyAvailble.value) {
-        isBuyAvailble.value = false
+    if (isBuyAvailable.value) {
+        isBuyAvailable.value = false
         dialogFormVisible.value = false
     } else {
         isReviewBid.value = false
@@ -172,7 +173,6 @@ const removeWatchlist = async () => {
     }
 }
 
-
 async function getExploreAuctionList() {
     try {
         if (auction.value.category) {
@@ -189,17 +189,18 @@ async function getExploreAuctionList() {
 
 async function handleBidAuction() {
     try {
-        const res = await bidAuction({
-            auctionId: auction.value.id,
-            bidAmount: bidAmount.value,
-        })
         dialogFormVisible.value = false
         isReviewBid.value = false
-        bidAmount.value = null
-        if (isBuyAvailble.value) {
+        if (isBuyAvailable.value) {
             router.push(`/payments/${auction.value.id}`)
-            isBuyAvailble.value = false
+            isBuyAvailable.value = false
+        } else {
+            const res = await bidAuction({
+                auctionId: auction.value.id,
+                bidAmount: bidAmount.value,
+            })
         }
+        bidAmount.value = null
     } catch (error) {
         console.log(error)
         ElNotification({
@@ -282,7 +283,7 @@ onBeforeMount(async () => {
         <el-dialog v-model="dialogFormVisible" :title="bidPopUpTitle" width="500"
             style="border-radius: 20px; padding: 24px; font-weight: 600" class="rounded-xl">
             <div v-if="!isReviewBid" class="flex flex-col gap-2">
-                <p class="inline-block font-bold text-xl">${{ auction.currentPrice }}</p>
+                <p class="inline-block font-bold text-xl">{{ formatNumber(auction.currentPrice) }} VNĐ</p>
                 <div class="flex items-center justify-between">
                     <span class="inline-block">{{ auction.bidCount }} {{ auction.bidCount < 2 ? 'bid' : 'bids' }}</span>
                             <span class="inline-block text-sx">Time left: {{ countdown }}</span>
@@ -290,15 +291,15 @@ onBeforeMount(async () => {
                 <div class="flex items-center justify-between gap-3">
                     <button @click="addBidMount(auction.currentPrice + 5)"
                         class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
-                        Bid {{ auction.currentPrice + 5 }}$
+                        Bid {{ formatNumber(auction.currentPrice + 5) }} VNĐ
                     </button>
                     <button @click="addBidMount(auction.currentPrice + 10)"
                         class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
-                        Bid {{ auction.currentPrice + 10 }}$
+                        Bid {{ formatNumber(auction.currentPrice + 10) }} VNĐ
                     </button>
                     <button @click="addBidMount(auction.currentPrice + 15)"
                         class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
-                        Bid {{ auction.currentPrice + 15 }}$
+                        Bid {{ formatNumber(auction.currentPrice + 15) }} VNĐ
                     </button>
                 </div>
                 <div class="relative py-2">
@@ -309,14 +310,14 @@ onBeforeMount(async () => {
                     <p>Your max bid</p>
                     <div class="flex items-center justify-between gap-3 relative">
                         <input v-model="bidAmount" type="number" class="w-2/3 border py-1 pl-8 rounded-xl" />
-                        <span class="font-bold absolute left-[15px]">$</span>
+                        <span class="font-bold absolute left-[15px]"></span>
                         <button @click="reviewBid"
                             class="flex-1 border p-2 rounded-3xl bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
                             Review bid
                         </button>
                     </div>
                     <p :class="{ 'text-[red]': bidAmount < auction.currentPrice } || !bidAmount">
-                        Enter more ${{ auction.currentPrice }}
+                        Enter more {{ formatNumber(auction.currentPrice) }} VNĐ
                     </p>
                 </div>
             </div>
@@ -324,12 +325,12 @@ onBeforeMount(async () => {
                 <div class="flex items-center">
                     <p class="w-1/3 text-base">Current bid</p>
                     <p class="text-base">
-                        ${{ auction.currentPrice }} - {{ auction.bidCount }} {{ auction.bidCount < 2 ? 'bid' : 'bids' }}
-                            </p>
+                        {{ formatNumber(auction.currentPrice) }} VNĐ - {{ auction.bidCount }} {{ auction.bidCount < 2
+                            ? 'bid' : 'bids' }} </p>
                 </div>
                 <div class="flex items-center">
                     <p class="w-1/3 text-base">Your max bid</p>
-                    <p class="text-base">${{ bidAmount }}</p>
+                    <p class="text-base">{{ bidAmount }}</p>
                 </div>
                 <div class="flex items-center">
                     <p class="w-1/3 text-base">Time left:</p>
@@ -338,7 +339,7 @@ onBeforeMount(async () => {
                 <div class="flex items-start">
                     <p class="w-1/3 text-base">Estemated Total:</p>
                     <ul class="w-2/3">
-                        <li class="text-base">${{ bidAmount + 5 }}</li>
+                        <li class="text-base">{{ bidAmount + 5 }}</li>
                         <li class="text-base text-[#9B9B9B]">
                             *This item may be subject to duties and taxes upon delivery.
                         </li>
@@ -351,8 +352,8 @@ onBeforeMount(async () => {
             <template #footer>
                 <div v-show="isReviewBid">
                     <div class="dialog-footer">
-                        <el-button @click="handleEditBid">{{ isBuyAvailble ? 'Close' : 'Edit Bid' }}</el-button>
-                        <el-button type="primary" @click="handleBidAuction">{{ isBuyAvailble ? 'Confirm order' :
+                        <el-button @click="handleEditBid">{{ isBuyAvailable ? 'Close' : 'Edit Bid' }}</el-button>
+                        <el-button type="primary" @click="handleBidAuction">{{ isBuyAvailable ? 'Confirm order' :
                             'Confirm bid' }}</el-button>
                     </div>
                     <div class="text-xs text-[#5B5252] pt-6 text-left">
@@ -367,7 +368,8 @@ onBeforeMount(async () => {
         <div class="flex items-start gap-10 p-8 border rounded-2xl mt-3">
             <div class="auction-detail-images flex flex-col items-start">
                 <div class="border p-3 rounded-lg">
-                    <img :src="listImage[imageOverIndex] || 'https://as1.ftcdn.net/v2/jpg/04/62/93/66/1000_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg'" alt="" class="w-[500px] h-[500px] rounded-xl object-cover" />
+                    <img :src="listImage[imageOverIndex] || 'https://as1.ftcdn.net/v2/jpg/04/62/93/66/1000_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg'"
+                        alt="" class="w-[500px] h-[500px] rounded-xl object-cover" />
                 </div>
                 <div v-show="listImage.length" class="auction-detail-list w-full h-fit">
                     <Icon v-show="listImage.length > 6" @click="scrollToLeft(scrollBox)"
@@ -377,12 +379,11 @@ onBeforeMount(async () => {
                         <p v-for="(item, index) in listImage" :key="index" class="scrollbar-demo-item image-box"
                             @mouseleave="imageOverIndex = imageActiveIndex" @mouseover="imageOverIndex = index"
                             @click="imageActiveIndex = index">
-                            <img :src="item" alt="" width="80" height="80"
-                                class="object-cover"
+                            <img :src="item" alt="" width="80" height="80" class="object-cover"
                                 :class="{ 'image-active': imageActiveIndex === index, 'image-item rounded-lg': true }" />
                         </p>
                     </div>
-                    <Icon v-show="listImage.length >6" @click="scrollRight(scrollBox)"
+                    <Icon v-show="listImage.length > 6" @click="scrollRight(scrollBox)"
                         class="auction-detail-arrow-icon auction-detail-right-icon w-[300px]"
                         icon="ic:round-keyboard-arrow-right" />
                 </div>
@@ -395,16 +396,17 @@ onBeforeMount(async () => {
                         alt="" />
                     <div class="flex flex-col">
                         <span>{{ auction.user && auction.user.fullName }}</span>
-                        <el-rate disabled style="height: 15px" :colors="colors"
-                            v-model="rating"
+                        <el-rate disabled style="height: 15px" :colors="colors" v-model="rating"
                             score-template="({auction.user && auction.user.ratings.totalRatings})" />
                     </div>
                 </div>
                 <div class="bg-[#FFF0DF] w-full p-3 flex items-center gap-3">
-                    <p class="font-semibold min-w-[50px] pr-2 border-r border-black">${{ auction.currentPrice }}</p>
+                    <p class="font-semibold min-w-[50px] pr-2 border-r border-black">{{
+                        formatNumber(auction.currentPrice) }}
+                        VNĐ</p>
                     <div class="flex items-center gap-2">
                         <p class="text-xs">Buy it now with:</p>
-                        <p class="font-semibold text-sm text-[#505050]">${{ auction.maxPrice }}</p>
+                        <p class="font-semibold text-sm text-[#505050]">{{ formatNumber(auction.maxPrice) }} VNĐ</p>
                     </div>
                 </div>
                 <div class="flex gap-2 items-center">

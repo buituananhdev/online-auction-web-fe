@@ -3,6 +3,7 @@ import { ref, onBeforeMount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuctionStore } from '../../../stores/auction.store';
 import { getSingleAuction } from '../../../services/auction.service'
+import { bidAuction } from '../../../services/bid.service'
 import { feedBack } from '../../../services/feedback.service'
 
 const useAuction = useAuctionStore()
@@ -15,11 +16,12 @@ const isTransactionSuccess = ref(true)
 const number = ref(0)
 const dialogVisible = ref(false)
 
-function getTransactionStatus(id) {
+async function getTransactionStatus(id) {
     switch (id) {
         case '00':
             isTransactionSuccess.value = true;
             dialogVisible.value = true;
+            await buyItem()
             break;
         default:
             isTransactionSuccess.value = false;
@@ -58,6 +60,17 @@ async function sendFeedback() {
     }
 }
 
+async function buyItem() {
+    try {
+        const res = await bidAuction({
+            auctionId: auctionId.value,
+            bidAmount: auction.value.maxPrice,
+        })
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 onBeforeMount(async () => {
     if (route.query.vnp_TransactionStatus) {
         getTransactionStatus(route.query.vnp_TransactionStatus)
@@ -84,7 +97,8 @@ onBeforeMount(async () => {
                         <div>
                             <el-button size="large" class="w-[150px]" @click="router.push('/auctions')">Continue
                                 shopping</el-button>
-                            <el-button size="large" class="w-[150px]" type="primary" @click="dialogVisible = isTransactionSuccess">Rate</el-button>
+                            <el-button size="large" class="w-[150px]" type="primary"
+                                @click="dialogVisible = isTransactionSuccess">Rate</el-button>
                         </div>
                     </div>
                 </template>
