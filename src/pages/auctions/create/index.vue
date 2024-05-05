@@ -183,6 +183,8 @@ const submit = async () => {
                 message: 'Create Auction Successfully!',
                 type: 'success',
             });
+            router.push('/seller-history')
+            currentAuction = {}
         } else {
             console.log('error submit!');
             ElNotification({

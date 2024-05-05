@@ -12,7 +12,7 @@ export const loginApi = async (data) => {
     return await axiosApiInstance.post('/auth/login', data)
 }
 export const loginGGApi = async (accessToken) => {
-    return await axios.post(`/auth/google?googleToken=${accessToken}`)
+    return await axios.post(`/auth/google?googleToken=${accessToken}&role=1`)
 }
 export const registerApi = async (data) => {
     return await axiosApiInstance.post('/auth/register', data)

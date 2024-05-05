@@ -263,6 +263,8 @@ function startCountdown(dateTime) {
 
 watch(id, async () => {
     await useAuction.syncAuction(id.value)
+    listImage.value = auction.value.mediaUrls;
+    rating.value = auction.value.user.ratings.avarageRating
     window.scrollTo(0, 0)
 })
 
