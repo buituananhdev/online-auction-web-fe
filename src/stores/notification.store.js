@@ -24,6 +24,7 @@ export const useNotificationStore = defineStore('notification', {
             this.newNotificationCount++
         },
         decreaseNotification() {
+            if(!this.newNotificationCount) return
             this.newNotificationCount--
         },
         async markReadNotification(id) {

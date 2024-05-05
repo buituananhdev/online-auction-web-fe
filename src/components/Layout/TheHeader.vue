@@ -35,9 +35,10 @@
                     </template>
                 </el-dropdown>
                 <el-dropdown style="margin-top: 6px;" trigger="click">
-                    <el-badge :value="unreadNotificationCount" class="item">
+                    <el-badge v-if="unreadNotificationCount" :value="unreadNotificationCount" class="item">
                         <img src="../../assets/icons/bell-icon.svg" class="cursor-pointer" width="20" alt="" />
                     </el-badge>
+                    <img v-else src="../../assets/icons/bell-icon.svg" class="cursor-pointer" width="20" alt="" />
                     <template #dropdown>
                         <el-dropdown-menu style="width: 300px; max-height: 40vh; padding-top: 15px;"
                             class="header-notification-list">
@@ -46,7 +47,7 @@
                             <el-dropdown-item v-else v-for="item in notificationList" @click="goToItemURL(item)"
                                 :key="item.id" :style="getStyle(item.isRead)" :icon="Plus">
                                 <div class="flex gap-1">
-                                    <el-icon size="23" style="margin-top: 4px" :color="item.type === 3 ? '#409eff' : '#00aa00'">
+                                    <el-icon size="23" style="margin-top: 4px" :color="item.type === 3 ? '#00aa00' : '#4093ff'">
                                         <SuccessFilled v-show="item.type === 3" />
                                         <Comment v-show="item.type === 2" />
                                         <PriceTag v-show="item.type === 1" />
@@ -54,7 +55,7 @@
                                     <div class="flex flex-col">
                                         <span class="font-semibold">{{ item.title }}</span>
                                         <span class="text-xs">{{ item.content }}</span>
-                                        <span class="text-xs">{{ getTimeDifference(item.dateCreated) }}</span>
+                                        <span class="text-xs mt-1">{{ getTimeDifference(item.dateCreated) }}</span>
                                     </div>
                                 </div>
 
@@ -218,9 +219,11 @@ async function getNotificationList() {
 }
 
 async function goToItemURL(item) {
-    item.isRead = true
-    await useNotification.markReadNotification(item.id)
-    useNotification.decreaseNotification()
+    if(!item.isRead) {
+        useNotification.decreaseNotification()
+        item.isRead = true
+        await useNotification.markReadNotification(item.id)
+    }
     router.push(item.redirectUrl)
 }
 
