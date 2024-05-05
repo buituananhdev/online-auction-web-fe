@@ -191,22 +191,16 @@ async function handleBidAuction() {
     try {
         dialogFormVisible.value = false
         isReviewBid.value = false
-        bidAmount.value = null
         if (isBuyAvailable.value) {
-            isBuyAvailable.value = false
             router.push(`/payments/${auction.value.id}`)
+            isBuyAvailable.value = false
         } else {
             const res = await bidAuction({
                 auctionId: auction.value.id,
                 bidAmount: bidAmount.value,
             })
-            await useAuction.syncAuction(id)
-            ElNotification({
-                title: 'Bid auction',
-                message: 'Bid successfully!',
-                type: 'success',
-            })
         }
+        bidAmount.value = null
     } catch (error) {
         console.log(error)
         ElNotification({
@@ -263,6 +257,8 @@ function startCountdown(dateTime) {
 
 watch(id, async () => {
     await useAuction.syncAuction(id.value)
+    listImage.value = auction.value.mediaUrls;
+    rating.value = auction.value.user.ratings.avarageRating
     window.scrollTo(0, 0)
 })
 
@@ -329,8 +325,8 @@ onBeforeMount(async () => {
                 <div class="flex items-center">
                     <p class="w-1/3 text-base">Current bid</p>
                     <p class="text-base">
-                        {{ formatNumber(auction.currentPrice) }} VNĐ - {{ auction.bidCount }} {{ auction.bidCount < 2 ? 'bid' : 'bids' }}
-                            </p>
+                        {{ formatNumber(auction.currentPrice) }} VNĐ - {{ auction.bidCount }} {{ auction.bidCount < 2
+                            ? 'bid' : 'bids' }} </p>
                 </div>
                 <div class="flex items-center">
                     <p class="w-1/3 text-base">Your max bid</p>
@@ -405,7 +401,9 @@ onBeforeMount(async () => {
                     </div>
                 </div>
                 <div class="bg-[#FFF0DF] w-full p-3 flex items-center gap-3">
-                    <p class="font-semibold min-w-[50px] pr-2 border-r border-black">{{ formatNumber(auction.currentPrice) }} VNĐ</p>
+                    <p class="font-semibold min-w-[50px] pr-2 border-r border-black">{{
+                        formatNumber(auction.currentPrice) }}
+                        VNĐ</p>
                     <div class="flex items-center gap-2">
                         <p class="text-xs">Buy it now with:</p>
                         <p class="font-semibold text-sm text-[#505050]">{{ formatNumber(auction.maxPrice) }} VNĐ</p>

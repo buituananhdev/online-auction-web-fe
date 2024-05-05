@@ -6,7 +6,7 @@
                 <span class="text-sm text-[#555555] mt-[3px]">Manage profile information for account security</span>
             </div>
             <div class="flex items-center">
-                <button class="px-5 py-1 h-10 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-md transition-all mr-10">Change Password</button>
+                <button class="px-5 py-1 h-10 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-md transition-all mr-10" @click="() => {isShowChangePassword = true}">Change Password</button>
             </div>
         </div>
         <div class="flex pt-[30px] font-normal">
@@ -48,49 +48,59 @@
             </div>
         </div>
     </div>
-    <div 
-        v-if="isShowChangePassword"
-        class="w-full bg-[rgba(17,24,32,0.7)] fixed top-0 bottom-0 left-0 right-0 h-screen z-10 flex items-center justify-center"
+    <el-dialog
+        v-model="isShowChangePassword"
+        width="600"
+        :before-close="handleClose"
+        style="border-radius: 16px;"
     >
-        <div class="flex flex-col text-sm bg-white w-[600px] h-[60%] items-center justify-center rounded-lg gap-5">
-            <el-form @submit.prevent="changePassword" ref="passwordForm" :model="changePasswordForm" label-width="auto"  :rules="rules">
+        <div class="flex flex-col text-sm h-[65%] items-center justify-center rounded-lg gap-5">
+            <el-form @submit.prevent="submitChangePassword" ref="passwordRef" :model="changePasswordForm" label-width="auto"  :rules="rules">
                 <h1 class="text-3xl flex items-center justify-center mb-10 font-bold">Change Password</h1>
                 <div class="flex flex-col mb-5">
                     <span class="text-[#555555CC] pb-[3px]">Old Password</span>
                     <el-form-item prop="oldPass">
-                        <el-input size="large" v-model="changePasswordForm.oldPass" style="width: 400px; padding-left: 20px; color: #333333;"/>
+                        <el-input size="large" type="password" show-password v-model="changePasswordForm.oldPass" placeholder="Please input your old password" style="width: 400px; padding-left: 20px; color: #333333;"/>
                     </el-form-item>
                 </div>
                 <div class="flex flex-col mb-5">
                     <span class="text-[#555555CC] pb-[3px]">New Password</span>
                     <el-form-item prop="newPass">
-                        <el-input size="large" v-model="changePasswordForm.newPass" style="width: 400px; padding-left: 20px; color: #333333;"/>
+                        <el-input size="large" type="password" show-password v-model="changePasswordForm.newPass" placeholder="Please input your new password" style="width: 400px; padding-left: 20px; color: #333333;"/>
                     </el-form-item>
                 </div>
                 <div class="flex flex-col mb-10">
                     <span class="text-[#555555CC] pb-[3px]">Confirm Password</span>
                     <el-form-item prop="confirmNewPass">
-                        <el-input size="large" v-model="changePasswordForm.confirmNewPass" style="width: 400px; padding-left: 20px; color: #333333;"/>
+                        <el-input size="large" type="password" show-password v-model="changePasswordForm.confirmNewPass" placeholder="Please confirm your new password" style="width: 400px; padding-left: 20px; color: #333333;"/>
                     </el-form-item>
                 </div>
-                <div class="flex">
+                <div class="flex pb-8">
                     <button class="px-5 py-2 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-md transition-all" type="submit">Change Password</button>
-                    <button class="px-5 py-2 border border-gray-300 ml-5 text-[#E23F33] hover:bg-[#E23F33] hover:text-white text-base font-semibold rounded-md transition-all">Cancel</button>
+                    <button class="px-5 py-2 border border-gray-300 ml-5 text-[#E23F33] hover:bg-[#E23F33] hover:text-white text-base font-semibold rounded-md transition-all" @click="() => {isShowChangePassword = false}">Cancel</button>
                 </div>
             </el-form>
         </div>
-    </div>
+    </el-dialog>
+    <!-- <div 
+        v-if="isShowChangePassword"
+        class="w-full bg-[rgba(17,24,32,0.7)] fixed top-0 bottom-0 left-0 right-0 h-screen z-10 flex items-center justify-center"
+    >
+        
+    </div> -->
 </template>
 
 <script setup>
 import { reactive, ref } from 'vue'
 import { authStore } from '../../stores/auth.store'
-
+import { updateProfile, changePassword } from '../../services/user.service'
+ 
 const form = ref(null)
-const passwordForm = ref(null)
+const passwordRef = ref(null)
 const userAuth = authStore()
 const isValids = ref([false, false, false])
-const isShowChangePassword = ref(true)
+const isValids2 = ref([false, false, false])
+const isShowChangePassword = ref(false)
 
 
 const currentUser = reactive({
@@ -136,16 +146,59 @@ const validateAddress = (rule, value, callback) => {
     else callback()
 }
 
+const validateField2 = (field, value, errorMessage) => {
+    if (!value) {
+        return new Error(errorMessage)
+    } else if ( field === 1 || field === 2) {
+        if (changePasswordForm.newPass != changePasswordForm.confirmNewPass) {
+            return new Error('Passwords do not match')
+        }
+    }
+}
+
+const validateOldPass = (rule, value, callback) => {
+    const errorMessage = 'Old Password is required'
+    const error = validateField2(0, value, errorMessage)
+    if (error) callback(error)
+    else callback()
+}
+const validateNewPass = (rule, value, callback) => {
+    const errorMessage = 'New Password is required'
+    const error = validateField2(1, value, errorMessage)
+    if (error) callback(error)
+    else callback()
+}
+const validateConfirmNewPass = (rule, value, callback) => {
+    const errorMessage = 'Confirm New Password is required'
+    const error = validateField2(2, value, errorMessage)
+    if (error) callback(error)
+    else callback()
+}
+
 const rules = reactive({
     fullName: [{ validator: validateFullName, trigger: 'blur' }],
     phone: [{ validator: validatePhone,  trigger: 'blur' }],
     address: [{ validator: validateAddress, trigger: 'blur' }],
+    oldPass: [{ validator: validateOldPass, trigger: 'blur' }],
+    newPass: [{ validator: validateNewPass, trigger: 'blur' }],
+    confirmNewPass: [{ validator: validateConfirmNewPass, trigger: 'blur' }]
 })
+
+const handleClose = () => {
+  ElMessageBox.confirm('Are you sure you want to close the password change form?')
+    .then(() => {
+        isShowChangePassword.value = false
+    })
+    .catch(() => {
+        isShowChangePassword.value = true
+    })
+}
+
 const submit = () => {
   console.log('submit!')
 }
 
-const changePassword = () => {
+const submitChangePassword = () => {
     console.log('change password!');
 }
 </script>
