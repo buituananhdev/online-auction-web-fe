@@ -45,6 +45,7 @@ export const useAuctionStore = defineStore('auctions', {
                 type: 'info',
                 onClick: () => {
                     window.location.href = data.redirectUrl;
+                    useNotificationStore().decreaseNotification()
                 }
             })
             if (data.relatedID === this.watchingAuction.id) {
@@ -52,6 +53,7 @@ export const useAuctionStore = defineStore('auctions', {
                 console.log(data);
             }
             useNotificationStore().addNotification(data)
+            useNotificationStore().increaseNotification()
         },
         onConnectionEstablished() {
             console.log('SignalR Connected.')

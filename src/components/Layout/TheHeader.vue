@@ -35,13 +35,30 @@
                     </template>
                 </el-dropdown>
                 <el-dropdown style="margin-top: 6px;" trigger="click">
-                    <el-badge :value="3" class="item">
+                    <el-badge :value="unreadNotificationCount" class="item">
                         <img src="../../assets/icons/bell-icon.svg" class="cursor-pointer" width="20" alt="" />
                     </el-badge>
                     <template #dropdown>
-                        <el-dropdown-menu style="width: 300px; max-height: 40vh; padding-top: 15px;" class="header-notification-list">
-                            <el-dropdown-item v-if="notificationList.length === 0">You don't have any notification</el-dropdown-item>
-                            <el-dropdown-item v-else v-for="item in notificationList" :key="item.id" style="width: 100%; border-bottom: 1px solid #f8f8f8; white-space: break-spaces;" :icon="Plus">{{ item.content }}</el-dropdown-item>
+                        <el-dropdown-menu style="width: 300px; max-height: 40vh; padding-top: 15px;"
+                            class="header-notification-list">
+                            <el-dropdown-item v-if="notificationList.length === 0">You don't have any
+                                notification</el-dropdown-item>
+                            <el-dropdown-item v-else v-for="item in notificationList" @click="goToItemURL(item)"
+                                :key="item.id" :style="getStyle(item.isRead)" :icon="Plus">
+                                <div class="flex gap-1">
+                                    <el-icon size="23" style="margin-top: 4px" :color="item.type === 3 ? '#409eff' : '#00aa00'">
+                                        <SuccessFilled v-show="item.type === 3" />
+                                        <Comment v-show="item.type === 2" />
+                                        <PriceTag v-show="item.type === 1" />
+                                    </el-icon>
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold">{{ item.title }}</span>
+                                        <span class="text-xs">{{ item.content }}</span>
+                                        <span class="text-xs">{{ getTimeDifference(item.dateCreated) }}</span>
+                                    </div>
+                                </div>
+
+                            </el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -80,8 +97,9 @@ import { useRouter } from 'vue-router'
 import { authStore } from '../../stores/auth.store'
 import { getListCategories } from '../../services/category.service'
 import { useCategoryStore } from '../../stores/category.store'
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ArrowDown, SuccessFilled, Comment, PriceTag } from '@element-plus/icons-vue'
 import { useNotificationStore } from '../../stores/notification.store'
+import { getTimeDifference } from '../../utils/index'
 
 const role = localStorage.getItem('role')
 
@@ -122,6 +140,23 @@ const categories = ref([])
 const isPopupVisible = ref(false)
 const isEditPopupVisible = ref(false)
 const notificationList = computed(() => useNotification.notificationList)
+const unreadNotificationCount = computed(() => useNotification.newNotificationCount)
+
+function getStyle(condition) {
+    return condition
+        ? {
+            width: '100%',
+            borderBottom: '1px solid #f8f8f8',
+            whiteSpace: 'break-spaces',
+        }
+        : {
+            width: '100%',
+            whiteSpace: 'break-spaces',
+            fontWeight: '550',
+            borderBottom: '1px solid #ffff',
+            backgroundColor: '#f8f8f8'
+        };
+}
 
 const togglePopup = () => {
     isPopupVisible.value = !isPopupVisible.value
@@ -182,6 +217,12 @@ async function getNotificationList() {
     }
 }
 
+async function goToItemURL(item) {
+    item.isRead = true
+    await useNotification.markReadNotification(item.id)
+    useNotification.decreaseNotification()
+    router.push(item.redirectUrl)
+}
 
 onMounted(async () => {
     document.addEventListener('click', handleOutsideClick)
@@ -208,7 +249,5 @@ onUnmounted(() => {
 </style>
 
 <style scoped>
-.header-notification-list {
-
-}
+.header-notification-list {}
 </style>
