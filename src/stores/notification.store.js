@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia'
-import { HubConnectionBuilder } from '@microsoft/signalr'
-import { getNotificationList } from '../services/notification.service'
+import { getNotificationList, readNotification } from '../services/notification.service'
 
 export const useNotificationStore = defineStore('notification', {
     state: () => ({
         notificationList: [],
-        notificationCount: 0,
+        newNotificationCount: 0,
         connection: null,
     }),
     actions: {
@@ -13,14 +12,26 @@ export const useNotificationStore = defineStore('notification', {
             try {
                 const res = await getNotificationList()
                 this.notificationList = res.data
+                this.newNotificationCount = res.data.filter(item => item.isRead === false).length
             } catch (error) {
                 console.error(error);
             }
         },
         addNotification(data) {
-            console.log('push', this.notificationList);
             this.notificationList.push(data)
-            console.log('done', this.notificationList );
+        },
+        increaseNotification() {
+            this.newNotificationCount++
+        },
+        decreaseNotification() {
+            this.newNotificationCount--
+        },
+        async markReadNotification(id) {
+            try {
+                await readNotification(id)
+            } catch (error) {
+                console.error(error);
+            }
         }
     },
 })
