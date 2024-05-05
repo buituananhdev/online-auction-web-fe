@@ -16,7 +16,7 @@ export const useAuctionStore = defineStore('auctions', {
                 })
                 .build()
 
-            this.connection.on('RECEIVE_NOTIFICATION', this.syncAuctionIfWatching)
+            this.connection.on('RECEIVE_NOTIFICATION', this.handleNotification)
             this.connection
                 .start()
                 .then(this.onConnectionEstablished)
@@ -37,9 +37,18 @@ export const useAuctionStore = defineStore('auctions', {
                 console.error(err)
             }
         },
-        syncAuctionIfWatching(data) {
+        handleNotification(data) {
+            ElNotification({
+                title: data.title,
+                message: data.content,
+                type: 'info',
+                onClick: () => {
+                    window.location.href = data.redirectUrl;
+                }
+            })
             if (data.relatedID === this.watchingAuction.id) {
                 this.syncAuction(data.relatedID)
+                console.log(data);
             }
         },
         onConnectionEstablished() {

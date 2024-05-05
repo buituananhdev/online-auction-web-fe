@@ -200,12 +200,6 @@ async function handleBidAuction() {
         if (isBuyAvailble.value) {
             router.push(`/payments/${auction.value.id}`)
             isBuyAvailble.value = false
-        } else {
-            ElNotification({
-                title: 'Bid auction',
-                message: 'Bid successfully!',
-                type: 'success',
-            })
         }
     } catch (error) {
         console.log(error)
