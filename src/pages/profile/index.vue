@@ -59,15 +59,15 @@
             <el-form @submit.prevent="submitChangePassword" ref="passwordRef" :model="changePasswordForm" label-width="auto"  :rules="rules">
                 <h1 class="text-3xl flex items-center justify-center mb-10 font-bold">Change Password</h1>
                 <div class="flex flex-col mb-5">
-                    <span class="pb-[3px]">Old Password</span>
-                    <el-form-item prop="oldPass">
-                        <el-input size="large" type="password" show-password v-model="changePasswordForm.oldPass" placeholder="Please input your old password" style="width: 400px; padding-left: 20px; color: #333333;"/>
+                    <span class="pb-[3px]">Current Password</span>
+                    <el-form-item prop="currentPassword">
+                        <el-input size="large" type="password" show-password v-model="changePasswordForm.currentPassword" placeholder="Please input your old password" style="width: 400px; padding-left: 20px; color: #333333;"/>
                     </el-form-item>
                 </div>
                 <div class="flex flex-col mb-5">
                     <span class="pb-[3px]">New Password</span>
-                    <el-form-item prop="newPass">
-                        <el-input size="large" type="password" show-password v-model="changePasswordForm.newPass" placeholder="Please input your new password" style="width: 400px; padding-left: 20px; color: #333333;"/>
+                    <el-form-item prop="newPassword">
+                        <el-input size="large" type="password" show-password v-model="changePasswordForm.newPassword" placeholder="Please input your new password" style="width: 400px; padding-left: 20px; color: #333333;"/>
                     </el-form-item>
                 </div>
                 <div class="flex flex-col mb-10">
@@ -78,7 +78,7 @@
                 </div>
                 <div class="flex pb-8">
                     <button class="px-5 py-2 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-md transition-all" type="submit">Change Password</button>
-                    <button class="px-5 py-2 border border-gray-300 ml-5 text-[#E23F33] hover:bg-[#E23F33] hover:text-white text-base font-semibold rounded-md transition-all" @click="() => {isShowChangePassword = false}">Cancel</button>
+                    <button class="px-5 py-2 border border-gray-300 ml-5 text-[#E23F33] hover:bg-[#E23F33] hover:text-white text-base font-semibold rounded-md transition-all" @click.prevent="() => {isShowChangePassword = false}">Cancel</button>
                 </div>
             </el-form>
         </div>
@@ -113,8 +113,8 @@ const currentUser = reactive({
 })
 
 const changePasswordForm  = reactive({
-    oldPass: '',
-    newPass: '',
+    currentPassword: '',
+    newPassword: '',
     confirmNewPass: '',
 })
 
@@ -152,14 +152,14 @@ const validateField2 = (field, value, errorMessage) => {
     if (!value) {
         return new Error(errorMessage)
     } else if ( field === 1 || field === 2) {
-        if (changePasswordForm.newPass != changePasswordForm.confirmNewPass) {
+        if (changePasswordForm.newPassword != changePasswordForm.confirmNewPass) {
             return new Error('Passwords do not match')
         }
     }
 }
 
 const validateOldPass = (rule, value, callback) => {
-    const errorMessage = 'Old Password is required'
+    const errorMessage = 'Current Password is required'
     const error = validateField2(0, value, errorMessage)
     if (error) callback(error)
     else callback()
@@ -181,8 +181,8 @@ const rules = reactive({
     fullName: [{ validator: validateFullName, trigger: 'blur' }],
     phone: [{ validator: validatePhone,  trigger: 'blur' }],
     address: [{ validator: validateAddress, trigger: 'blur' }],
-    oldPass: [{ validator: validateOldPass, trigger: 'blur' }],
-    newPass: [{ validator: validateNewPass, trigger: 'blur' }],
+    currentPassword: [{ validator: validateOldPass, trigger: 'blur' }],
+    newPassword: [{ validator: validateNewPass, trigger: 'blur' }],
     confirmNewPass: [{ validator: validateConfirmNewPass, trigger: 'blur' }]
 })
 
@@ -200,8 +200,21 @@ const submit = () => {
   console.log('submit!')
 }
 
-const submitChangePassword = () => {
-    console.log('change password!');
+const submitChangePassword = async() => {
+    try {
+        await changePassword(changePasswordForm)
+        ElNotification({
+            title: 'Change Password',
+            message: 'Change Password Successfully!',
+            type: 'success',
+        });
+    } catch (error) {
+        ElNotification({
+            title: 'Change Password',
+            message: 'Change Password Failed!',
+            type: 'error',
+        });
+    }
 }
 </script>
 
