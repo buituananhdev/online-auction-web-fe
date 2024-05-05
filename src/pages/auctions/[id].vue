@@ -18,6 +18,7 @@ const exploredAuctionList = ref([])
 const router = useRouter()
 const route = useRoute()
 const listImage = ref([])
+const userRole = ref('')
 const rating = ref({
     totalRatings: 0,
     averageRating: 0,
@@ -270,6 +271,7 @@ onBeforeMount(async () => {
     rating.value = auction.value.user.ratings.avarageRating
     await getExploreAuctionList()
     startCountdown(auction.value.endTime)
+    userRole.value = localStorage.getItem('role')
 })
 </script>
 
@@ -417,11 +419,11 @@ onBeforeMount(async () => {
                     <span class="inline-block text-[#8B96A5] w-1/3">Condition:</span>
                     <span class="text-[#505050]">{{ converConditionText(auction.condition) }}</span>
                 </div>
-                <button @click="handlePlaceBid"
+                <button v-show="userRole === 'Buyer'" @click="handlePlaceBid"
                     class="w-full bg-[#409EFF] text-white font-bold rounded-3xl py-2 text-lg hover:bg-[#3A8EE4] transition-all">
                     Place bid
                 </button>
-                <div class="flex items-center w-full gap-2">
+                <div v-show="userRole === 'Buyer'" class="flex items-center w-full gap-2">
                     <button
                         class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white transition-all"
                         @click="handlePlaceBid(true)">
