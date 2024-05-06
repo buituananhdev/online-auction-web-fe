@@ -8,6 +8,7 @@ import { bidAuction } from '../../services/bid.service'
 import { useAuctionStore } from '../../stores/auction.store'
 import { authStore } from '../../stores/auth.store'
 import { formatNumber } from '../../utils/index.js'
+import PredictPrice from '../../services/gemini-ai.service.js'
 
 const auth = authStore()
 const auctionId = ref()
@@ -27,6 +28,11 @@ const id = computed(() => {
     console.log(route.params.id);
     return route.params.id
 })
+
+const predictAvgPrice = computed(async () => {
+    // return auction.predictAvgPrice == 0 ? await PredictPrice(auction.value) : auction.predictAvgPrice;
+    return auction.predictAvgPrice;
+});
 const scrollBox = ref()
 const scrollBox2 = ref()
 const colors = ref(['#99A9BF', '#F7BA2A', '#FF9900'])
@@ -410,6 +416,9 @@ onBeforeMount(async () => {
                         <p class="text-xs">Buy it now with:</p>
                         <p class="font-semibold text-sm text-[#505050]">{{ formatNumber(auction.maxPrice) }} VNĐ</p>
                     </div>
+                </div>
+                <div class="flex gap-2 items-center">
+                    <span class="text-xs">Predict price: {{ predictAvgPrice }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
                     <span class="font-xs text-xs border-b border-black">{{ auction.bidCount }} bids</span>
