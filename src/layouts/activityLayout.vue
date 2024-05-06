@@ -50,7 +50,7 @@
                                 <el-radio-button :value="true">collapse</el-radio-button>
                             </el-radio-group> -->
                             <el-menu
-                                default-active="1-1"
+                                :default-active="role == 'Buyer' ? '5' : '1-1'"
                                 class="el-menu-vertical-demo"
                                 :collapse="isCollapse"
                                 @open="handleOpen"
@@ -82,25 +82,9 @@
                                     <el-icon><document-add /></el-icon>
                                     <template #title>Create Auction</template>
                                 </el-menu-item>
-                                <el-menu-item index="3" v-if="role == 'Buyer'" @click="router.push('/profile')">
-                                    <el-icon><user /></el-icon>
-                                    <template #title >Personal Profile</template>
-                                </el-menu-item>
-                                <el-menu-item index="4" v-if="role == 'Buyer'" @click="router.push('/auctions')">
-                                    <el-icon>
-                                        <img
-                                            class=""
-                                            src="../assets/icons/auction.svg"
-                                            width="18"
-                                            alt=""
-                                        />
-                                    </el-icon>
-                                    <template #title >Auctions</template>
-                                </el-menu-item>
                                 <el-menu-item index="5" v-if="role == 'Buyer'" @click="router.push('/buyer-history')">
                                     <el-icon>
                                         <img
-                                            class=""
                                             src="../assets/icons/bid.svg"
                                             width="18"
                                             alt=""
@@ -108,10 +92,29 @@
                                     </el-icon>
                                     <template #title >Bids & Offers</template>
                                 </el-menu-item>
+                                <el-menu-item index="3" v-if="role == 'Buyer'" @click="router.push('/profile')">
+                                    <el-icon>
+                                        <img
+                                            src="../assets/icons/user.svg"
+                                            width="18"
+                                            alt=""
+                                        />
+                                    </el-icon>
+                                    <template #title >Personal Profile</template>
+                                </el-menu-item>
+                                <el-menu-item index="4" v-if="role == 'Buyer'" @click="router.push('/auctions')">
+                                    <el-icon>
+                                        <img
+                                            src="../assets/icons/auction.svg"
+                                            width="18"
+                                            alt=""
+                                        />
+                                    </el-icon>
+                                    <template #title >Auctions</template>
+                                </el-menu-item>
                                 <el-menu-item index="6" v-if="role == 'Buyer'" @click="router.push('/watchlist')">
                                     <el-icon>
                                         <img
-                                            class=""
                                             src="../assets/icons/heart-icon.svg"
                                             width="18"
                                             alt=""
