@@ -25,20 +25,6 @@
             <div class="flex flex-col">
                 <div class="pb-8 flex items-center justify-between">
                     <span class="font-bold text-xl">{{ getTitle(status) }}</span>
-                    <el-select
-                        v-model="status"
-                        placeholder="Filter by status"
-                        size="large"
-                        style="width: 240px"
-                        @change="filterStatus"
-                    >
-                    <el-option
-                        v-for="(item, index) in Object.keys(listProductStatus)"
-                        :key="index"
-                        :label="productStatus[item]"
-                        :value="index + 1"
-                    />
-                    </el-select>
                 </div>
                 <div v-if="listSellerHistorys.length" class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
                     <div
@@ -73,7 +59,11 @@ const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()
 const searchValue = ref('')
-const status = ref('')
+
+const status = computed(() => {
+    console.log(route.query);
+    return route.query.status
+})
 const size  = 5
 
 const meta = ref({
@@ -87,13 +77,13 @@ const listProductStatus = productStatus
 
 const getTitle = (status) => {
     switch (status) {
-        case 1:
+        case '1':
             return 'Inprogress'
-        case 2:
+        case '2':
             return 'Ended'
-        case 3:
+        case '3':
             return 'Canceled'
-        case 4:
+        case '4':
             return 'Pending Publish'
         default: 
             return ''
@@ -105,6 +95,10 @@ const loading = computed(() => {
 })
 
 watch(searchValue, async () => {
+    await SearchHistory()
+})
+
+watch(status, async () => {
     await SearchHistory()
 })
 
@@ -126,10 +120,6 @@ const getHistory = async (currentPage, pageSize, searchQuery, status) => {
     } catch (error) {
         console.log(error)
     }
-}
-
-const filterStatus = async () => {
-    await SearchHistory()
 }
 
 const handleClickSearch = () => {
@@ -170,7 +160,7 @@ const refreshData = async () => {
     if (searchValue.value || status.value) {
         await SearchHistory()
     } else {
-        await getHistory(meta.value.currentPage, meta.value.pageSize)
+        await getHistory(meta.value.currentPage, meta.value.pageSize, searchValue.value, status.value)
     }
 }
 

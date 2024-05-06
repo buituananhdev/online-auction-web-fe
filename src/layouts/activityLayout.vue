@@ -25,7 +25,7 @@
                         >
                     </div>
                     <div class="flex">
-                        <div class="min-h-[800px] w-[18.75%] pr-8 my-8 flex flex-col">
+                        <!-- <div class="min-h-[800px] w-[18.75%] pr-8 my-8 flex flex-col">
                             <ul class="text-[#363636] font-bold">
                                 <li v-if="role == 'Seller'" class="py-[10px] pl-4">
                                     <RouterLink to="/seller-history">Seller history</RouterLink>
@@ -39,33 +39,89 @@
                                 <li v-if="role == 'Buyer'" class="py-[10px] pl-4">
                                     <a href="watchlist">Watchlist</a>
                                 </li>
-                                <li class="py-[10px] pl-4">
+                                <li v-if="role == 'Buyer'" class="py-[10px] pl-4">
                                     <a href="profile">Profile</a>
                                 </li>
-                                <!-- <li class="py-[10px] pl-4">
-                                    <RouterLink to="/recently-viewed">Recently viewed</RouterLink>
-                                </li> -->
-                                <!-- <li class="py-[10px] pl-4">
-                                    <a href="">Saved sellers</a>
-                                </li>
-                                <li class="py-[10px] pl-4">
-                                    <a href="">My Garage</a>
-                                </li>
-                                <li class="py-[10px] pl-4">
-                                    <a href="">Sizes</a>
-                                </li>
-                                <li class="py-[10px] pl-4">
-                                    <a href="">Selling</a>
-                                </li>
-                                <li class="py-[10px] pl-4">
-                                    <a href="">Collection beta</a>
-                                </li>
-                                <li class="py-[10px] pl-4">
-                                    <a href="">The eBay vault</a>
-                                </li> -->
                             </ul>
+                        </div> -->
+                        <div class="flex flex-col">
+                            <!-- <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
+                                <el-radio-button :value="false">expand</el-radio-button>
+                                <el-radio-button :value="true">collapse</el-radio-button>
+                            </el-radio-group> -->
+                            <el-menu
+                                default-active="1-1"
+                                class="el-menu-vertical-demo"
+                                :collapse="isCollapse"
+                                @open="handleOpen"
+                                @close="handleClose"
+                                v-model="status"
+                            >
+                                <el-sub-menu index="1" v-if="role == 'Seller'">
+                                    <template #title>
+                                        <el-icon><sold-out /></el-icon>
+                                        <span>Seller History</span>
+                                    </template>
+                                    <el-menu-item-group>
+                                        <template #title><span>Status</span></template>
+                                        <el-menu-item index="1-1"  @click="router.push('/seller-history')">All sold items</el-menu-item>
+                                        <el-menu-item index="1-2" @click="router.push({ path: '/seller-history', query: { status: 1 }})">Inprogress</el-menu-item>
+                                        <el-menu-item index="1-3" @click="router.push({ path: '/seller-history', query: { status: 2 }})">Ended</el-menu-item>
+                                        <el-menu-item index="1-4" @click="router.push({ path: '/seller-history', query: { status: 3 }})">Cancel</el-menu-item>
+                                        <el-menu-item index="1-5" @click="router.push({ path: '/seller-history', query: { status: 4 }})">Pending Publish</el-menu-item>
+                                    </el-menu-item-group>
+                                    <!-- <el-menu-item-group title="Group Two">
+                                        <el-menu-item index="1-3">item three</el-menu-item>
+                                    </el-menu-item-group>
+                                    <el-sub-menu index="1-4">
+                                        <template #title><span>item four</span></template>
+                                        <el-menu-item index="1-4-1">item one</el-menu-item>
+                                    </el-sub-menu> -->
+                                </el-sub-menu>
+                                <el-menu-item index="2" v-if="role == 'Seller'" @click="router.push('/create-auction')">
+                                    <el-icon><document-add /></el-icon>
+                                    <template #title>Create Auction</template>
+                                </el-menu-item>
+                                <el-menu-item index="3" v-if="role == 'Buyer'" @click="router.push('/profile')">
+                                    <el-icon><user /></el-icon>
+                                    <template #title >Personal Profile</template>
+                                </el-menu-item>
+                                <el-menu-item index="4" v-if="role == 'Buyer'" @click="router.push('/auctions')">
+                                    <el-icon>
+                                        <img
+                                            class=""
+                                            src="../assets/icons/auction.svg"
+                                            width="18"
+                                            alt=""
+                                        />
+                                    </el-icon>
+                                    <template #title >Auctions</template>
+                                </el-menu-item>
+                                <el-menu-item index="5" v-if="role == 'Buyer'" @click="router.push('/buyer-history')">
+                                    <el-icon>
+                                        <img
+                                            class=""
+                                            src="../assets/icons/bid.svg"
+                                            width="18"
+                                            alt=""
+                                        />
+                                    </el-icon>
+                                    <template #title >Bids & Offers</template>
+                                </el-menu-item>
+                                <el-menu-item index="6" v-if="role == 'Buyer'" @click="router.push('/watchlist')">
+                                    <el-icon>
+                                        <img
+                                            class=""
+                                            src="../assets/icons/heart-icon.svg"
+                                            width="18"
+                                            alt=""
+                                        />
+                                    </el-icon>
+                                    <template #title >Watchlist</template>
+                                </el-menu-item>
+                            </el-menu>
                         </div>
-                        <div class="flex-auto">
+                        <div class="ml-5 flex-auto">
                             <slot />
                         </div>
                     </div>
@@ -84,8 +140,16 @@ import { authStore } from '../stores/auth.store'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuctionStore } from '../stores/auction.store'
+import {
+  DocumentAdd,
+  Menu as IconMenu,
+  SoldOut,
+  User,
+} from '@element-plus/icons-vue'
 
 const searchValue = ref('')
+const status = ref(null)
+const isCollapse = ref(false)
 const useAuction = useAuctionStore()
 const SearchIcon = Search
 const router = useRouter()
@@ -102,9 +166,24 @@ const handleClickSearch = () => {
         router.push({ path: '/auctions', query: queryWithoutSearch })
     }
 }
+const handleOpen = (key, keyPath) => {
+  console.log(key, keyPath)
+}
+const handleClose = (key, keyPath) => {
+  console.log(key, keyPath)
+}
 onMounted(() => {
     if (route.query.search) {
         searchValue.value = route.query.search.toString()
     }
+    if (route.query.status) {
+        status.value = route.query.status
+    }
 })
 </script>
+<style>
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+  min-height: 100%;
+}
+</style>
