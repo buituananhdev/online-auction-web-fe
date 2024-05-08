@@ -199,6 +199,7 @@ async function handleBidAuction() {
         dialogFormVisible.value = false
         isReviewBid.value = false
         if (isBuyAvailable.value) {
+            useAuction.setPurchasePrice(bidAmount.value)
             router.push(`/payments/${auction.value.id}`)
             isBuyAvailable.value = false
         } else {
@@ -242,6 +243,10 @@ function scrollToLeft(scrollBox) {
 
 function backtoHome() {
     router.push('/')
+}
+
+function goToSellerInfor(id) {
+    router.push(`/seller/${id}`)
 }
 
 function startCountdown(dateTime) {
@@ -317,7 +322,9 @@ onBeforeMount(async () => {
                 <div>
                     <p>Your max bid</p>
                     <div class="flex items-center justify-between gap-3 relative">
-                        <input v-model="bidAmount" type="number" class="w-2/3 border py-1 pl-8 rounded-xl" />
+                        <el-input v-model="bidAmount" style="width: 70%;"
+                            :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                            :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
                         <span class="font-bold absolute left-[15px]"></span>
                         <button @click="reviewBid"
                             class="flex-1 border p-2 rounded-3xl bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
@@ -338,7 +345,7 @@ onBeforeMount(async () => {
                 </div>
                 <div class="flex items-center">
                     <p class="w-1/3 text-base">Your max bid</p>
-                    <p class="text-base">{{ bidAmount }}</p>
+                    <p class="text-base">{{ formatNumber(bidAmount) }} VNĐ</p>
                 </div>
                 <div class="flex items-center">
                     <p class="w-1/3 text-base">Time left:</p>
@@ -347,7 +354,7 @@ onBeforeMount(async () => {
                 <div class="flex items-start">
                     <p class="w-1/3 text-base">Estemated Total:</p>
                     <ul class="w-2/3">
-                        <li class="text-base">{{ bidAmount + 5 }}</li>
+                        <li class="text-base">{{ formatNumber(bidAmount + 5) }} VNĐ</li>
                         <li class="text-base text-[#9B9B9B]">
                             *This item may be subject to duties and taxes upon delivery.
                         </li>
@@ -398,7 +405,8 @@ onBeforeMount(async () => {
             </div>
             <div v-show="auction.user" class="auction-detail-information flex flex-col gap-2 items-start w-[43%] py-4">
                 <span class="text-xl font-semibold">{{ auction.productName }}</span>
-                <div class="flex items-center gap-2 p-2 border rounded-lg w-full">
+                <div class="cursor-pointer flex items-center gap-2 p-2 border rounded-lg w-full"
+                    @click="goToSellerInfor(auction.user.id)">
                     <img class="w-[35px] h-[35px] object-contain rounded-full"
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8xme21WZD0--nyHf-4B90Lmycw0tCNGjld7D1l4edsQ&s"
                         alt="" />

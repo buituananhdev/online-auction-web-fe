@@ -59,7 +59,7 @@
         </div>
         <div class="min-w-[900px]">
             <div v-if="listProducts.length" class="list-product relative min-h-[800px] mb-10">
-                <div v-for="item in listProducts" :key="item.id" class="product-card">
+                <div v-for="item in listProducts" :key="item.id">
                     <product-card :auction="item" />
                 </div>
                 <div class="flex justify-end w-full absolute bottom-[-40px] right-0">
@@ -320,10 +320,6 @@ onBeforeMount(async () => {
 })
 </script>
 <style scoped lang="scss">
-.product-card {
-    // width: calc((100% - 90px) / 3);
-    // height: fit-content;
-}
 
 .list-product {
     color: $color-primary;

@@ -13,3 +13,7 @@ export const updateProfile = async (data) => {
 export const changePassword = async (data) => {
     return await axiosApiInstance.patch(`/users/change-password`, data)
 }
+
+export const getUserInformation = async (id) => {
+    return await axiosApiInstance.get(`/users/${id}`)
+}

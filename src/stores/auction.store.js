@@ -7,6 +7,7 @@ export const useAuctionStore = defineStore('auctions', {
     state: () => ({
         watchingAuction: {},
         connection: null,
+        purchasePrice: 0
     }),
     actions: {
         initializeConnection(token) {
@@ -62,5 +63,8 @@ export const useAuctionStore = defineStore('auctions', {
         onConnectionError(error) {
             console.error('SignalR Connection Error: ', error)
         },
+        setPurchasePrice(price){
+            this.purchasePrice = price
+        }
     },
 })

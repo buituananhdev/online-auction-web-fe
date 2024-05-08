@@ -7,38 +7,19 @@
                 <a href="/register" class="text-[#409EFF] cursor-pointer underline">create an account</a>
             </p>
             <div class="my-4 flex flex-col justify-center items-center gap-4">
-                <el-form
-                    ref="userRef"
-                    :rules="rules"
-                    style="max-width: 600px; margin-bottom: -20px"
-                    :model="user"
-                    label-width="auto"
-                >
+                <el-form ref="userRef" :rules="rules" style="max-width: 600px; margin-bottom: -20px" :model="user"
+                    label-width="auto">
                     <el-form-item prop="email">
-                        <el-input
-                            v-model="user.email"
-                            type="email"
-                            style="width: 340px"
-                            size="large"
-                            class="cursor-pointer"
-                            placeholder="Please input your email"
-                        />
+                        <el-input v-model="user.email" type="email" style="width: 340px" size="large"
+                            class="cursor-pointer" placeholder="Please input your email" />
                     </el-form-item>
                     <el-form-item prop="password">
-                        <el-input
-                            v-model="user.password"
-                            style="width: 340px"
-                            type="password"
-                            autocomplete="off"
-                            size="large"
-                            placeholder="Please input your password"
-                            show-password
-                        />
+                        <el-input v-model="user.password" style="width: 340px" type="password" autocomplete="off"
+                            size="large" placeholder="Please input your password" show-password />
                     </el-form-item>
                     <el-form-item>
-                        <el-button size="large" type="primary" class="w-[340px]" @click="submit(userRef)" round
-                            >Sign in</el-button
-                        >
+                        <el-button size="large" type="primary" class="w-[340px]" @click="submit(userRef)" round>Sign
+                            in</el-button>
                     </el-form-item>
                 </el-form>
                 <div class="relative">
@@ -68,6 +49,7 @@ const user = reactive({
 const useAuction = useAuctionStore()
 const googleLoginBtn = ref()
 const auth = authStore()
+
 onMounted(() => {
     console.log('onBeforeMount')
     const gClientId = '666131485042-hnsv2co3gq2dg5g8hc77e4p1fto5rell.apps.googleusercontent.com'
@@ -94,7 +76,13 @@ const handleCredentialResponse = async (res) => {
             message: 'Log in successfully!',
             type: 'success',
         })
-        router.push('/')
+        console.log('hihii', router.options.history.state?.back.startsWith('/auctions/'));
+        if (router.options.history.state?.back.startsWith('/auctions/')) {
+            console.log((heheheh));
+            router.push.back()
+        } else {
+            router.push('/')
+        }
     } catch (error) {
         ElNotification({
             title: 'Error',
@@ -160,11 +148,15 @@ const submit = async (formEl) => {
             localStorage.setItem('role', data.data.role)
             await auth.initAuthStore()
             !useAuction.connection && useAuction.initializeConnection(data.data.accessToken)
-            if(auth.user.role === 2) {
+            if (auth.user.role === 2) {
                 router.push({ name: 'seller-history' })
+            } else if (router.options.history.state?.back.startsWith('/auctions/')) {
+                console.log('hehheh');
+                router.go(-1)
             } else {
-                router.push({ name: 'dashboard' })
+                router.push('/')
             }
+
             ElNotification({
                 title: 'Success',
                 message: 'Log in successfully!',

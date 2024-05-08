@@ -71,7 +71,7 @@
             <template #footer>
                 <div class="flex flex-col items-start gap-1 p-1">
                     <div class="flex justify-between w-full">
-                        <p class="font-bold text-lg">${{ auction.currentPrice }}</p>
+                        <p class="font-bold text-lg">${{ formatNumber(auction.currentPrice) }}</p>
                         <el-text style="font-size: 13px; display: inline-block">{{ auction.bidCount }} bids</el-text>
                     </div>
                     <el-rate
@@ -95,6 +95,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuctionStore } from '../../stores/auction.store';
 import { addWatchlist, deleteWatchlist } from '../../services/watchlist.service'
+import { formatNumber } from '../../utils'
 
 defineProps({
     auction: Object,

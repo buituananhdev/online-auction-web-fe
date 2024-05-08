@@ -46,9 +46,9 @@
                         </div>
                     </div>
                 </div>
-                <p class="w-1/6">$ {{ auction.currentPrice }}</p>
+                <p class="w-1/6 font-semibold">{{ formatNumber(useAuction.purchasePrice) }} VNĐ</p>
                 <p class="w-1/6">1</p>
-                <span class="w-1/6">$ {{ auction.currentPrice }}</span>
+                <span class="w-1/6 font-semibold">{{ formatNumber(useAuction.purchasePrice) }} VNĐ</span>
             </div>
         </div>
         <div class="p-3 w-full border-b flex flex-col gap-3 h-[32%]">
@@ -90,6 +90,7 @@ import { LocationFilled } from '@element-plus/icons-vue'
 import { useAuctionStore } from '../../stores/auction.store'
 import { useRoute } from 'vue-router';
 import { getSingleAuction } from '../../services/auction.service'
+import { formatNumber } from '../../utils'
 
 const route = useRoute()
 const formData = ref({
