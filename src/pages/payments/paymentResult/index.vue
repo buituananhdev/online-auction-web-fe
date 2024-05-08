@@ -72,9 +72,6 @@ async function buyItem() {
 }
 
 onBeforeMount(async () => {
-    if (route.query.vnp_TransactionStatus) {
-        getTransactionStatus(route.query.vnp_TransactionStatus)
-    }
     if (route.query.vnp_TxnRef) {
         number.value = route.query.vnp_TxnRef
     }
@@ -83,6 +80,9 @@ onBeforeMount(async () => {
         auction.value = useAuction.watchingAuction
     } else {
         await getDetailAuction()
+    }
+    if (route.query.vnp_TransactionStatus) {
+        getTransactionStatus(route.query.vnp_TransactionStatus)
     }
 })
 </script>

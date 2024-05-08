@@ -97,6 +97,12 @@ const routes = [
         meta: { layout: 'auth', requiresAuth: true },
         component: () => import('../pages/payments/paymentResult/index.vue'),
     },
+    {
+        path: '/seller/:id',
+        name: 'seller-infomation',
+        meta: { layout: 'auth', requiresAuth: true },
+        component: () => import('../pages/profile/seller/[id].vue'),
+    },
 ]
 const router = createRouter({
     history: createWebHistory(),
