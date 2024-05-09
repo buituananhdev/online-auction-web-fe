@@ -5,82 +5,83 @@
                 <img width="50" class="rounded-full"
                     src="https://scontent.fdad3-6.fna.fbcdn.net/v/t39.30808-6/426587256_1430509044210042_7946706195478323343_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGJAwy2cy3ozNO6_7jEhyDyXu52TFDhi9Ve7nZMUOGL1VpuR-3ErXuUitueR_3NPEQEtrYu0xsOzygnsODxm_yg&_nc_ohc=mYaPYCfznu4AX9xv_jp&_nc_ht=scontent.fdad3-6.fna&oh=00_AfB9VxyP9nHo5xo_XgDip71TokS9kjdKrUIKxyIf8EQOQw&oe=6602BD50"
                     alt="" />
-                <router-link to="/">Web Name</router-link>
+                <router-link to="/"><span class="text-2xl text-[#409eff] font-bold">MaVile</span></router-link>
             </div>
             <slot />
-            <div class="flex gap-6" v-if="useAuth.isLoggedIn">
-                <el-select v-model="value" placeholder="WatchList" style="width: 110px">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select>
-                <el-dropdown>
-                    <span class="flex items-center" @click="handleClickMyEbay">
-                        My eBay
-                        <el-icon class="el-icon--right">
-                            <arrow-down />
-                        </el-icon>
-                    </span>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item v-if="role == 'Seller'" @click="router.push('/seller-history')">Seller
-                                History</el-dropdown-item>
-                            <el-dropdown-item v-if="role == 'Seller'" @click="router.push('/create-auction')">Create
-                                Auction</el-dropdown-item>
-                            <el-dropdown-item v-if="role == 'Buyer'"
-                                @click="router.push('/auctions')">Auctions</el-dropdown-item>
-                            <el-dropdown-item v-if="role == 'Buyer'" @click="router.push('/buyer-history')">Bids &
-                                Offers</el-dropdown-item>
-                            <el-dropdown-item v-if="role == 'Buyer'"
-                                @click="router.push('/watchlist')">Watchlist</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
-                <el-dropdown style="margin-top: 6px;" trigger="click">
-                    <el-badge v-if="unreadNotificationCount" :value="unreadNotificationCount" class="item">
-                        <img src="../../assets/icons/bell-icon.svg" class="cursor-pointer" width="20" alt="" />
-                    </el-badge>
-                    <img v-else src="../../assets/icons/bell-icon.svg" class="cursor-pointer" width="20" alt="" />
-                    <template #dropdown>
-                        <el-dropdown-menu style="width: 300px; max-height: 40vh; padding-top: 15px;"
-                            class="header-notification-list">
-                            <el-dropdown-item v-if="notificationList.length === 0">You don't have any
-                                notification</el-dropdown-item>
-                            <el-dropdown-item v-else v-for="item in notificationList" @click="goToItemURL(item)"
-                                :key="item.id" :style="getStyle(item.isRead)" :icon="Plus">
-                                <div class="flex gap-1">
-                                    <el-icon size="23" style="margin-top: 4px" :color="item.type === 3 ? '#00aa00' : '#4093ff'">
-                                        <SuccessFilled v-show="item.type === 3" />
-                                        <Comment v-show="item.type === 2" />
-                                        <PriceTag v-show="item.type === 1" />
-                                    </el-icon>
-                                    <div class="flex flex-col">
-                                        <span class="font-semibold">{{ item.title }}</span>
-                                        <span class="text-xs">{{ item.content }}</span>
-                                        <span class="text-xs mt-1">{{ getTimeDifference(item.dateCreated) }}</span>
+            <div class="flex items-center gap-6">
+                <div class="flex gap-6" v-if="useAuth.isLoggedIn">
+                    <el-dropdown>
+                        <span class="flex items-center" @click="handleClickMyEbay">
+                            My eBay
+                            <el-icon class="el-icon--right">
+                                <arrow-down />
+                            </el-icon>
+                        </span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item v-if="role == 'Seller'" @click="router.push('/seller-history')">Seller
+                                    History</el-dropdown-item>
+                                <el-dropdown-item v-if="role == 'Seller'" @click="router.push('/create-auction')">Create
+                                    Auction</el-dropdown-item>
+                                <el-dropdown-item v-if="role == 'Buyer'"
+                                    @click="router.push('/auctions')">Auctions</el-dropdown-item>
+                                <el-dropdown-item v-if="role == 'Buyer'" @click="router.push('/buyer-history')">Bids &
+                                    Offers</el-dropdown-item>
+                                <el-dropdown-item v-if="role == 'Buyer'"
+                                    @click="router.push('/watchlist')">Watchlist</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                    <el-dropdown style="margin-top: 6px;" trigger="click">
+                        <el-badge v-if="unreadNotificationCount" :value="unreadNotificationCount" class="item">
+                            <img src="../../assets/icons/bell-icon.svg" class="cursor-pointer" width="20" alt="" />
+                        </el-badge>
+                        <img v-else src="../../assets/icons/bell-icon.svg" class="cursor-pointer" width="20" alt="" />
+                        <template #dropdown>
+                            <el-dropdown-menu style="width: 300px; max-height: 40vh; padding-top: 15px;"
+                                class="header-notification-list">
+                                <el-dropdown-item v-if="notificationList.length === 0">You don't have any
+                                    notification</el-dropdown-item>
+                                <el-dropdown-item v-else v-for="item in notificationList" @click="goToItemURL(item)"
+                                    :key="item.id" :style="getStyle(item.isRead)" :icon="Plus">
+                                    <div class="flex gap-1">
+                                        <el-icon size="23" style="margin-top: 4px"
+                                            :color="item.type === 3 ? '#00aa00' : '#4093ff'">
+                                            <SuccessFilled v-show="item.type === 3" />
+                                            <Comment v-show="item.type === 2" />
+                                            <PriceTag v-show="item.type === 1" />
+                                        </el-icon>
+                                        <div class="flex flex-col">
+                                            <span class="font-semibold">{{ item.title }}</span>
+                                            <span class="text-xs">{{ item.content }}</span>
+                                            <span class="text-xs mt-1">{{ getTimeDifference(item.dateCreated) }}</span>
+                                        </div>
                                     </div>
-                                </div>
 
-                            </el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
+                <div v-if="useAuth.isLoggedIn" class="container flex justify-end items-center gap-4 w-fit ml-4">
+                    <span class="font-[550]">{{ useAuth.user.fullName }} | </span>
+                    <el-popover placement="bottom-end" :width="200" trigger="click" class="p-0">
+                        <ul>
+                            <li class="border-b py-2 cursor-pointer" @click="router.push('/profile')">My account</li>
+                            <li class="pt-2 cursor-pointer" @click="signOut">Sign out</li>
+                        </ul>
+                        <template #reference>
+                            <el-avatar style="cursor: pointer"
+                                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+                        </template>
+                    </el-popover>
+                </div>
+                <div v-else>
+                    <el-button type="primary" @click="router.push('/register')">Sign up</el-button>
+                    <el-button @click="router.push('/login')">Sign in</el-button>
+                </div>
             </div>
-            <div v-if="useAuth.isLoggedIn" class="container flex justify-end items-center gap-4 w-fit">
-                <span>{{ useAuth.user.fullName }} | </span>
-                <el-popover placement="bottom-end" :width="200" trigger="click" class="p-0">
-                    <ul>
-                        <li class="border-b py-2 cursor-pointer" @click="router.push('/profile')">My account</li>
-                        <li class="pt-2 cursor-pointer" @click="signOut">Sign out</li>
-                    </ul>
-                    <template #reference>
-                        <el-avatar style="cursor: pointer"
-                            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-                    </template>
-                </el-popover>
-            </div>
-            <div v-else>
-                <el-button type="primary" @click="router.push('/register')">Sign up</el-button>
-                <el-button @click="router.push('/login')">Sign in</el-button>
-            </div>
+
         </div>
         <div class="h-[30px] w-full py-2 flex justify-center bg-white border-b">
             <ul class="justify-center text-center flex items-center gap-6">
@@ -112,28 +113,6 @@ const props = defineProps({
 })
 const useCategory = useCategoryStore()
 const value = ref('')
-const options = [
-    {
-        value: 'Option1',
-        label: 'Option1',
-    },
-    {
-        value: 'Option2',
-        label: 'Option2',
-    },
-    {
-        value: 'Option3',
-        label: 'Option3',
-    },
-    {
-        value: 'Option4',
-        label: 'Option4',
-    },
-    {
-        value: 'Option5',
-        label: 'Option5',
-    },
-]
 const useNotification = useNotificationStore()
 const useAuth = authStore()
 const router = useRouter()
@@ -219,7 +198,7 @@ async function getNotificationList() {
 }
 
 async function goToItemURL(item) {
-    if(!item.isRead) {
+    if (!item.isRead) {
         useNotification.decreaseNotification()
         item.isRead = true
         await useNotification.markReadNotification(item.id)

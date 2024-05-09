@@ -10,10 +10,7 @@
         </div>
         <div class="mt-10 mx-6">
             <span class="font-bold text-2xl">Recently viewed</span>
-            <div v-if="!recentlyViewdList.length" class="scrollbar-flex-content">
-                <skeleton-card v-for="item in 4" :key="item" style="padding-right: 20px;" />
-            </div>
-            <div v-else class="dashboard-list">
+            <div v-if="recentlyViewdList.length" class="dashboard-list">
                 <Icon v-show="recentlyViewdList.length > 3" @click="scrollToLeft(scrollBox2)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-left" />
                 <div ref="scrollBox2" class="scrollbar-flex-content scroll-custom">
@@ -31,23 +28,20 @@
                 <skeleton-card v-for="item in 4" :key="item" style="padding-right: 20px;" />
             </div>
             <div class="dashboard-list">
-                <Icon @click="scrollToLeft(scrollBox1)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
+                <Icon v-if="categoriesList.length > 6" @click="scrollToLeft(scrollBox1)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-left" />
                 <div ref="scrollBox1" class="scrollbar-flex-content scroll-custom">
                     <p v-for="item in categoriesList" :key="item" class="scrollbar-demo-item">
-                        <category-card :category="item" />
+                        <a :href="'/auctions?categories=' + item.id"><category-card :category="item" /></a>
                     </p>
                 </div>
-                <Icon @click="scrollRight(scrollBox1)" class="dashboard-arrow-icon dashboard-right-icon w-[300px]"
+                <Icon v-if="categoriesList.length > 6" @click="scrollRight(scrollBox1)" class="dashboard-arrow-icon dashboard-right-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-right" />
             </div>
         </div>
         <div class="mt-10 mx-4">
             <span class="font-bold text-2xl">Top Bid Auctions</span>
-            <div v-if="!topAuctionsList.length" class="scrollbar-flex-content">
-                <skeleton-card v-for="item in 4" :key="item" style="padding-right: 20px;" />
-            </div>
-            <div class="dashboard-list">
+            <div v-if="topAuctionsList.length" class="dashboard-list">
                 <Icon v-show="topAuctionsList.length > 3" @click="scrollToLeft(scrollBox)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-left" />
                 <div ref="scrollBox" class="scrollbar-flex-content scroll-custom">
@@ -63,8 +57,10 @@
 </template>
 <script setup>
 import { getTopAuctionsList, getRecentlyViewedList, getListAuctions } from '../../services/auction.service';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue'
+import { useCategoryStore } from '../../stores/category.store'
 
+const useCategory = useCategoryStore()
 const listImg = [
     {
         id: 1,
@@ -84,45 +80,45 @@ const listImg = [
     },
 ]
 const categoriesList = ref([
-    {
-        img: 'https://www.charleskeith.vn/dw/image/v2/BCWJ_PRD/on/demandware.static/-/Sites-vn-products/default/dwbcba1aad/images/hi-res/2023-L6-CK2-50271205-J8-1.jpg?sw=756&sh=1008',
-        name: "hhehhe"
-    },
-    {
-        img: 'https://ir.ebaystatic.com/cr/v/c01/02_PopularDestination_Sneakers.jpg',
-        name: "hhehhe"
-    },
-    {
-        img: 'https://ir.ebaystatic.com/cr/v/c01/03_PopularDestination_Tire.jpg',
-        name: "hhehhe"
-    },
-    {
-        img: 'https://ir.ebaystatic.com/cr/v/c01/03_PopularDestination_Tire.jpg',
-        name: "hhehhe"
-    },
-    {
-        img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
-        name: "hhehhe"
-    },
-    {
-        img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
-        name: "hhehhe"
-    },
-    {
-        img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
-        name: "hhehhe"
-    },
-    {
-        img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
-        name: "hhehhe"
-    },
-    {
-        img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
-        name: "hhehhe"
-    },
+    // {
+    //     img: 'https://www.charleskeith.vn/dw/image/v2/BCWJ_PRD/on/demandware.static/-/Sites-vn-products/default/dwbcba1aad/images/hi-res/2023-L6-CK2-50271205-J8-1.jpg?sw=756&sh=1008',
+    //     name: "hhehhe"
+    // },
+    // {
+    //     img: 'https://ir.ebaystatic.com/cr/v/c01/02_PopularDestination_Sneakers.jpg',
+    //     name: "hhehhe"
+    // },
+    // {
+    //     img: 'https://ir.ebaystatic.com/cr/v/c01/03_PopularDestination_Tire.jpg',
+    //     name: "hhehhe"
+    // },
+    // {
+    //     img: 'https://ir.ebaystatic.com/cr/v/c01/03_PopularDestination_Tire.jpg',
+    //     name: "hhehhe"
+    // },
+    // {
+    //     img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
+    //     name: "hhehhe"
+    // },
+    // {
+    //     img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
+    //     name: "hhehhe"
+    // },
+    // {
+    //     img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
+    //     name: "hhehhe"
+    // },
+    // {
+    //     img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
+    //     name: "hhehhe"
+    // },
+    // {
+    //     img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
+    //     name: "hhehhe"
+    // },
 ])
 const topAuctionsList = ref([]);
-const recentlyViewdList = ref([])
+const recentlyViewdList = ref([]);
 
 const getAuctionsList = async () => {
     try {
@@ -167,9 +163,10 @@ function scrollToLeft(scrollBox) {
         scrollBox.scrollLeft -= 400;
     }
 }
-onMounted(() => {
-    getAuctionsList()
-    getRecentyViewdAuctionsList()
+onMounted(async () => {
+    await getAuctionsList()
+    await getRecentyViewdAuctionsList()
+    categoriesList.value = useCategory.categoryList
 })
 </script>
 
@@ -206,6 +203,7 @@ onMounted(() => {
     width: fit-content;
     margin: 16px 18px 0px 0;
     border-radius: 4px;
+    gap: 16px;
 }
 
 .scroll-custom {
