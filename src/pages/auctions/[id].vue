@@ -314,17 +314,17 @@ onBeforeMount(async () => {
                             <span class="inline-block text-sx">Time left: {{ countdown }}</span>
                 </div>
                 <div class="flex items-center justify-between gap-3">
-                    <button @click="addBidMount(auction.currentPrice + 5)"
+                    <button @click="addBidMount(auction.currentPrice + 50000)"
                         class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
-                        Bid {{ formatNumber(auction.currentPrice + 5) }} VNĐ
+                        Bid {{ formatNumber(auction.currentPrice + 50000) }} VNĐ
                     </button>
-                    <button @click="addBidMount(auction.currentPrice + 10)"
+                    <button @click="addBidMount(auction.currentPrice + 100000)"
                         class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
-                        Bid {{ formatNumber(auction.currentPrice + 10) }} VNĐ
+                        Bid {{ formatNumber(auction.currentPrice + 100000) }} VNĐ
                     </button>
-                    <button @click="addBidMount(auction.currentPrice + 15)"
+                    <button @click="addBidMount(auction.currentPrice + 150000)"
                         class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
-                        Bid {{ formatNumber(auction.currentPrice + 15) }} VNĐ
+                        Bid {{ formatNumber(auction.currentPrice + 150000) }} VNĐ
                     </button>
                 </div>
                 <div class="relative py-2">
