@@ -12,7 +12,7 @@ export const useCategoryStore = defineStore('category', {
         },
         async getCategoryList() {
             try {
-                const res = await getListCategories(1, 15)
+                const res = await getListCategories(1, 20)
                 this.categoryList = res.data.data
             } catch (error) {
                 console.error(error);
