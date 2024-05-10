@@ -32,8 +32,8 @@
                     </ul>
                 </div>
                 <div class="footer flex gap-3 items-center">
-                    <el-button type="primary" style="width: 80%; color: #ffff" size="large" color="#409EFF">Place
-                        bid</el-button>
+                    <!-- <el-button type="primary" style="width: 80%; color: #ffff" size="large" color="#409EFF">Place
+                        bid</el-button> -->
                     <div @click="handleSetWatchlist(auction)"
                         class="image rounded-full p-2 border-black border-[0.7px] cursor-pointer">
                         <img class="hover:opacity-40" v-if="!auction.isWatched" src="../../assets/icons/heart-icon.svg"
