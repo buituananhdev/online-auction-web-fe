@@ -47,7 +47,8 @@
                             <el-dropdown-item v-else v-for="item in notificationList" @click="goToItemURL(item)"
                                 :key="item.id" :style="getStyle(item.isRead)" :icon="Plus">
                                 <div class="flex gap-1">
-                                    <el-icon size="23" style="margin-top: 4px" :color="item.type === 3 ? '#00aa00' : '#4093ff'">
+                                    <el-icon size="23" style="margin-top: 4px"
+                                        :color="item.type === 3 ? '#00aa00' : '#4093ff'">
                                         <SuccessFilled v-show="item.type === 3" />
                                         <Comment v-show="item.type === 2" />
                                         <PriceTag v-show="item.type === 1" />
@@ -57,40 +58,39 @@
                                         <span class="text-xs">{{ item.content }}</span>
                                         <span class="text-xs mt-1">{{ getTimeDifference(item.dateCreated) }}</span>
                                     </div>
-
-                                </el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
-                </div>
-                <div v-if="useAuth.isLoggedIn" class="container flex justify-end items-center gap-4 w-fit ml-4">
-                    <span class="font-[550]">{{ useAuth.user.fullName }} | </span>
-                    <el-popover placement="bottom-end" :width="200" trigger="click" class="p-0">
-                        <ul>
-                            <li class="border-b py-2 cursor-pointer" @click="router.push('/profile')">My account</li>
-                            <li class="pt-2 cursor-pointer" @click="signOut">Sign out</li>
-                        </ul>
-                        <template #reference>
-                            <el-avatar style="cursor: pointer"
-                                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-                        </template>
-                    </el-popover>
-                </div>
-                <div v-else>
-                    <el-button type="primary" @click="router.push('/register')">Sign up</el-button>
-                    <el-button @click="router.push('/login')">Sign in</el-button>
-                </div>
+                                </div>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
             </div>
+            <div v-if="useAuth.isLoggedIn" class="container flex justify-end items-center gap-4 w-fit ml-4">
+                <span class="font-[550]">{{ useAuth.user.fullName }} | </span>
+                <el-popover placement="bottom-end" :width="200" trigger="click" class="p-0">
+                    <ul>
+                        <li class="border-b py-2 cursor-pointer" @click="router.push('/profile')">My account</li>
+                        <li class="pt-2 cursor-pointer" @click="signOut">Sign out</li>
+                    </ul>
+                    <template #reference>
+                        <el-avatar style="cursor: pointer"
+                            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+                    </template>
+                </el-popover>
+            </div>
+            <div v-else>
+                <el-button type="primary" @click="router.push('/register')">Sign up</el-button>
+                <el-button @click="router.push('/login')">Sign in</el-button>
+            </div>
+        </div>
 
-        </div>
-        <div class="h-[30px] w-full py-2 flex justify-center bg-white border-b">
-            <ul class="justify-center text-center flex items-center gap-6">
-                <li v-for="(item, index) in categories" :key="index"
-                    class="text-xs text-[#505050] cursor-pointer py-1 px-2 rounded-lg hover:bg-[#EEEEEE]">
-                    <a :href="'/auctions?categories=' + item.id">{{ item.categoryName }}</a>
-                </li>
-            </ul>
-        </div>
+    </div>
+    <div class="h-[30px] w-full py-2 flex justify-center bg-white border-b">
+        <ul class="justify-center text-center flex items-center gap-6">
+            <li v-for="(item, index) in categories" :key="index"
+                class="text-xs text-[#505050] cursor-pointer py-1 px-2 rounded-lg hover:bg-[#EEEEEE]">
+                <a :href="'/auctions?categories=' + item.id">{{ item.categoryName }}</a>
+            </li>
+        </ul>
     </div>
 </template>
 <script setup>
