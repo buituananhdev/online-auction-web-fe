@@ -79,7 +79,7 @@
                             <button
                                 v-show="role == 'Seller' && auction.productStatus == 1"
                                 class="hover:bg-[#E23F33] text-[#E23F33] border-gray-300 border rounded-xl py-[7px] w-[200px] hover:text-white transition"
-                                @click="handleCancelAuction(auction.id)"
+                                @click="handleCancelAuction(auction)"
                             >
                                 Cancel
                             </button>
@@ -127,15 +127,15 @@ const viewDetailAuction = (auctionId) => {
     router.push({ path: `auctions/${auctionId}` })
 }
 
-const handleCancelAuction = async(auctionId) => {
+const handleCancelAuction = async(auction) => {
     try {
-        await cancelAuction(auctionId)
+        await cancelAuction(auction.id)
         ElNotification({
             title: 'Cancel Auction',
             message: 'Cancel Auction Successfully!',
             type: 'success',
         })
-        
+        auction.productStatus  = 3
     } catch (error) {
         ElNotification({
             title: 'Cancel Auction',
