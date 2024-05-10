@@ -66,6 +66,10 @@ export const deleteAuction = async (id) => {
     return axiosApiInstance.delete(`/auctions/${id}`)
 }
 
+export const cancelAuction = async (id, status = 3) => {
+    return axiosApiInstance.patch(`/auctions/${id}/cancel?status=${status}`)
+}
+
 export const getTopAuctionsList = async () => {
     return axiosApiInstance.get(`/auctions/top-10`)
 }

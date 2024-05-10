@@ -102,6 +102,10 @@ watch(status, async () => {
     await SearchHistory()
 })
 
+// watch(listSellerHistorys, () => {
+//     loading = true
+// })
+
 watch(() => meta.value.pageSize, async (newValue, oldValue) => {
     if (newValue !== oldValue) {
         await SearchHistory()
