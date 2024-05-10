@@ -73,7 +73,7 @@ onMounted(async () => {
                 <span class="text-[32px] font-semibold">{{ seller.fullName }}</span>
                 <div class="flex items-center gap-3">
                     <span><b>{{ feedbackList.length }}</b> feedback</span>
-                    <span><b>10</b> items sold</span>
+                    <span><b>{{ productList.length }}</b> items</span>
                     <el-rate disabled v-model="rating" />
                 </div>
             </div>
@@ -88,8 +88,11 @@ onMounted(async () => {
                         <span class="text-[#6C6C6C] text-sm font-semibold">Shop</span>
                     </div>
                 </template>
-                <div class="py-[30px] flex item-center flex-wrap gap-[24px] px-[10px]">
+                <div v-if="productList.length" class="py-[30px] flex item-center flex-wrap gap-[24px] px-[10px] justify-center">
                     <product-card v-for="item in productList" :key="item.id" :auction="item" />
+                </div>
+                <div v-else class="w-full">
+                    <el-empty description="No data" />
                 </div>
             </el-tab-pane>
             <el-tab-pane label="Feedback" name="third">
@@ -101,10 +104,13 @@ onMounted(async () => {
                         <span class="text-[#6C6C6C] text-sm font-semibold">Feedback</span>
                     </div>
                 </template>
-                <div class="flex flex-col py-[20px] px-[10px]">
+                <div v-if="feedbackList.length" class="flex flex-col py-[20px] px-[10px]">
                     <div v-for="(item, index) in feedbackList" :key="index">
                         <feedback-item :feedbackItem="item" />
                     </div>
+                </div>
+                <div v-else class="w-full">
+                    <el-empty description="No data" />
                 </div>
             </el-tab-pane>
         </el-tabs>

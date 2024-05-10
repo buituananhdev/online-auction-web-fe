@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const getLayout = () => {
     let res;
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token')
     res = token ? {
         layout: 'auth',
         requiresAuth: true

@@ -15,8 +15,8 @@
                 <div class="flex flex-col">
                     <div class="flex items-end justify-between pb-4 border-b-[1px] border-gray-300">
                         <h1 class="text-[#363636] text-3xl font-bold my-[19px]">My eBay</h1>
-                        <a href="" class="text-[13px] mb-4 underline text-[#409EFF] font-medium">
-                            Tell us what you think</a>
+                        <span class="text-[13px] mb-4 underline text-[#409EFF] font-medium">
+                            Tell us what you think</span>
                     </div>
                     <div class="flex">
                         <!-- <div class="min-h-[800px] w-[18.75%] pr-8 my-8 flex flex-col">
@@ -43,7 +43,7 @@
                                 <el-radio-button :value="false">expand</el-radio-button>
                                 <el-radio-button :value="true">collapse</el-radio-button>
                             </el-radio-group> -->
-                            <el-menu :default-active="role == 'Buyer' ? '5' : '1-1'" class="el-menu-vertical-demo"
+                            <el-menu :default-active="activeItem" class="el-menu-vertical-demo"
                                 :collapse="isCollapse" @open="handleOpen" @close="handleClose" v-model="status">
                                 <el-sub-menu index="1" v-if="role == 'Seller'">
                                     <template #title>
@@ -135,6 +135,15 @@ const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()
 const role = localStorage.getItem('role')
+const activeItem = ref(5)
+
+const handleHighLightItem = () => {
+    if(window.location.pathname === '/profile') {
+        activeItem.value = 3
+    } else if(window.location.pathname.startsWith('/seller-history')) {
+        activeItem.value = '1-1'
+    }
+}
 
 const handleClickSearch = () => {
     if (searchValue.value.trim() !== '') {
@@ -160,6 +169,8 @@ onMounted(() => {
     if (route.query.status) {
         status.value = route.query.status
     }
+
+    handleHighLightItem()
 })
 </script>
 <style>
