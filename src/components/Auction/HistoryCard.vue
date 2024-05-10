@@ -5,7 +5,7 @@
                 <div class="demo-image__preview">
                     <el-image
                         style="width: 200px; height: 200px; border-radius: 16px"
-                        :src="auction.mediaUrls[0] || 'https://as1.ftcdn.net/v2/jpg/04/62/93/66/1000_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg'"
+                        :src="auction?.mediaUrls?.[0] ? auction.mediaUrls[0]  : 'https://as1.ftcdn.net/v2/jpg/04/62/93/66/1000_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg'"
                         :zoom-rate="1.2"
                         :max-scale="7"
                         :min-scale="0.2"

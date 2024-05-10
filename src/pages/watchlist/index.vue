@@ -57,10 +57,6 @@ const meta = ref({
 
 const watchlist = ref([])
 
-watch(watchlist, () => {
-    isLoading.value = !isLoading.value
-})
-
 watch(() => meta.value.pageSize, async (newValue, oldValue) => {
     if (newValue !== oldValue) {
         await SearchWatchlist()
