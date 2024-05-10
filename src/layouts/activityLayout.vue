@@ -92,7 +92,7 @@
                                     </el-icon>
                                     <template #title >Bids & Offers</template>
                                 </el-menu-item>
-                                <el-menu-item index="3" v-if="role == 'Buyer'" @click="router.push('/profile')">
+                                <el-menu-item index="3" v-if="role == 'Buyer' || 'Seller'" @click="router.push('/profile')">
                                     <el-icon>
                                         <img
                                             src="../assets/icons/user.svg"
