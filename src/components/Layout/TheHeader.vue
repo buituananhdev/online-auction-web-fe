@@ -14,7 +14,7 @@
                 </el-select>
                 <el-dropdown>
                     <span class="flex items-center" @click="handleClickMyEbay">
-                        My eBay
+                        My MaVile
                         <el-icon class="el-icon--right">
                             <arrow-down />
                         </el-icon>
