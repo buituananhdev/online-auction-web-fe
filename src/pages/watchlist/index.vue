@@ -5,15 +5,8 @@
                 <span class="font-bold text-2xl flex items-center justify-center">My eBay - Watchlist</span>
                 <div class="w-1/2">
                     <div class="w-full flex items-center justify-center">
-                        <el-input
-                            v-model="searchValue"
-                            style="border-radius: 30px"
-                            placeholder="Search..."
-                            class="input-with-select"
-                            @keyup.enter="handleClickSearch"
-                            clearable
-                            size="large"
-                        >
+                        <el-input v-model="searchValue" style="border-radius: 30px" placeholder="Search..."
+                            class="input-with-select" @keyup.enter="handleClickSearch" clearable size="large">
                             <template #append>
                                 <el-button :icon="SearchIcon" @click="handleClickSearch" />
                             </template>
@@ -23,14 +16,11 @@
             </div>
 
             <div class="flex flex-col mt-8">
-                <div v-if="watchlist.length" class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
-                    <div
-                        v-for="item in watchlist"
-                        :key="item.id"
-                        class="w-full flex items-center justify-center"
-                    >
+                <div v-if="watchlist.length"
+                    class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
+                    <div v-for="item in watchlist" :key="item.id" class="w-full flex items-center justify-center">
                         <!-- <history-card :auction="item" /> -->
-                        <history-card :auction="item" :isInWatchlist="true"/>
+                        <history-card :auction="item" :isInWatchlist="true" />
                     </div>
                     <div class="flex justify-end w-full absolute bottom-0 right-0 gap-3">
                         <span class="text-sm underline text-[#409EFF] cursor-pointer" @click="meta.pageSize += size"
@@ -69,10 +59,6 @@ const watchlist = ref([])
 
 watch(watchlist, () => {
     isLoading.value = !isLoading.value
-})
-
-watch(searchValue, async () => {
-    await SearchWatchlist()
 })
 
 watch(() => meta.value.pageSize, async (newValue, oldValue) => {
@@ -146,6 +132,9 @@ onMounted(() => {
     if (route.query.search) {
         searchValue.value = route.query.search.toString()
     }
+    setTimeout(() => {
+        isLoading.value = false
+    }, 2000);
 })
 </script>
 
@@ -153,13 +142,16 @@ onMounted(() => {
 .demo-image__error .image-slot {
     font-size: 30px;
 }
+
 .demo-image__error .image-slot .el-icon {
     font-size: 30px;
 }
+
 .demo-image__error .el-image {
     width: 100%;
     height: 300px;
 }
+
 .input-with-select .el-input-group__prepend {
     background-color: var(--el-fill-color-blank);
 }

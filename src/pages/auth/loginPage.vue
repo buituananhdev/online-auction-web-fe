@@ -76,6 +76,8 @@ const handleCredentialResponse = async (res) => {
             message: 'Log in successfully!',
             type: 'success',
         })
+        // localStorage.setItem('role', data.data.role)
+        localStorage.setItem('role', data.data.role)
         console.log('hihii', router.options.history.state?.back.startsWith('/auctions/'));
         if (router.options.history.state?.back.startsWith('/auctions/')) {
             console.log((heheheh));

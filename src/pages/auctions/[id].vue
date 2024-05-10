@@ -2,7 +2,7 @@
 import { ArrowLeft } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ref, defineProps, computed, onBeforeMount, onMounted, watch, watchEffect } from 'vue'
-import { getListAuctions, getSingleAuction } from '../../services/auction.service'
+import { getListAuctions, getSingleAuction, updatePredictPrice } from '../../services/auction.service'
 import { addWatchlist, deleteWatchlist } from '../../services/watchlist.service'
 import { bidAuction } from '../../services/bid.service'
 import { useAuctionStore } from '../../stores/auction.store'
@@ -29,10 +29,8 @@ const id = computed(() => {
     return route.params.id
 })
 
-const predictAvgPrice = computed(async () => {
-    // return auction.predictAvgPrice == 0 ? await PredictPrice(auction.value) : auction.predictAvgPrice;
-    return auction.predictAvgPrice;
-});
+const predictAvgPrice = ref(0);
+console.log('checkkk', predictAvgPrice.value);
 const scrollBox = ref()
 const scrollBox2 = ref()
 const colors = ref(['#99A9BF', '#F7BA2A', '#FF9900'])
@@ -274,12 +272,26 @@ watch(id, async () => {
     window.scrollTo(0, 0)
 })
 
+
+
 onBeforeMount(async () => {
     await useAuction.syncAuction(id.value)
     currentAuction.value.auctionId = auction.value.id
     console.log(auction.value.mediaUrls);
     listImage.value = auction.value.mediaUrls;
     rating.value = auction.value.user.ratings.avarageRating
+    console.log(auction.value.predictAvgPrice);
+    if (auction.value.predictAvgPrice == 0) {
+        const res = await PredictPrice(auction.value)
+        if (parseFloat(res)) {
+            predictAvgPrice.value = res;
+            await updatePredictPrice(id.value, res);
+        } else {
+            predictAvgPrice.value = "AI can't predict the price of this product, please reload the page to try again."
+        }
+    } else {
+        predictAvgPrice.value = auction.value.predictAvgPrice
+    }
     await getExploreAuctionList()
     startCountdown(auction.value.endTime)
     userRole.value = localStorage.getItem('role')
@@ -302,17 +314,17 @@ onBeforeMount(async () => {
                             <span class="inline-block text-sx">Time left: {{ countdown }}</span>
                 </div>
                 <div class="flex items-center justify-between gap-3">
-                    <button @click="addBidMount(auction.currentPrice + 5)"
+                    <button @click="addBidMount(auction.currentPrice + 50000)"
                         class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
-                        Bid {{ formatNumber(auction.currentPrice + 5) }} VNĐ
+                        Bid {{ formatNumber(auction.currentPrice + 50000) }} VNĐ
                     </button>
-                    <button @click="addBidMount(auction.currentPrice + 10)"
+                    <button @click="addBidMount(auction.currentPrice + 100000)"
                         class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
-                        Bid {{ formatNumber(auction.currentPrice + 10) }} VNĐ
+                        Bid {{ formatNumber(auction.currentPrice + 100000) }} VNĐ
                     </button>
-                    <button @click="addBidMount(auction.currentPrice + 15)"
+                    <button @click="addBidMount(auction.currentPrice + 150000)"
                         class="border p-2 rounded-3xl flex-1 bg-[#409EFF] text-white hover:bg-[#3A8EE4]">
-                        Bid {{ formatNumber(auction.currentPrice + 15) }} VNĐ
+                        Bid {{ formatNumber(auction.currentPrice + 150000) }} VNĐ
                     </button>
                 </div>
                 <div class="relative py-2">
@@ -426,7 +438,7 @@ onBeforeMount(async () => {
                     </div>
                 </div>
                 <div class="flex gap-2 items-center">
-                    <span class="text-xs">Predict price: {{ predictAvgPrice }}</span>
+                    <span class="text-xs text-[#409EFF] flex items-center gap-1"> <span> <img width="15px" src="../../assets/icons/google-gemini-icon.svg" alt=""> </span> Google gemini AI predict price: {{ Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(predictAvgPrice) }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
                     <span class="font-xs text-xs border-b border-black">{{ auction.bidCount }} bids</span>

@@ -1,5 +1,5 @@
 <template>
-    <div v-loading="loading" class="w-full">
+    <div class="w-full">
         <div class="mt-6 ml-2">
             <div class="flex justify-between gap-5 my-[42px]">
                 <span class="font-bold text-2xl flex items-center justify-center">Seller history</span>
