@@ -9,9 +9,6 @@
             </div>
             <slot />
             <div class="flex gap-6" v-if="useAuth.isLoggedIn">
-                <el-select v-model="value" placeholder="WatchList" style="width: 110px">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select>
                 <el-dropdown>
                     <span class="flex items-center" @click="handleClickMyEbay">
                         My MaVile
