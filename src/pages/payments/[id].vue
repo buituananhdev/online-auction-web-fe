@@ -134,7 +134,7 @@ const handleSubmit = () => {
     let vnpUrl = import.meta.env.VITE_VNP_URL;
     let returnUrl = import.meta.env.VITE_VNP_RETURN_URL;
     let orderId = moment(date).format('DDHHmmss');
-    let amount = auction.value.currentPrice;
+    let amount = useAuction.purchasePrice;
     let bankCode = formData.value.bankCode;
 
     let locale = formData.value.language;

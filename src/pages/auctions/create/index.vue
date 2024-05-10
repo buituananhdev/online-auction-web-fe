@@ -22,6 +22,7 @@ let currentAuction = reactive({
     canReturn: false,
     mediaUrls: computed(() => fileList.value.map(x => x.url)),
 })
+const uploadLoading = ref(false)
 
 const meta = ref({
     pageNumber: 1,
