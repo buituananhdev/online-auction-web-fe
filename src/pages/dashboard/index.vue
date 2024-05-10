@@ -8,9 +8,9 @@
                 </el-carousel-item>
             </el-carousel>
         </div>
-        <div class="mt-10 mx-6">
+        <div v-if="recentlyViewdList.length" class="mt-10 mx-6">
             <span class="font-bold text-2xl">Recently viewed</span>
-            <div v-if="recentlyViewdList.length" class="dashboard-list">
+            <div class="dashboard-list">
                 <Icon v-show="recentlyViewdList.length > 3" @click="scrollToLeft(scrollBox2)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-left" />
                 <div ref="scrollBox2" class="scrollbar-flex-content scroll-custom">
@@ -22,11 +22,8 @@
                     icon="ic:round-keyboard-arrow-right" />
             </div>
         </div>
-        <div class="dashboard-categories mt-10 mx-4">
+        <div v-if="categoriesList.length" class="dashboard-categories mt-10 mx-4">
             <span class="font-bold text-2xl">Trending on myWeb</span>
-            <div v-if="!categoriesList.length" class="scrollbar-flex-content">
-                <skeleton-card v-for="item in 4" :key="item" style="padding-right: 20px;" />
-            </div>
             <div class="dashboard-list">
                 <Icon v-if="categoriesList.length > 6" @click="scrollToLeft(scrollBox1)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-left" />
@@ -39,9 +36,9 @@
                     icon="ic:round-keyboard-arrow-right" />
             </div>
         </div>
-        <div class="mt-10 mx-4">
+        <div v-if="topAuctionsList.length" class="mt-10 mx-4">
             <span class="font-bold text-2xl">Top Bid Auctions</span>
-            <div v-if="topAuctionsList.length" class="dashboard-list">
+            <div class="dashboard-list">
                 <Icon v-show="topAuctionsList.length > 3" @click="scrollToLeft(scrollBox)" class="dashboard-arrow-icon dashboard-left-icon w-[300px]"
                     icon="ic:round-keyboard-arrow-left" />
                 <div ref="scrollBox" class="scrollbar-flex-content scroll-custom">
