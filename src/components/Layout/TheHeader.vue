@@ -25,10 +25,10 @@
                                 History</el-dropdown-item>
                             <el-dropdown-item v-if="role == 'Seller'" @click="router.push('/create-auction')">Create
                                 Auction</el-dropdown-item>
-                            <el-dropdown-item v-if="role == 'Buyer'"
-                                @click="router.push('/auctions')">Auctions</el-dropdown-item>
                             <el-dropdown-item v-if="role == 'Buyer'" @click="router.push('/buyer-history')">Bids &
                                 Offers</el-dropdown-item>
+                            <el-dropdown-item v-if="role == 'Buyer'"
+                                @click="router.push('/auctions')">Auctions</el-dropdown-item>
                             <el-dropdown-item v-if="role == 'Buyer'"
                                 @click="router.push('/watchlist')">Watchlist</el-dropdown-item>
                         </el-dropdown-menu>

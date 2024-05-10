@@ -76,6 +76,13 @@
                             >
                                 View Detail
                             </button>
+                            <button
+                                v-show="role == 'Seller' && auction.productStatus == 1"
+                                class="hover:bg-[#E23F33] text-[#E23F33] border-gray-300 border rounded-xl py-[7px] w-[200px] hover:text-white transition"
+                                @click="handleCancelAuction(auction.id)"
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -87,6 +94,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { productStatus } from '../../utils/Enums/ProductStatus.js'
+import { cancelAuction} from '../../services/auction.service'
 
 defineProps({
     auction: Object,
@@ -96,7 +104,10 @@ defineProps({
     },
 })
 
+
 const router = useRouter()
+const role = localStorage.getItem('role')
+
 
 // const url = auction.mediaUrls[0] || 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
 // const srcList = auction.mediaUrls || [
@@ -114,6 +125,24 @@ const ProductStatusNames = productStatus
 
 const viewDetailAuction = (auctionId) => {
     router.push({ path: `auctions/${auctionId}` })
+}
+
+const handleCancelAuction = async(auctionId) => {
+    try {
+        await cancelAuction(auctionId)
+        ElNotification({
+            title: 'Cancel Auction',
+            message: 'Cancel Auction Successfully!',
+            type: 'success',
+        })
+        
+    } catch (error) {
+        ElNotification({
+            title: 'Cancel Auction',
+            message: 'Cancel Auction Failed!',
+            type: 'error',
+        })
+    }
 }
 
 const icons = {
