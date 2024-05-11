@@ -235,7 +235,9 @@ const upload = async (file) => {
                 <h2 class="font-bold mb-[10px]">PHOTOS & VIDEO</h2>
                 <span class="text-sm font-semibold">Buyers want to see all details and angles.</span>
                 <div class="mt-6">
-                    <el-upload v-model:file-list="fileList" :action="true" :http-request="upload"
+                    <el-upload v-model:file-list="fileList" 
+                        action="true"
+                        :http-request="upload"
                         list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
                         <el-icon>
                             <Plus />
