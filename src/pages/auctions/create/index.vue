@@ -262,14 +262,14 @@ const upload = async (file) => {
             </div>
             <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
                 <h2 class="font-bold mb-[10px]">ITEM CATEGORY</h2>
-                <div class="w-full flex gap-10 justify-center items-center">
+                <div class="w-full flex gap-10 items-center">
                     <span class="text-sm">Please select the product's category type!</span>
-                    <el-form-item prop="categoryId" style="margin-bottom: 0">
+                    <el-form-item prop="categoryId" style="margin-bottom: 0; width: 70%;">
                         <el-select
                             v-model="currentAuction.categoryId"
                             placeholder="Select"
                             size="large"
-                            style="width: 500px"
+                            style="min-width: 600px;"
                         >
                             <el-option
                                 v-for="item in listCategories"
