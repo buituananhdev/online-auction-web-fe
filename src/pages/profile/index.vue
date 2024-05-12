@@ -75,7 +75,7 @@
     </div>
     <el-dialog v-model="isShowChangePassword" width="600" style="border-radius: 16px;">
         <div class="flex flex-col text-sm h-[65%] items-center justify-center rounded-lg gap-5">
-            <el-form ref="passwordRef" :model="changePasswordForm"
+            <el-form ref="passwordForm" :model="changePasswordForm" @submit.prevent="submitChangePassword"
                 label-width="auto" :rules="rules">
                 <h1 class="text-3xl flex items-center justify-center mb-10 font-bold">Change Password</h1>
                 <div class="flex flex-col mb-5 gap-2">
@@ -101,8 +101,8 @@
                     </el-form-item>
                 </div>
                 <div class="flex pb-8 items-center justify-center gap-4">
-                    <el-button @click="isShowChangePassword = false">Cancel</el-button>
-                    <el-button @click="submitChangePassword" type="primary">Confirm</el-button>
+                    <button class="hover:bg-[#E23F33] text-[#E23F33] border-gray-300 border rounded-md py-[7px] px-5 hover:text-white transition" @click.prevent="isShowChangePassword = false">Cancel</button>
+                    <button class="border rounded-md py-[7px] px-5 bg-[#409EFF] hover:bg-[#3A8EE4] transition text-white" type="submit">Confirm</button>
                 </div>
             </el-form>
         </div>
@@ -119,7 +119,7 @@ import { uploadImage } from "../../plugins/uploadImage";
 
 
 const form = ref(null)
-const passwordRef = ref(null)
+const passwordForm = ref(null)
 const userAuth = authStore()
 const isValids = ref([false, false, false])
 const isValids2 = ref([false, false, false])
@@ -272,19 +272,52 @@ const changeAvatar = async () => {
 }
 
 const submitChangePassword = async () => {
+    // try {
+    //     await changePassword(changePasswordForm)
+    //     ElNotification({
+    //         title: 'Change Password',
+    //         message: 'Change Password Successfully!',
+    //         type: 'success',
+    //     });
+    // } catch (error) {
+    //     ElNotification({
+    //         title: 'Change Password',
+    //         message: 'Change Password Failed!',
+    //         type: 'error',
+    //     });
+    // }
     try {
-        await changePassword(changePasswordForm)
-        ElNotification({
-            title: 'Change Password',
-            message: 'Change Password Successfully!',
-            type: 'success',
-        });
+        const valid = await new Promise((resolve) => {
+            passwordForm.value.validate((valid) => {
+                resolve(valid)
+            })
+        })
+
+        if (valid) {
+            console.log('success')
+            await changePassword(changePasswordForm)
+            ElNotification({
+                title: 'Change Password',
+                message: 'Change Password Successfully!',
+                type: 'success',
+            });
+        } else {
+            console.log('error submit!')
+            ElNotification({
+                title: 'Change Password',
+                message: 'Change Password Failed!',
+                type: 'error',
+            });
+            return false
+        }
     } catch (error) {
+        console.log('error')
         ElNotification({
             title: 'Change Password',
             message: 'Change Password Failed!',
             type: 'error',
         });
+        console.log(error)
     }
 }
 </script>
