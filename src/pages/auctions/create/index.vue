@@ -77,6 +77,10 @@ const validateField = (field, value, errorMessage) => {
         isValids.value[field] = false
         return new Error(errorMessage)
     } else if (field === 2 || field === 3) {
+        if (field === 3 && (currentAuction.startingPrice >= currentAuction.maxPrice)) {
+            isValids.value[field] = false
+            return new Error('Max Price must be greater than Starting Price')
+        }
         if (value < 0) {
             isValids.value[field] = false
             return new Error(`${ field === 2 ? 'Starting Price' : 'Max Price'} must be greater than or equal to 0`)
