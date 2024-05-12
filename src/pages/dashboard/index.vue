@@ -76,44 +76,7 @@ const listImg = [
         img: 'https://www.pngitem.com/pimgs/m/175-1758168_ipad-pro-ipad-pro-banner-hd-png-download.png',
     },
 ]
-const categoriesList = ref([
-    // {
-    //     img: 'https://www.charleskeith.vn/dw/image/v2/BCWJ_PRD/on/demandware.static/-/Sites-vn-products/default/dwbcba1aad/images/hi-res/2023-L6-CK2-50271205-J8-1.jpg?sw=756&sh=1008',
-    //     name: "hhehhe"
-    // },
-    // {
-    //     img: 'https://ir.ebaystatic.com/cr/v/c01/02_PopularDestination_Sneakers.jpg',
-    //     name: "hhehhe"
-    // },
-    // {
-    //     img: 'https://ir.ebaystatic.com/cr/v/c01/03_PopularDestination_Tire.jpg',
-    //     name: "hhehhe"
-    // },
-    // {
-    //     img: 'https://ir.ebaystatic.com/cr/v/c01/03_PopularDestination_Tire.jpg',
-    //     name: "hhehhe"
-    // },
-    // {
-    //     img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
-    //     name: "hhehhe"
-    // },
-    // {
-    //     img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
-    //     name: "hhehhe"
-    // },
-    // {
-    //     img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
-    //     name: "hhehhe"
-    // },
-    // {
-    //     img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
-    //     name: "hhehhe"
-    // },
-    // {
-    //     img: 'https://ir.ebaystatic.com/cr/v/c01/07_PopularDestination_Toys.jpg',
-    //     name: "hhehhe"
-    // },
-])
+const categoriesList = ref([])
 const topAuctionsList = ref([]);
 const recentlyViewdList = ref([]);
 
@@ -121,10 +84,6 @@ const getAuctionsList = async () => {
     try {
         const res = await getTopAuctionsList()
         topAuctionsList.value = res.data
-        if (topAuctionsList.value) {
-            const res = await getListAuctions()
-            topAuctionsList.value = res.data.data
-        }
     } catch (error) {
         console.log(error);
     }
@@ -133,10 +92,6 @@ const getRecentyViewdAuctionsList = async () => {
     try {
         const res = await getRecentlyViewedList()
         recentlyViewdList.value = res.data
-        if (recentlyViewdList.value) {
-            const res = await getListAuctions()
-            recentlyViewdList.value = res.data.data
-        }
     } catch (error) {
         console.log(error);
     }

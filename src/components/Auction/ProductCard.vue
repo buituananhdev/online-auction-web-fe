@@ -32,7 +32,7 @@
                     </ul>
                 </div>
                 <div class="footer flex gap-3 items-center">
-                    <el-button type="primary" style="width: 80%; color: #ffff" size="large" color="#409EFF">Place
+                    <el-button type="primary" @click="handlePlaceBidAuction(auction.id)" style="width: 80%; color: #ffff" size="large" color="#409EFF">Place
                         bid</el-button>
                     <div @click="handleSetWatchlist(auction)"
                         class="image rounded-full p-2 border-black border-[0.7px] cursor-pointer">
@@ -54,12 +54,12 @@
             <template #footer>
                 <div class="flex flex-col items-start gap-1 p-1">
                     <div class="flex justify-between w-full">
-                        <p class="font-bold text-lg">${{ formatNumber(auction.currentPrice) }}</p>
+                        <p class="font-bold text-lg">{{ formatNumber(auction.currentPrice) }} VNĐ</p>
                         <el-text style="font-size: 13px; display: inline-block">{{ auction.bidCount }} bids</el-text>
                     </div>
                     <el-rate v-model="auction.user.ratings.avarageRating" disabled style="height: 20px" :colors="colors"
                         score-template="({auction.user.ratings.totalRatings})" />
-                    <span class="w-full truncate">${{ auction.productName }}</span>
+                    <span class="w-full truncate">{{ auction.productName }}</span>
                     <p truncated style="font-size: 13px">Time left {{ convertISOToRegularTime(auction.endTime) }}</p>
                 </div>
             </template>
@@ -185,6 +185,11 @@ const handleSetWatchlist = (auction) => {
     } else {
         addToWatchlist(auction)
     }
+}
+
+const handlePlaceBidAuction = (item) => {
+    useAuction.setBidStatus(true)
+    router.push(`auctions/${item.id}`)
 }
 </script>
 <style>
