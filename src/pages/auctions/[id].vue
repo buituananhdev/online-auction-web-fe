@@ -442,7 +442,7 @@ onBeforeMount(async () => {
                 </div>
                 <div class="flex gap-2 items-center">
                     <span class="font-xs text-xs border-b border-black">{{ auction.bidCount }} bids</span>
-                    <span class="text-xs">Ends in: {{ countdown }}</span>
+                    <span class="text-xs">Ends in: {{ auction.productStatus === 2? 'Sold' : countdown }}</span>
                 </div>
                 <div class="flex items-flex w-full">
                     <span class="inline-block text-[#8B96A5] w-1/3">Condition:</span>
