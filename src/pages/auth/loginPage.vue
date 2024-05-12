@@ -147,6 +147,7 @@ const submit = async (formEl) => {
             const data = await loginApi(user)
             localStorage.setItem('access_token', data.data.accessToken)
             localStorage.setItem('refresh_token', data.data.refreshToken)
+            console.log('role', data.data.role);
             localStorage.setItem('role', data.data.role)
             await auth.initAuthStore()
             !useAuction.connection && useAuction.initializeConnection(data.data.accessToken)

@@ -65,6 +65,7 @@
 
                         <div class="flex flex-col mt-14 gap-2">
                             <button
+                                @click="handlePlaceBidAuction(auction)"
                                 v-show="isInWatchlist"
                                 class="bg-[#409EFF] text-white border rounded-xl py-[7px] w-[200px] hover:bg-[#3A8EE4] transition"
                             >
@@ -95,6 +96,8 @@
 import { useRouter } from 'vue-router'
 import { productStatus } from '../../utils/Enums/ProductStatus.js'
 import { cancelAuction} from '../../services/auction.service'
+import { useAuctionStore } from '../../stores/auction.store.js';
+
 
 defineProps({
     auction: Object,
@@ -104,7 +107,7 @@ defineProps({
     },
 })
 
-
+const useAuction = useAuctionStore()
 const router = useRouter()
 const role = localStorage.getItem('role')
 
@@ -173,6 +176,8 @@ const getColor = (status) => {
             return '#FFA500'
     }
 }
+const handlePlaceBidAuction = (item) => {
+    useAuction.setBidStatus(true)
+    router.push(`auctions/${item.id}`)
+}
 </script>
-
-<style></style>
