@@ -115,7 +115,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import TheHeader from '../components/Layout/TheHeader.vue'
 import TheFooter from '../components/Layout/TheFooter.vue'
 import { authStore } from '../stores/auth.store'
@@ -135,13 +135,17 @@ const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()
 const role = localStorage.getItem('role')
-const activeItem = ref(5)
+const activeItem = ref()
 
 const handleHighLightItem = () => {
     if(window.location.pathname === '/profile') {
-        activeItem.value = 3
+        activeItem.value = '3'
     } else if(window.location.pathname.startsWith('/seller-history')) {
         activeItem.value = '1-1'
+    } else if(window.location.pathname === '/watchlist') {
+        activeItem.value = '6'
+    } else if(window.location.pathname === '/buyer-history') {
+        activeItem.value = '5'
     }
 }
 
