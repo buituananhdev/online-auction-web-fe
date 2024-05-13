@@ -83,9 +83,9 @@
     </div>
     <div class="h-[30px] w-full py-2 flex justify-center bg-white border-b">
         <ul class="justify-center text-center flex items-center gap-6">
-            <li v-for="(item, index) in categories" :key="index"
+            <li v-for="item in categories"
                 class="text-xs text-[#505050] cursor-pointer py-1 px-2 rounded-lg hover:bg-[#EEEEEE]">
-                <a :href="'/auctions?categories=' + item.id">{{ item.categoryName }}</a>
+                <a :href="'/auctions?categories='">{{ item }}</a>
             </li>
         </ul>
     </div>
@@ -94,7 +94,6 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from '../../stores/auth.store'
-import { getListCategories } from '../../services/category.service'
 import { useCategoryStore } from '../../stores/category.store'
 import { ArrowDown, SuccessFilled, Comment, PriceTag } from '@element-plus/icons-vue'
 import { useNotificationStore } from '../../stores/notification.store'
@@ -165,16 +164,6 @@ const signOut = () => {
     useAuth.isLoggedIn = false
     router.push({ name: 'login' })
     localStorage.setItem('isAuthPage', true)
-}
-
-const getCategoryList = async () => {
-    try {
-        const res = await getListCategories()
-        categories.value = res.data.data
-        console.log(categories.value);
-    } catch (error) {
-        console.error(error);
-    }
 }
 
 async function getNotificationList() {

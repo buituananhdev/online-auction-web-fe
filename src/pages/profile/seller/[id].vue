@@ -88,8 +88,9 @@ onMounted(async () => {
                         <span class="text-[#6C6C6C] text-sm font-semibold">Shop</span>
                     </div>
                 </template>
-                <div v-if="productList.length" class="py-[30px] flex item-center flex-wrap gap-[24px] px-[10px] justify-center">
+                <div v-if="productList.length" class="py-[30px] flex item-center flex-wrap gap-[24px] px-[60px]">
                     <product-card v-for="item in productList" :key="item.id" :auction="item" />
+
                 </div>
                 <div v-else class="w-full">
                     <el-empty description="No data" />

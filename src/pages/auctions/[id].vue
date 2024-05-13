@@ -19,7 +19,7 @@ const exploredAuctionList = ref([])
 const router = useRouter()
 const route = useRoute()
 const listImage = ref([])
-const userRole = ref('')
+const userRole = ref(localStorage.getItem('role'))
 const rating = ref({
     totalRatings: 0,
     averageRating: 0,
@@ -41,7 +41,7 @@ const currentAuction = ref({
 })
 const imageActiveIndex = ref(0)
 const imageOverIndex = ref(0)
-const dialogFormVisible = ref(false)
+const dialogFormVisible = ref(useAuction.isBidding)
 const convertISOToRegularTime = (isoTimeString) => {
     const date = new Date(isoTimeString)
 
@@ -294,7 +294,6 @@ onBeforeMount(async () => {
     }
     await getExploreAuctionList()
     startCountdown(auction.value.endTime)
-    userRole.value = localStorage.getItem('role')
 })
 </script>
 

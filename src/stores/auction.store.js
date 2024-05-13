@@ -7,7 +7,8 @@ export const useAuctionStore = defineStore('auctions', {
     state: () => ({
         watchingAuction: {},
         connection: null,
-        purchasePrice: 0
+        purchasePrice: 0,
+        isBidding: false
     }),
     actions: {
         initializeConnection(token) {
@@ -65,6 +66,9 @@ export const useAuctionStore = defineStore('auctions', {
         },
         setPurchasePrice(price){
             this.purchasePrice = price
+        },
+        setBidStatus(status) {
+            this.isBidding = status
         }
     },
 })
