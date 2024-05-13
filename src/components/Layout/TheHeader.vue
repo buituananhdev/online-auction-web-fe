@@ -10,7 +10,7 @@
             <slot />
             <div class="flex gap-6" v-if="useAuth.isLoggedIn">
                 <el-dropdown>
-                    <span class="flex items-center" @click="handleClickMyEbay">
+                    <span class="flex items-center">
                         My MaVile
                         <el-icon class="el-icon--right">
                             <arrow-down />
@@ -146,14 +146,6 @@ const logout = () => {
     localStorage.clear()
     window.location.href = '/login'
     localStorage.setItem('isAuthPage', true)
-}
-
-const handleClickMyEbay = () => {
-    if (role == 'Seller') {
-        router.push('/seller-history')
-    } else if (role == 'Buyer') {
-        router.push('/buyer-history')
-    }
 }
 
 const handleOutsideClick = (event) => {
