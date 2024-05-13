@@ -247,6 +247,9 @@ const upload = async (file) => {
                             <Plus />
                         </el-icon>
                     </el-upload>
+                    <el-dialog v-model="dialogVisible">
+                        <img w-full :src="dialogImageUrl" alt="Preview Image" />
+                    </el-dialog>
                 </div>
             </div>
             <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
