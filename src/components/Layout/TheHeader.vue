@@ -202,6 +202,7 @@ onMounted(async () => {
 onUnmounted(() => {
     document.removeEventListener('click', handleOutsideClick)
 })
+
 </script>
 <style>
 .el-input-group__append {
