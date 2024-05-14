@@ -10,7 +10,7 @@
             <slot />
             <div class="flex gap-6" v-if="useAuth.isLoggedIn">
                 <el-dropdown>
-                    <span class="flex items-center" @click="handleClickMyEbay">
+                    <span class="flex items-center">
                         My MaVile
                         <el-icon class="el-icon--right">
                             <arrow-down />
@@ -79,16 +79,16 @@
                 <el-button @click="router.push('/login')">Sign in</el-button>
             </div>
         </div>
-
+        <div class="h-[30px] w-full py-2 flex justify-center bg-white border-b">
+            <ul class="justify-center text-center flex items-center gap-6">
+                <li v-for="item in categories" :key="item.id"
+                    class="text-xs text-[#505050] cursor-pointer py-1 px-2 rounded-lg hover:bg-[#EEEEEE]">
+                    <a :href="'/auctions?categories='">{{ item.categoryName }}</a>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="h-[30px] w-full py-2 flex justify-center bg-white border-b">
-        <ul class="justify-center text-center flex items-center gap-6">
-            <li v-for="item in categories"
-                class="text-xs text-[#505050] cursor-pointer py-1 px-2 rounded-lg hover:bg-[#EEEEEE]">
-                <a :href="'/auctions?categories='">{{ item }}</a>
-            </li>
-        </ul>
-    </div>
+    
 </template>
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
@@ -146,14 +146,6 @@ const logout = () => {
     localStorage.clear()
     window.location.href = '/login'
     localStorage.setItem('isAuthPage', true)
-}
-
-const handleClickMyEbay = () => {
-    if (role == 'Seller') {
-        router.push('/seller-history')
-    } else if (role == 'Buyer') {
-        router.push('/buyer-history')
-    }
 }
 
 const handleOutsideClick = (event) => {
