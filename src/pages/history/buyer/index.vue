@@ -110,7 +110,6 @@ const handleClickSearch = () => {
     }
 }
 
-
 const SearchHistory = async () => {
     try {
         const res = await getBuyerHistoryList(meta.value.currentPage, meta.value.pageSize, searchValue.value, status.value)
@@ -130,7 +129,6 @@ const SearchHistory = async () => {
         console.log(error)
     }
 }
-
 
 const refreshData = async () => {
     if (searchValue.value || status.value) {
