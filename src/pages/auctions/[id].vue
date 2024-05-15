@@ -272,8 +272,6 @@ watch(id, async () => {
     window.scrollTo(0, 0)
 })
 
-
-
 onBeforeMount(async () => {
     await useAuction.syncAuction(id.value)
     currentAuction.value.auctionId = auction.value.id
