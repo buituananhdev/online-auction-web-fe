@@ -47,7 +47,6 @@ const meta = ref({
     pageSize: 5,
 })
 
-
 const listBuyerHistorys = ref([])
 
 const listProductStatus = ref([
