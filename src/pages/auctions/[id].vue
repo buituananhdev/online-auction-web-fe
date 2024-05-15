@@ -20,10 +20,12 @@ const router = useRouter()
 const route = useRoute()
 const listImage = ref([])
 const userRole = ref(localStorage.getItem('role'))
+
 const rating = ref({
     totalRatings: 0,
     averageRating: 0,
 })
+
 const id = computed(() => {
     console.log(route.params.id);
     return route.params.id
