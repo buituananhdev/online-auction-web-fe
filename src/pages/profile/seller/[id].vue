@@ -54,6 +54,7 @@ async function getFeedbackList() {
         console.error(error);
     }
 }
+
 onMounted(async () => {
     sellerId.value = route.params.id
     await getSellerInformation()
