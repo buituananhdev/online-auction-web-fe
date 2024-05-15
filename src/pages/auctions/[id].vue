@@ -131,7 +131,6 @@ function reviewBid() {
 
 async function getDetailAuction() {
     try {
-        // const id = route.params.id
         const res = await getSingleAuction(auctionId.value)
         auction.value = res.data
         console.log(auction.value);
