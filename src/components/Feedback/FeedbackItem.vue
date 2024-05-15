@@ -5,6 +5,7 @@ import { getTimeDifference } from '../../utils'
 defineProps({
     feedbackItem: Object,
 })
+
 </script>
 
 <template> 
