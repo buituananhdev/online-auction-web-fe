@@ -108,12 +108,9 @@ watch(() => meta.value.pageSize, async (newValue, oldValue) => {
 const getHistory = async (currentPage, pageSize, searchQuery, status) => {
     try {
         const res = await getSellerHistory(currentPage, pageSize, searchQuery, status)
-        console.log(res)
         listSellerHistorys.value = res.data.data
         meta.value = res.data.meta
         console.log('list', listSellerHistorys.value)
-
-        // console.log('meta', meta)
     } catch (error) {
         console.log(error)
     }
