@@ -158,6 +158,7 @@ onMounted(() => {
         searchValue.value = route.query.search.toString()
     }
 })
+
 </script>
 
 <style scoped>
