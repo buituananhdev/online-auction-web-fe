@@ -107,6 +107,7 @@ const props = defineProps({
         require: true,
     },
 })
+
 const useCategory = useCategoryStore()
 const value = ref('')
 const useNotification = useNotificationStore()
