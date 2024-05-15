@@ -53,9 +53,10 @@
     </div>
 </template>
 <script setup>
-import { getTopAuctionsList, getRecentlyViewedList, getListAuctions } from '../../services/auction.service';
+import { getTopAuctionsList, getRecentlyViewedList } from '../../services/auction.service';
 import { onMounted, ref } from 'vue'
 import { useCategoryStore } from '../../stores/category.store'
+
 
 const useCategory = useCategoryStore()
 const listImg = [
