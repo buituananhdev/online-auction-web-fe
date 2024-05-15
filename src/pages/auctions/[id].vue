@@ -30,7 +30,6 @@ const id = computed(() => {
 })
 
 const predictAvgPrice = ref(0);
-console.log('checkkk', predictAvgPrice.value);
 const scrollBox = ref()
 const scrollBox2 = ref()
 const colors = ref(['#99A9BF', '#F7BA2A', '#FF9900'])
@@ -39,9 +38,11 @@ const currentAuction = ref({
     auctionId: null,
     type: 2,
 })
+
 const imageActiveIndex = ref(0)
 const imageOverIndex = ref(0)
 const dialogFormVisible = ref(useAuction.isBidding)
+
 const convertISOToRegularTime = (isoTimeString) => {
     const date = new Date(isoTimeString)
 
@@ -71,6 +72,7 @@ const convertISOToRegularTime = (isoTimeString) => {
 
     return `${hours}:${minutes} -  ${month} ${day}, ${year}`
 }
+
 const isBuyAvailable = ref(false)
 const bidAmount = ref()
 const countdown = ref()
