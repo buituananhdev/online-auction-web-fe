@@ -114,6 +114,7 @@ const rules = ref({
         { required: true, message: 'Vui lòng chọn ngôn ngữ', trigger: 'change' }
     ]
 });
+
 const useAuction = useAuctionStore()
 const auction = ref({})
 const title = 'Thông tin thanh toán';
