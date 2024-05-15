@@ -122,13 +122,7 @@ const form = ref(null)
 const passwordForm = ref(null)
 const userAuth = authStore()
 const isValids = ref([false, false, false])
-const isValids2 = ref([false, false, false])
 const isShowChangePassword = ref(false)
-
-// const handleAvatarSuccess = (response,uploadFile) => {
-//     console.log(response, uploadFile);
-//     // imageUrl.value = URL.createObjectURL(uploadFile.raw)
-// }
 
 const beforeAvatarUpload = (rawFile) => {
   if (rawFile.type !== 'image/jpeg') {
@@ -272,20 +266,6 @@ const changeAvatar = async () => {
 }
 
 const submitChangePassword = async () => {
-    // try {
-    //     await changePassword(changePasswordForm)
-    //     ElNotification({
-    //         title: 'Change Password',
-    //         message: 'Change Password Successfully!',
-    //         type: 'success',
-    //     });
-    // } catch (error) {
-    //     ElNotification({
-    //         title: 'Change Password',
-    //         message: 'Change Password Failed!',
-    //         type: 'error',
-    //     });
-    // }
     try {
         const valid = await new Promise((resolve) => {
             passwordForm.value.validate((valid) => {
