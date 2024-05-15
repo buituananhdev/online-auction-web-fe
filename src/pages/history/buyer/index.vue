@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
+import { onBeforeMount, onMounted, ref, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getBuyerHistoryList } from '../../../services/auction.service'
@@ -110,6 +110,7 @@ const handleClickSearch = () => {
     }
 }
 
+
 const SearchHistory = async () => {
     try {
         const res = await getBuyerHistoryList(meta.value.currentPage, meta.value.pageSize, searchValue.value, status.value)
@@ -129,6 +130,7 @@ const SearchHistory = async () => {
         console.log(error)
     }
 }
+
 
 const refreshData = async () => {
     if (searchValue.value || status.value) {
