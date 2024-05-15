@@ -52,9 +52,7 @@ import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getSellerHistory } from '../../../services/auction.service'
-import { productStatus } from '../../../utils/Enums/ProductStatus.js'
 
-// const props = isLoading
 const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()
@@ -73,7 +71,6 @@ const meta = ref({
 })
 
 const listSellerHistorys = ref([])
-const listProductStatus = productStatus
 
 const getTitle = (status) => {
     switch (status) {
@@ -101,10 +98,6 @@ watch(searchValue, async () => {
 watch(status, async () => {
     await SearchHistory()
 })
-
-// watch(listSellerHistorys, () => {
-//     loading = true
-// })
 
 watch(() => meta.value.pageSize, async (newValue, oldValue) => {
     if (newValue !== oldValue) {
