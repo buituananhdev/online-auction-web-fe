@@ -22,6 +22,7 @@
                     icon="ic:round-keyboard-arrow-right" />
             </div>
         </div>
+
         <div v-if="categoriesList.length" class="dashboard-categories mt-10 mx-4">
             <span class="font-bold text-2xl">Trending on myWeb</span>
             <div class="dashboard-list">
@@ -53,7 +54,7 @@
     </div>
 </template>
 <script setup>
-import { getTopAuctionsList, getRecentlyViewedList, getListAuctions } from '../../services/auction.service';
+import { getTopAuctionsList, getRecentlyViewedList } from '../../services/auction.service';
 import { onMounted, ref } from 'vue'
 import { useCategoryStore } from '../../stores/category.store'
 
@@ -88,6 +89,7 @@ const getAuctionsList = async () => {
         console.log(error);
     }
 }
+
 const getRecentyViewdAuctionsList = async () => {
     try {
         const res = await getRecentlyViewedList()
@@ -96,6 +98,7 @@ const getRecentyViewdAuctionsList = async () => {
         console.log(error);
     }
 }
+
 const scrollBox = ref();
 const scrollBox1 = ref();
 const scrollBox2 = ref();
@@ -115,6 +118,7 @@ function scrollToLeft(scrollBox) {
         scrollBox.scrollLeft -= 400;
     }
 }
+
 onMounted(async () => {
     await getAuctionsList()
     await getRecentyViewdAuctionsList()

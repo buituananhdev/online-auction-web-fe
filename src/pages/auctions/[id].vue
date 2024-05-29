@@ -20,17 +20,18 @@ const router = useRouter()
 const route = useRoute()
 const listImage = ref([])
 const userRole = ref(localStorage.getItem('role'))
+
 const rating = ref({
     totalRatings: 0,
     averageRating: 0,
 })
+
 const id = computed(() => {
     console.log(route.params.id);
     return route.params.id
 })
 
 const predictAvgPrice = ref(0);
-console.log('checkkk', predictAvgPrice.value);
 const scrollBox = ref()
 const scrollBox2 = ref()
 const colors = ref(['#99A9BF', '#F7BA2A', '#FF9900'])
@@ -39,9 +40,11 @@ const currentAuction = ref({
     auctionId: null,
     type: 2,
 })
+
 const imageActiveIndex = ref(0)
 const imageOverIndex = ref(0)
 const dialogFormVisible = ref(useAuction.isBidding)
+
 const convertISOToRegularTime = (isoTimeString) => {
     const date = new Date(isoTimeString)
 
@@ -71,6 +74,7 @@ const convertISOToRegularTime = (isoTimeString) => {
 
     return `${hours}:${minutes} -  ${month} ${day}, ${year}`
 }
+
 const isBuyAvailable = ref(false)
 const bidAmount = ref()
 const countdown = ref()
@@ -131,7 +135,6 @@ function reviewBid() {
 
 async function getDetailAuction() {
     try {
-        // const id = route.params.id
         const res = await getSingleAuction(auctionId.value)
         auction.value = res.data
         console.log(auction.value);
@@ -271,8 +274,6 @@ watch(id, async () => {
     rating.value = auction.value.user.ratings.avarageRating
     window.scrollTo(0, 0)
 })
-
-
 
 onBeforeMount(async () => {
     await useAuction.syncAuction(id.value)
@@ -419,7 +420,7 @@ onBeforeMount(async () => {
                 <div class="cursor-pointer flex items-center gap-2 p-2 border rounded-lg w-full"
                     @click="goToSellerInfor(auction.user.id)">
                     <img class="w-[35px] h-[35px] object-contain rounded-full"
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8xme21WZD0--nyHf-4B90Lmycw0tCNGjld7D1l4edsQ&s"
+                        :src="auction.user.avatar"
                         alt="" />
                     <div class="flex flex-col">
                         <span>{{ auction.user && auction.user.fullName }}</span>

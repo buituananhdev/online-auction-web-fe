@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
+import { onBeforeMount, onMounted, ref, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getBuyerHistoryList } from '../../../services/auction.service'
@@ -46,7 +46,6 @@ const meta = ref({
     totalPages: 1,
     pageSize: 5,
 })
-
 
 const listBuyerHistorys = ref([])
 
@@ -157,6 +156,7 @@ onMounted(() => {
         searchValue.value = route.query.search.toString()
     }
 })
+
 </script>
 
 <style scoped>

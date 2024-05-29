@@ -48,14 +48,6 @@
                 </el-form>
             </div>
             <div class="min-w-[30%] flex flex-col items-center justify-center">
-                <!-- <label class="cursor-pointer">
-                    <input type="file" hidden ref="fileInput">
-                    <img v-if="currentUser.avatar" :src="currentUser.avatar" alt="Avatar" height="200" width="200"
-                        class="rounded-full" @click="openFileInput">
-                    <img v-else
-                        src="https://gcs.tripi.vn/public-tripi/tripi-feed/img/474090QTs/anh-avatar-vit-ngao-sieu-cute_084403989.jpg"
-                        alt="Avatar" height="200" width="200" class="rounded-full" @click="openFileInput">
-                </label> -->
                 <el-upload
                     class="avatar-uploader"
                     v-model="currentUser.avatar"

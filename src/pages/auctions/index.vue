@@ -271,9 +271,8 @@ const Search = async () => {
         console.log('query', query)
         router.push({ path: `/auctions`, query })
         console.log('query', query)
-        // console.log('fffff')
     } catch (error) {
-        // console.log(error)
+        console.log(error)
     }
 }
 const refreshData = async () => {
