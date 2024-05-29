@@ -30,7 +30,7 @@
                 <div class="py-3 w-3/5">
                     <div class="flex items-center gap-2 mb-3">
                         <img class="w-[24px] h-[24px] rounded-full"
-                            src="https://scontent.fhan2-5.fna.fbcdn.net/v/t39.30808-6/426587256_1430509044210042_7946706195478323343_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGJAwy2cy3ozNO6_7jEhyDyXu52TFDhi9Ve7nZMUOGL1VpuR-3ErXuUitueR_3NPEQEtrYu0xsOzygnsODxm_yg&_nc_ohc=0e39l21fNvAQ7kNvgGJVPV2&_nc_ht=scontent.fhan2-5.fna&oh=00_AfC4aQbwZPNwmoW1ZcWkMCwJk87XqG726tgRAPTIcKnLsQ&oe=6637E9D0"
+                            :src="auction.user.avatar"
                             alt="">
                         <span>{{ auction.user && auction.user.fullName }}</span>
                     </div>
