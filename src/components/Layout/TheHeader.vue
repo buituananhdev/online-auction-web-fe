@@ -83,7 +83,7 @@
             <ul class="justify-center text-center flex items-center gap-6">
                 <li v-for="item in categories" :key="item.id"
                     class="text-xs text-[#505050] cursor-pointer py-1 px-2 rounded-lg hover:bg-[#EEEEEE]">
-                    <a :href="'/auctions?categories='">{{ item.categoryName }}</a>
+                    <p @click="goToListProduct(item.id)">{{ item.categoryName }}</p>
                 </li>
             </ul>
         </div>
@@ -119,6 +119,10 @@ const isEditPopupVisible = ref(false)
 const notificationList = computed(() => useNotification.notificationList)
 const unreadNotificationCount = computed(() => useNotification.newNotificationCount)
 
+
+function goToListProduct(id){
+    router.push(`/auctions?categories=${id}`)
+}
 function getStyle(condition) {
     return condition
         ? {
