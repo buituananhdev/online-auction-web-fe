@@ -246,6 +246,7 @@ const upload = async (file) => {
                         list-type="picture-card" 
                         :on-preview="handlePictureCardPreview" 
                         :on-remove="handleRemove"
+                        class="upload-demo"
                     >
                         <el-icon>
                             <Plus />
