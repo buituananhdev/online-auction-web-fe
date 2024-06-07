@@ -15,7 +15,7 @@
                 <div class="flex flex-col">
                     <div class="flex items-end justify-between pb-4 border-b-[1px] border-gray-300">
                         <h1 class="text-[#363636] text-3xl font-bold my-[19px]">My eBay</h1>
-                        <span class="text-[13px] mb-4 underline text-[#409EFF] font-medium">
+                        <span class="text-[13px] mb-4 underline text-[#409EFF] font-medium cursor-pointer">
                             Tell us what you think</span>
                     </div>
                     <div class="flex">
