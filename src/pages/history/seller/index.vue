@@ -32,7 +32,7 @@
                         :key="item.id"
                         class="w-full flex items-center justify-center"
                     >
-                        <history-card :auction="item" />
+                        <history-card :auction="item" @cancel-auction="handleCancelAuction(item)" />
                     </div>
                     <div class="flex justify-end w-full absolute bottom-0 right-0 gap-3">
                         <span class="text-sm underline text-[#409EFF] cursor-pointer" @click="meta.pageSize += size"
@@ -51,7 +51,7 @@
 import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getSellerHistory } from '../../../services/auction.service'
+import { getSellerHistory, cancelAuction } from '../../../services/auction.service'
 
 const SearchIcon = Search
 const router = useRouter()
@@ -155,6 +155,24 @@ const refreshData = async () => {
         await SearchHistory()
     } else {
         await getHistory(meta.value.currentPage, meta.value.pageSize, searchValue.value, status.value)
+    }
+}
+
+const handleCancelAuction = async(auction) => {
+    try {
+        await cancelAuction(auction.id)
+        ElNotification({
+            title: 'Cancel Auction',
+            message: 'Cancel Auction Successfully!',
+            type: 'success',
+        })
+        refreshData()
+    } catch (error) {
+        ElNotification({
+            title: 'Cancel Auction',
+            message: 'Cancel Auction Failed!',
+            type: 'error',
+        })
     }
 }
 
