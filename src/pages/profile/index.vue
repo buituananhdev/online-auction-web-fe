@@ -13,8 +13,8 @@
         </div>
         <div class="relative flex pt-[30px] font-normal">
             <div class="flex flex-col text-sm pr-[50px] flex-1 border-r border-gray-200">
-                <img src="../../assets/icons/edit-icon.svg" alt="edit-icon"
-                    class="w-[24px] h-[24px] absolute top-[10px] right-[31%] cursor-pointer">
+                <!-- <img src="../../assets/icons/edit-icon.svg" alt="edit-icon" -->
+                    <!-- class="w-[24px] h-[24px] absolute top-[10px] right-[31%] cursor-pointer"> -->
                 <el-form @submit.prevent="submit" ref="form" :model="currentUser" label-width="auto" :rules="rules">
                     <div class="pb-[30px] flex">
                         <span class="text-[#555555CC] min-w-[30%] text-right">Email</span>
@@ -30,7 +30,7 @@
                     <div class="pb-[30px] flex items-center">
                         <span class="text-[#555555CC] min-w-[30%] text-right">Phone Number</span>
                         <el-form-item prop="phone">
-                            <el-input size="large" v-model="currentUser.phone"
+                            <el-input type="number" size="large" v-model="currentUser.phone"
                                 style="padding-left: 20px; color: #333333; width: 400px;" />
                         </el-form-item>
                     </div>
@@ -270,16 +270,17 @@ const submitChangePassword = async () => {
         if (valid) {
             console.log('success')
             await changePassword(changePasswordForm)
+            isShowChangePassword.value = false
             ElNotification({
-                title: 'Change Password',
-                message: 'Change Password Successfully!',
-                type: 'success',
+                title: 'Change password',
+                message: 'Change password successfully!',
+                type: 'success',    
             });
         } else {
             console.log('error submit!')
             ElNotification({
-                title: 'Change Password',
-                message: 'Change Password Failed!',
+                title: 'Change password',
+                message: 'Change password failed, please try again!',
                 type: 'error',
             });
             return false
@@ -287,8 +288,8 @@ const submitChangePassword = async () => {
     } catch (error) {
         console.log('error')
         ElNotification({
-            title: 'Change Password',
-            message: 'Change Password Failed!',
+            title: 'Change password',
+            message: 'Change password failed, please try again!',
             type: 'error',
         });
         console.log(error)

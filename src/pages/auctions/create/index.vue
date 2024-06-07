@@ -77,13 +77,22 @@ const validateField = (field, value, errorMessage) => {
         isValids.value[field] = false
         return new Error(errorMessage)
     } else if (field === 2 || field === 3) {
-        if (field === 3 && (currentAuction.startingPrice >= currentAuction.maxPrice)) {
+        if (isNaN(Number(value))) {
+            isValids.value[field] = false;
+            return new Error(`${field === 2 ? 'Starting Price' : 'Max Price'} must be a number`);
+        }
+        console.log('price', currentAuction.startingPrice, 'hii', currentAuction.maxPrice, currentAuction.startingPrice >= currentAuction.maxPrice);
+        // debugger
+        if (parseFloat(currentAuction.startingPrice) > parseFloat(currentAuction.maxPrice)) {
             isValids.value[field] = false
-            return new Error('Max Price must be greater than Starting Price')
+            if(field === 3)
+                return new Error('Max Price must be greater than Starting Price')
+            else 
+                return new Error('Starting Price must be less than Max Price')
         }
         if (value < 0) {
             isValids.value[field] = false
-            return new Error(`${ field === 2 ? 'Starting Price' : 'Max Price'} must be greater than or equal to 0`)
+            return new Error(`${field === 2 ? 'Starting Price' : 'Max Price'} must be greater than or equal to 0`)
         }
     } else if (field === 4) {
         if (!isFutureTime(value)) {
@@ -182,13 +191,13 @@ const submit = async () => {
 
         if (valid) {
             console.log('success')
-            await addAuction(currentAuction)
+            const res = await addAuction(currentAuction)
             ElNotification({
                 title: 'Create Auction',
                 message: 'Create Auction Successfully!',
                 type: 'success',
             });
-            router.push('/seller-history')
+            router.push(`/auctions/${res.data.id}`)
             currentAuction = {}
         } else {
             console.log('error submit!')
@@ -239,15 +248,8 @@ const upload = async (file) => {
                 <h2 class="font-bold mb-[10px]">PHOTOS & VIDEO</h2>
                 <span class="text-sm font-semibold">Buyers want to see all details and angles.</span>
                 <div class="mt-6">
-                    <el-upload 
-                        v-model:file-list="fileList" 
-                        action="#"
-                        :http-request="upload"
-                        list-type="picture-card" 
-                        :on-preview="handlePictureCardPreview" 
-                        :on-remove="handleRemove"
-                        class="upload-demo"
-                    >
+                    <el-upload v-model:file-list="fileList" action="#" :http-request="upload" list-type="picture-card"
+                        :on-preview="handlePictureCardPreview" :on-remove="handleRemove" class="upload-demo">
                         <el-icon>
                             <Plus />
                         </el-icon>
@@ -261,16 +263,8 @@ const upload = async (file) => {
                 <h2 class="font-bold mb-[10px]">TITLE</h2>
                 <div class="w-full">
                     <el-form-item prop="productName">
-                        <el-input
-                            v-model="currentAuction.productName"
-                            maxlength="100"
-                            placeholder="Please input"
-                            show-word-limit
-                            clearable
-                            type="text"
-                            size="large"
-                            style="width: 908px"
-                        />
+                        <el-input v-model="currentAuction.productName" maxlength="100" placeholder="Please input"
+                            show-word-limit clearable type="text" size="large" style="width: 908px" />
                     </el-form-item>
                 </div>
             </div>
@@ -279,18 +273,10 @@ const upload = async (file) => {
                 <div class="w-full flex gap-10 items-center">
                     <span class="text-sm">Please select the product's category type!</span>
                     <el-form-item prop="categoryId" style="margin-bottom: 0; width: 70%;">
-                        <el-select
-                            v-model="currentAuction.categoryId"
-                            placeholder="Select"
-                            size="large"
-                            style="min-width: 600px;"
-                        >
-                            <el-option
-                                v-for="item in listCategories"
-                                :key="item.id"
-                                :label="item.categoryName"
-                                :value="item.id"
-                            />
+                        <el-select v-model="currentAuction.categoryId" placeholder="Select" size="large"
+                            style="min-width: 600px;">
+                            <el-option v-for="item in listCategories" :key="item.id" :label="item.categoryName"
+                                :value="item.id" />
                         </el-select>
                     </el-form-item>
                 </div>
@@ -305,12 +291,8 @@ const upload = async (file) => {
             </div>
             <div class="mx-6 pt-8 flex flex-col pb-10 border-b-[1px]">
                 <h2 class="font-bold mb-[10px]">DESCRIPTION</h2>
-                <QuillEditor
-                    theme="snow"
-                    v-model:content="currentAuction.description"
-                    contentType="html"
-                    placeholder="Write a detailed description of your item, or save time and let Al draft it for you"
-                />
+                <QuillEditor theme="snow" v-model:content="currentAuction.description" contentType="html"
+                    placeholder="Write a detailed description of your item, or save time and let Al draft it for you" />
             </div>
             <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
                 <h2 class="font-bold mb-[10px]">PRICING</h2>
@@ -318,25 +300,18 @@ const upload = async (file) => {
                     <div class="flex flex-col">
                         <span class="mb-1 font-medium">Starting bid</span>
                         <el-form-item prop="startingPrice">
-                            <el-input
-                                v-model="currentAuction.startingPrice"
-                                style="width: 240px"
+                            <el-input v-model="currentAuction.startingPrice" style="width: 240px"
                                 placeholder="Please input"
                                 :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
-                            />
+                                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
                         </el-form-item>
                     </div>
                     <div class="flex flex-col">
                         <span class="mb-1 font-medium">Buy It Now(optional)</span>
                         <el-form-item prop="maxPrice">
-                            <el-input
-                                v-model="currentAuction.maxPrice"
-                                style="width: 240px"
-                                placeholder="Please input"
+                            <el-input v-model="currentAuction.maxPrice" style="width: 240px" placeholder="Please input"
                                 :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
-                            />
+                                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
                         </el-form-item>
                     </div>
                 </div>
@@ -344,46 +319,35 @@ const upload = async (file) => {
                     <span class="mb-1 font-medium">Auction End Time</span>
                     <el-form-item prop="endTime" style="display: flex; flex-direction: row">
                         <div class="block">
-                            <el-date-picker
-                                v-model="currentAuction.endTime"
-                                type="datetime"
-                                placeholder="Select date and time"
-                            />
+                            <el-date-picker v-model="currentAuction.endTime" type="datetime"
+                                placeholder="Select date and time" />
                         </div>
                     </el-form-item>
                 </div>
                 <div class="w-full mt-4">
-                    <el-checkbox
-                        v-model="currentAuction.canReturn"
-                        label="After receipt, returns allowed"
-                        size="large"
-                    />
+                    <el-checkbox v-model="currentAuction.canReturn" label="After receipt, returns allowed"
+                        size="large" />
                 </div>
             </div>
             <div class="w-full my-10">
                 <el-form-item style="display: flex; flex-direction: row">
-                    <button
-                        type="submit"
-                        class="py-[13px] px-5 my-2 mx-auto bg-[#409EFF] text-white font-bold rounded-full min-w-[343px] flex justify-center items-center"
-                    >
+                    <button type="submit"
+                        class="py-[13px] px-5 my-2 mx-auto bg-[#409EFF] text-white font-bold rounded-full min-w-[343px] flex justify-center items-center">
                         List it
                     </button>
                 </el-form-item>
             </div>
         </el-form>
     </div>
-    <div
-        v-if="isShowSelectCondition"
-        class="w-full bg-[rgba(17,24,32,0.7)] fixed top-0 bottom-0 left-0 right-0 h-screen z-10 flex items-center justify-center"
-    >
+    <div v-if="isShowSelectCondition"
+        class="w-full bg-[rgba(17,24,32,0.7)] fixed top-0 bottom-0 left-0 right-0 h-screen z-10 flex items-center justify-center">
         <div class="w-[616px] h-[80%] mx-[460px] mt-[50px] bg-white z-20 rounded-2xl flex flex-col">
             <div class="w-full flex justify-between border-b-[1px] border-gray-300">
                 <div></div>
                 <div class="text-xl font-bold my-4">Item condition</div>
                 <button
                     class="text-[#409EFF] py-[10px] px-5 m-2 font-semibold hover:bg-slate-100 hover:cursor-default rounded-full"
-                    @click="handleCloseModel"
-                >
+                    @click="handleCloseModel">
                     Done
                 </button>
             </div>
