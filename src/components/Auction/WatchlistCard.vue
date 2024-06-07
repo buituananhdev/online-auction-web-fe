@@ -65,10 +65,10 @@
                         <span class="text-[#505050]">Bid count: </span>
                         <span class="text-[#505050]">{{ auction.bidCount }}</span>
                     </div> -->
-                        <div>
+                        <!-- <div>
                             <span class="text-sm text-[#707070]">Sold by: </span>
                             <span class="underline text-[#409EFF]">{{ auction.user.fullName }}</span>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="flex flex-col gap-2 items-end">
                         <div>

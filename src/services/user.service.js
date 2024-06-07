@@ -15,7 +15,7 @@ export const updateAvatar = async (avatar) => {
 }
 
 export const changePassword = async (data) => {
-    return await axiosApiInstance.patch(`/users/change-password`, data)
+    return await axiosApiInstance.patch(`/users/profile/change-password`, data)
 }
 
 export const getUserInformation = async (id) => {
