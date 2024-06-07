@@ -2,7 +2,7 @@
     <div v-loading="isLoading" class="w-full">
         <div class="w-full">
             <div class="flex justify-between gap-5 pt-[25px] pb-8">
-                <span class="font-bold text-2xl flex items-center justify-center">My eBay - Watchlist</span>
+                <span class="font-bold text-2xl flex items-center justify-center">My MaVile - Watchlist</span>
                 <div class="w-1/2">
                     <div class="w-full flex items-center justify-center">
                         <el-input v-model="searchValue" style="border-radius: 30px" placeholder="Search..."

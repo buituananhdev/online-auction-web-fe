@@ -133,16 +133,6 @@ function reviewBid() {
     bidPopUpTitle.value = 'Review your bid'
 }
 
-async function getDetailAuction() {
-    try {
-        const res = await getSingleAuction(auctionId.value)
-        auction.value = res.data
-        console.log(auction.value);
-    } catch (error) {
-        console.log(error)
-    }
-}
-
 const addToWatchlist = async () => {
     try {
         await addWatchlist(currentAuction.value)
@@ -222,12 +212,6 @@ async function handleBidAuction() {
 
 function addBidMount(mount) {
     bidAmount.value = mount
-}
-
-function scrollToDown(scrollBox) {
-    if (scrollBox) {
-        scrollBox.scrollTop += 400
-    }
 }
 
 function scrollRight(scrollBox) {

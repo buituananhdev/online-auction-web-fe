@@ -11,8 +11,10 @@
                     @click="() => { isShowChangePassword = true }">Change Password</button>
             </div>
         </div>
-        <div class="flex pt-[30px] font-normal">
+        <div class="relative flex pt-[30px] font-normal">
             <div class="flex flex-col text-sm pr-[50px] flex-1 border-r border-gray-200">
+                <img src="../../assets/icons/edit-icon.svg" alt="edit-icon"
+                    class="w-[24px] h-[24px] absolute top-[10px] right-[31%] cursor-pointer">
                 <el-form @submit.prevent="submit" ref="form" :model="currentUser" label-width="auto" :rules="rules">
                     <div class="pb-[30px] flex">
                         <span class="text-[#555555CC] min-w-[30%] text-right">Email</span>
@@ -42,22 +44,18 @@
                     <div class="pb-[30px] flex">
                         <span class=" min-w-[30%] text-right"></span>
                         <button
-                            class="px-5 py-2 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-md transition-all"
+                            class="px-5 py-2 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-2xl w-full transition-all"
                             type="submit">Save</button>
                     </div>
                 </el-form>
             </div>
             <div class="min-w-[30%] flex flex-col items-center justify-center">
-                <el-upload
-                    class="avatar-uploader"
-                    v-model="currentUser.avatar"
-                    action="true"
-                    :show-file-list="false"
-                    :http-request="upload"
-                    :before-upload="beforeAvatarUpload"
-                >
+                <el-upload class="avatar-uploader" v-model="currentUser.avatar" action="true" :show-file-list="false"
+                    :http-request="upload" :before-upload="beforeAvatarUpload">
                     <img v-if="currentUser.avatar" :src="currentUser.avatar" class="avatar" />
-                    <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+                    <el-icon v-else class="avatar-uploader-icon">
+                        <Plus />
+                    </el-icon>
                 </el-upload>
                 <button
                     class="px-5 mt-10 py-2 border border-gray-300 ml-5 hover:bg-[#409EFF] hover:text-white text-base font-semibold rounded-md transition-all"
@@ -93,8 +91,12 @@
                     </el-form-item>
                 </div>
                 <div class="flex pb-8 items-center justify-center gap-4">
-                    <button class="hover:bg-[#E23F33] text-[#E23F33] border-gray-300 border rounded-md py-[7px] px-5 hover:text-white transition" @click.prevent="isShowChangePassword = false">Cancel</button>
-                    <button class="border rounded-md py-[7px] px-5 bg-[#409EFF] hover:bg-[#3A8EE4] transition text-white" type="submit">Confirm</button>
+                    <button
+                        class="hover:bg-[#E23F33] text-[#E23F33] border-gray-300 border rounded-md py-[7px] px-5 hover:text-white transition"
+                        @click.prevent="isShowChangePassword = false">Cancel</button>
+                    <button
+                        class="border rounded-md py-[7px] px-5 bg-[#409EFF] hover:bg-[#3A8EE4] transition text-white"
+                        type="submit">Confirm</button>
                 </div>
             </el-form>
         </div>
@@ -117,14 +119,14 @@ const isValids = ref([false, false, false])
 const isShowChangePassword = ref(false)
 
 const beforeAvatarUpload = (rawFile) => {
-  if (rawFile.type !== 'image/jpeg') {
-    ElMessage.error('Avatar picture must be JPG format!')
-    return false
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    ElMessage.error('Avatar picture size can not exceed 2MB!')
-    return false
-  }
-  return true
+    if (rawFile.type !== 'image/jpeg') {
+        ElMessage.error('Avatar picture must be JPG format!')
+        return false
+    } else if (rawFile.size / 1024 / 1024 > 2) {
+        ElMessage.error('Avatar picture size can not exceed 2MB!')
+        return false
+    }
+    return true
 }
 
 
@@ -296,9 +298,9 @@ const submitChangePassword = async () => {
 
 <style scoped>
 .avatar-uploader .avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
+    width: 178px;
+    height: 178px;
+    display: block;
 }
 </style>
 
@@ -308,23 +310,23 @@ const submitChangePassword = async () => {
 }
 
 .avatar-uploader .el-upload {
-  border: 1px dashed var(--el-border-color);
-  border-radius: 100%;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: var(--el-transition-duration-fast);
+    border: 1px dashed var(--el-border-color);
+    border-radius: 100%;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--el-transition-duration-fast);
 }
 
 .avatar-uploader .el-upload:hover {
-  border-color: var(--el-color-primary);
+    border-color: var(--el-color-primary);
 }
 
 .el-icon.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  text-align: center;
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    text-align: center;
 }
 </style>
