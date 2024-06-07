@@ -65,7 +65,7 @@
                 <span class="font-[550]">{{ useAuth.user.fullName }} | </span>
                 <el-popover placement="bottom-end" :width="200" trigger="click" class="p-0">
                     <ul>
-                        <li class="border-b py-2 cursor-pointer" @click="router.push('/profile')">My account</li>
+                        <li class="border-b py-2 cursor-pointer" @click="pushToProfile">My account</li>
                         <li class="pt-2 cursor-pointer" @click="signOut">Sign out</li>
                     </ul>
                     <template #reference>
@@ -183,6 +183,10 @@ async function goToItemURL(item) {
         await useNotification.markReadNotification(item.id)
     }
     router.push(item.redirectUrl)
+}
+
+function pushToProfile() {
+    router.push('/profile')
 }
 
 onMounted(async () => {

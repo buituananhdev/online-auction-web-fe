@@ -43,9 +43,10 @@
                                 <el-radio-button :value="false">expand</el-radio-button>
                                 <el-radio-button :value="true">collapse</el-radio-button>
                             </el-radio-group> -->
-                            <el-menu :default-active="activeItem" class="el-menu-vertical-demo"
-                                :collapse="isCollapse" @open="handleOpen" @close="handleClose" v-model="status">
-                                <el-sub-menu index="1" v-if="role == 'Seller'">
+                            <el-menu :default-active="activeItem" class="el-menu-vertical-demo" :collapse="isCollapse"
+                                @open="handleOpen" @close="handleClose" v-model="status">
+                                <el-sub-menu :class="{ 'bg-[#f6f8fc]': activeItem === '1' }" index="1"
+                                    v-if="role == 'Seller'">
                                     <template #title>
                                         <el-icon><sold-out /></el-icon>
                                         <span>Seller History</span>
@@ -72,30 +73,34 @@
                                         <el-menu-item index="1-4-1">item one</el-menu-item>
                                     </el-sub-menu> -->
                                 </el-sub-menu>
-                                <el-menu-item index="2" v-if="role == 'Seller'" @click="router.push('/create-auction')">
+                                <el-menu-item :class="{ 'bg-[#f6f8fc]': activeItem === '2' }" index="2"
+                                    v-if="role == 'Seller'" @click="router.push('/create-auction')">
                                     <el-icon><document-add /></el-icon>
                                     <template #title>Create Auction</template>
                                 </el-menu-item>
-                                <el-menu-item index="5" v-if="role == 'Buyer'" @click="router.push('/buyer-history')">
+                                <el-menu-item :class="{ 'bg-[#f6f8fc]': activeItem === '5' }" index="5"
+                                    v-if="role == 'Buyer'" @click="router.push('/buyer-history')">
                                     <el-icon>
                                         <img src="../assets/icons/bid.svg" width="18" alt="" />
                                     </el-icon>
                                     <template #title>Bids & Offers</template>
                                 </el-menu-item>
-                                <el-menu-item index="3" v-if="role == 'Buyer' || 'Seller'"
-                                    @click="router.push('/profile')">
+                                <el-menu-item :class="{ 'bg-[#f6f8fc]': activeItem === '3' }" index="3"
+                                    v-if="role == 'Buyer' || 'Seller'" @click="router.push('/profile')">
                                     <el-icon>
                                         <img src="../assets/icons/user.svg" width="18" alt="" />
                                     </el-icon>
                                     <template #title>Personal Profile</template>
                                 </el-menu-item>
-                                <el-menu-item index="4" v-if="role == 'Buyer'" @click="router.push('/auctions')">
+                                <el-menu-item :class="{ 'bg-[#f6f8fc]': activeItem === '4' }" index="4"
+                                    v-if="role == 'Buyer'" @click="router.push('/auctions')">
                                     <el-icon>
                                         <img src="../assets/icons/auction.svg" width="18" alt="" />
                                     </el-icon>
                                     <template #title>Auctions</template>
                                 </el-menu-item>
-                                <el-menu-item index="6" v-if="role == 'Buyer'" @click="router.push('/watchlist')">
+                                <el-menu-item :class="{ 'bg-[#f6f8fc]': activeItem === '6' }" index="6"
+                                    v-if="role == 'Buyer'" @click="router.push('/watchlist')">
                                     <el-icon>
                                         <img src="../assets/icons/heart-icon.svg" width="18" alt="" />
                                     </el-icon>
@@ -138,18 +143,21 @@ const role = localStorage.getItem('role')
 const activeItem = ref()
 
 const handleHighLightItem = () => {
-    if(window.location.pathname === '/profile') {
+    if (window.location.pathname === '/profile') {
         activeItem.value = '3'
-    } else if(window.location.pathname.startsWith('/seller-history')) {
+    } else if (window.location.pathname.startsWith('/seller-history')) {
         activeItem.value = '1-1'
-    } else if(window.location.pathname === '/watchlist') {
+    } else if (window.location.pathname === '/watchlist') {
         activeItem.value = '6'
-    } else if(window.location.pathname === '/buyer-history') {
+    } else if (window.location.pathname === '/buyer-history') {
         activeItem.value = '5'
     }
+    console.log('nahnnnnnnnn', activeItem.value);
+    // alert(activeItem.value)
 }
 
 const handleClickSearch = () => {
+
     if (searchValue.value.trim() !== '') {
         router.push({
             path: '/auctions',
@@ -166,6 +174,11 @@ const handleOpen = (key, keyPath) => {
 const handleClose = (key, keyPath) => {
     console.log(key, keyPath)
 }
+
+watch( () => route.fullPath, () => {
+    handleHighLightItem();
+    }
+);
 onMounted(() => {
     if (route.query.search) {
         searchValue.value = route.query.search.toString()
@@ -173,7 +186,6 @@ onMounted(() => {
     if (route.query.status) {
         status.value = route.query.status
     }
-
     handleHighLightItem()
 })
 </script>
