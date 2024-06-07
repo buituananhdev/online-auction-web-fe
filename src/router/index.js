@@ -33,7 +33,7 @@ const routes = [
         path: '/create-auction',
         name: 'create-auction',
         component: () => import('../pages/auctions/create/index.vue'),
-        meta: { layout: 'auth', requiresAuth: true, sellerPermission: true },
+        meta: { layout: 'activity', requiresAuth: true, sellerPermission: true },
     },
     {
         path: '/seller-history',
