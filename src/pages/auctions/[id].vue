@@ -20,10 +20,12 @@ const router = useRouter()
 const route = useRoute()
 const listImage = ref([])
 const userRole = ref(localStorage.getItem('role'))
+
 const rating = ref({
     totalRatings: 0,
     averageRating: 0,
 })
+
 const id = computed(() => {
     console.log(route.params.id);
     return route.params.id
@@ -38,9 +40,11 @@ const currentAuction = ref({
     auctionId: null,
     type: 2,
 })
+
 const imageActiveIndex = ref(0)
 const imageOverIndex = ref(0)
 const dialogFormVisible = ref(useAuction.isBidding)
+
 const convertISOToRegularTime = (isoTimeString) => {
     const date = new Date(isoTimeString)
 
@@ -70,6 +74,7 @@ const convertISOToRegularTime = (isoTimeString) => {
 
     return `${hours}:${minutes} -  ${month} ${day}, ${year}`
 }
+
 const isBuyAvailable = ref(false)
 const bidAmount = ref()
 const countdown = ref()
@@ -254,8 +259,6 @@ watch(id, async () => {
     window.scrollTo(0, 0)
 })
 
-
-
 onBeforeMount(async () => {
     await useAuction.syncAuction(id.value)
     currentAuction.value.auctionId = auction.value.id
@@ -401,7 +404,7 @@ onBeforeMount(async () => {
                 <div class="cursor-pointer flex items-center gap-2 p-2 border rounded-lg w-full"
                     @click="goToSellerInfor(auction.user.id)">
                     <img class="w-[35px] h-[35px] object-contain rounded-full"
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8xme21WZD0--nyHf-4B90Lmycw0tCNGjld7D1l4edsQ&s"
+                        :src="auction.user.avatar"
                         alt="" />
                     <div class="flex flex-col">
                         <span>{{ auction.user && auction.user.fullName }}</span>

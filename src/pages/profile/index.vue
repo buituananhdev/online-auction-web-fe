@@ -48,14 +48,6 @@
                 </el-form>
             </div>
             <div class="min-w-[30%] flex flex-col items-center justify-center">
-                <!-- <label class="cursor-pointer">
-                    <input type="file" hidden ref="fileInput">
-                    <img v-if="currentUser.avatar" :src="currentUser.avatar" alt="Avatar" height="200" width="200"
-                        class="rounded-full" @click="openFileInput">
-                    <img v-else
-                        src="https://gcs.tripi.vn/public-tripi/tripi-feed/img/474090QTs/anh-avatar-vit-ngao-sieu-cute_084403989.jpg"
-                        alt="Avatar" height="200" width="200" class="rounded-full" @click="openFileInput">
-                </label> -->
                 <el-upload
                     class="avatar-uploader"
                     v-model="currentUser.avatar"
@@ -122,13 +114,7 @@ const form = ref(null)
 const passwordForm = ref(null)
 const userAuth = authStore()
 const isValids = ref([false, false, false])
-const isValids2 = ref([false, false, false])
 const isShowChangePassword = ref(false)
-
-// const handleAvatarSuccess = (response,uploadFile) => {
-//     console.log(response, uploadFile);
-//     // imageUrl.value = URL.createObjectURL(uploadFile.raw)
-// }
 
 const beforeAvatarUpload = (rawFile) => {
   if (rawFile.type !== 'image/jpeg') {
@@ -272,20 +258,6 @@ const changeAvatar = async () => {
 }
 
 const submitChangePassword = async () => {
-    // try {
-    //     await changePassword(changePasswordForm)
-    //     ElNotification({
-    //         title: 'Change Password',
-    //         message: 'Change Password Successfully!',
-    //         type: 'success',
-    //     });
-    // } catch (error) {
-    //     ElNotification({
-    //         title: 'Change Password',
-    //         message: 'Change Password Failed!',
-    //         type: 'error',
-    //     });
-    // }
     try {
         const valid = await new Promise((resolve) => {
             passwordForm.value.validate((valid) => {

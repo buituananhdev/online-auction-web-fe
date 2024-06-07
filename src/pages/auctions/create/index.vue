@@ -11,6 +11,7 @@ const isValids = ref([false, false, false, false, false])
 const isShowSelectCondition = ref(false)
 const router = useRouter()
 const form = ref(null)
+
 let currentAuction = reactive({
     productName: '',
     categoryId: null,
@@ -22,7 +23,6 @@ let currentAuction = reactive({
     canReturn: false,
     mediaUrls: computed(() => fileList.value.map(x => x.url)),
 })
-const uploadLoading = ref(false)
 
 const meta = ref({
     pageNumber: 1,

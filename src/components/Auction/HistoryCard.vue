@@ -80,7 +80,7 @@
                             <button
                                 v-show="role == 'Seller' && auction.productStatus == 1"
                                 class="hover:bg-[#E23F33] text-[#E23F33] border-gray-300 border rounded-xl py-[7px] w-[200px] hover:text-white transition"
-                                @click="handleCancelAuction(auction)"
+                                @click="$emit('cancelAuction')"
                             >
                                 Cancel
                             </button>
