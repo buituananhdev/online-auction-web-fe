@@ -18,16 +18,16 @@
                     </span>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item v-if="role == 'Seller'" @click="router.push('/seller-history')">Seller
+                            <el-dropdown-item v-if="role == 'Seller'" @click="pushToPage('/seller-history')">Seller
                                 History</el-dropdown-item>
-                            <el-dropdown-item v-if="role == 'Seller'" @click="router.push('/create-auction')">Create
+                            <el-dropdown-item v-if="role == 'Seller'" @click="pushToPage('/create-auction')">Create
                                 Auction</el-dropdown-item>
-                            <el-dropdown-item v-if="role == 'Buyer'" @click="router.push('/buyer-history')">Bids &
+                            <el-dropdown-item v-if="role == 'Buyer'" @click="pushToPage('/buyer-history')">Bids &
                                 Offers</el-dropdown-item>
                             <el-dropdown-item v-if="role == 'Buyer'"
-                                @click="router.push('/auctions')">Auctions</el-dropdown-item>
+                                @click="pushToPage('/auctions')">Auctions</el-dropdown-item>
                             <el-dropdown-item v-if="role == 'Buyer'"
-                                @click="router.push('/watchlist')">Watchlist</el-dropdown-item>
+                                @click="pushToPage('/watchlist')">Watchlist</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -65,7 +65,7 @@
                 <span class="font-[550]">{{ useAuth.user.fullName }} | </span>
                 <el-popover placement="bottom-end" :width="200" trigger="click" class="p-0">
                     <ul>
-                        <li class="border-b py-2 cursor-pointer" @click="router.push('/profile')">My account</li>
+                        <li class="border-b py-2 cursor-pointer" @click="pushToPage('/profile')">My account</li>
                         <li class="pt-2 cursor-pointer" @click="signOut">Sign out</li>
                     </ul>
                     <template #reference>
@@ -75,8 +75,8 @@
                 </el-popover>
             </div>
             <div v-else>
-                <el-button type="primary" @click="router.push('/register')">Sign up</el-button>
-                <el-button @click="router.push('/login')">Sign in</el-button>
+                <el-button type="primary" @click="pushToPage('/register')">Sign up</el-button>
+                <el-button @click="pushToPage('/login')">Sign in</el-button>
             </div>
         </div>
         <div class="h-[30px] w-full py-2 flex justify-center bg-white border-b">
@@ -183,6 +183,10 @@ async function goToItemURL(item) {
         await useNotification.markReadNotification(item.id)
     }
     router.push(item.redirectUrl)
+}
+
+function pushToPage(path) {
+    router.push(path)
 }
 
 onMounted(async () => {
