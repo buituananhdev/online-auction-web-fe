@@ -189,7 +189,7 @@ const handleSetWatchlist = (auction) => {
 
 const handlePlaceBidAuction = (item) => {
     useAuction.setBidStatus(true)
-    router.push(`auctions/${item.id}`)
+    router.push(`auctions/${item}`)
 }
 </script>
 <style>

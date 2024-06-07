@@ -13,6 +13,7 @@ defineProps({
 </script>
 <style scoped>
 .category-card:hover p{
-    text-decoration: underline;
+    font-weight: 550;
+    color: rgb(74, 74, 74);
 }
 </style>

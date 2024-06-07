@@ -45,11 +45,11 @@
                             </el-radio-group> -->
                             <el-menu :default-active="activeItem" class="el-menu-vertical-demo" :collapse="isCollapse"
                                 @open="handleOpen" @close="handleClose" v-model="status">
-                                <el-sub-menu :class="{ 'bg-[#f6f8fc]': activeItem === '1' }" index="1"
+                                <el-sub-menu :class="{ 'bg-[#f6f8fc] text-[#409eff]': activeItem && activeItem.startsWith('1') }" index="1"
                                     v-if="role == 'Seller'">
                                     <template #title>
                                         <el-icon><sold-out /></el-icon>
-                                        <span>Seller History</span>
+                                        <span :class="{ 'text-[#409eff]': activeItem && activeItem.startsWith('1') }">Seller History</span>
                                     </template>
                                     <el-menu-item-group>
                                         <template #title><span>Status</span></template>
@@ -73,7 +73,7 @@
                                         <el-menu-item index="1-4-1">item one</el-menu-item>
                                     </el-sub-menu> -->
                                 </el-sub-menu>
-                                <el-menu-item :class="{ 'bg-[#f6f8fc]': activeItem === '2' }" index="2"
+                                <el-menu-item index="2"
                                     v-if="role == 'Seller'" @click="pushToPage('/create-auction')">
                                     <el-icon><document-add /></el-icon>
                                     <template #title>Create Auction</template>
