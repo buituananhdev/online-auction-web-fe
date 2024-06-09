@@ -75,7 +75,7 @@ onMounted(async () => {
                 <div class="flex items-center gap-3">
                     <span><b>{{ feedbackList.length }}</b> feedback</span>
                     <span><b>{{ productList.length }}</b> items</span>
-                    <el-rate disabled show-score v-model="rating" :score-template="rating.toFixed(2)+' points'" />
+                    <el-rate disabled show-score v-model="rating" :score-template="rating?.toFixed(2)+' points'" />
                 </div>
             </div>
         </div>
