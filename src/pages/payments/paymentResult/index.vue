@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useAuctionStore } from '../../../stores/auction.store';
 import { getSingleAuction } from '../../../services/auction.service'
 import { bidAuction } from '../../../services/bid.service'
+import { postPayment } from '../../../services/payment.service'
 import { feedBack } from '../../../services/feedback.service'
 
 const useAuction = useAuctionStore()
@@ -15,6 +16,7 @@ const feedback = ref({})
 const isTransactionSuccess = ref(true)
 const number = ref(0)
 const dialogVisible = ref(false)
+const transactionInf = ref({})
 
 async function getTransactionStatus(id) {
     switch (id) {
@@ -36,6 +38,10 @@ async function getDetailAuction() {
     } catch (err) {
         console.error(err)
     }
+}
+
+function gotoPage(path) {
+    router.push(path)
 }
 
 async function sendFeedback() {
@@ -66,6 +72,17 @@ async function buyItem() {
             auctionId: auctionId.value,
             bidAmount: auction.value.maxPrice,
         })
+        transactionInf.value.bidId = res.data.id
+    } catch (error) {   
+        console.error(error);
+    }
+}
+
+
+async function addPayment() {
+    try {
+        const res = await postPayment(transactionInf.value)
+        console.log('res', res.data);
     } catch (error) {
         console.error(error);
     }
@@ -75,6 +92,18 @@ onBeforeMount(async () => {
     if (route.query.vnp_TxnRef) {
         number.value = route.query.vnp_TxnRef
     }
+    if (route.query.vnp_Amount) {
+        transactionInf.value.amount = parseFloat(route.query.vnp_Amount)
+    }
+    if(route.query.vnp_TransactionNo) {
+        transactionInf.value.transactionNumber = route.query.vnp_TransactionNo
+    }
+    if(route.query.vnp_ResponseCode) {
+        transactionInf.value.code = route.query.vnp_ResponseCode
+    }
+    if (route.query.vnp_BankCode) {
+        transactionInf.value.bank = route.query.vnp_BankCode
+    }
     auctionId.value = localStorage.getItem('auctionId')
     if (useAuction.watchingAuction.id) {
         auction.value = useAuction.watchingAuction
@@ -82,8 +111,9 @@ onBeforeMount(async () => {
         await getDetailAuction()
     }
     if (route.query.vnp_TransactionStatus) {
-        getTransactionStatus(route.query.vnp_TransactionStatus)
+        await getTransactionStatus(route.query.vnp_TransactionStatus)
     }
+    await addPayment()
 })
 </script>
 
@@ -95,7 +125,7 @@ onBeforeMount(async () => {
                     <div class="flex flex-col items-center gap-5">
                         <span>Your order number is <span class="font-semibold text-[#409eff]">{{ number }}</span></span>
                         <div>
-                            <el-button size="large" class="w-[150px]" @click="router.push('/auctions')">Continue
+                            <el-button size="large" class="w-[150px]" @click="gotoPage('/auctions')">Continue
                                 shopping</el-button>
                             <el-button size="large" class="w-[150px]" type="primary"
                                 @click="dialogVisible = isTransactionSuccess">Rate</el-button>
@@ -108,10 +138,10 @@ onBeforeMount(async () => {
                     <div class="flex flex-col items-center gap-5">
                         <span>An error occurred during the transaction, please try again later</span>
                         <div class="flex items-center justify-center gap-2">
-                            <el-button class="w-[150px]" size="large" @click="router.push('/')">Go to home
+                            <el-button class="w-[150px]" size="large" @click="gotoPage('/')">Go to home
                                 page</el-button>
                             <el-button class="w-[150px]" size="large" type="primary"
-                                @click="router.push(`/payments/${auctionId}`)">Try again</el-button>
+                                @click="gotoPage(`/payments/${auctionId}`)">Try again</el-button>
                         </div>
                     </div>
                 </template>

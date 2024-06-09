@@ -65,12 +65,12 @@
                 <span class="font-[550]">{{ useAuth.user.fullName }} | </span>
                 <el-popover placement="bottom-end" :width="200" trigger="click" class="p-0">
                     <ul>
-                        <li class="border-b py-2 cursor-pointer" @click="pushToPage('/profile')">My account</li>
+                        <li class="border-b py-2 cursor-pointer" @click.prevent="pushToPage('/profile')">My account</li>
                         <li class="pt-2 cursor-pointer" @click="signOut">Sign out</li>
                     </ul>
                     <template #reference>
                         <el-avatar style="cursor: pointer"
-                            :src="useAuth.user.avatar || 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'" />
+                            :src="useAuth?.user?.avatar || 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'" />
                     </template>
                 </el-popover>
             </div>

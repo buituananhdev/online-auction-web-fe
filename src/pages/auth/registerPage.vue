@@ -146,6 +146,16 @@ const rules = reactive({
     email: [{ validator: checkMail, trigger: 'blur' }],
 })
 
+function checkValidSubmit(user) {
+    for (let key in user) {
+        if (user[key] === null) {
+            return 0;
+        }
+    }
+    if(user.password !== user.confirmPassword) return 1
+    return 2;
+}
+
 const submit = async (formEl) => {
     if (!formEl) return
     formEl.validate((valid) => {
@@ -159,6 +169,21 @@ const submit = async (formEl) => {
         })
     } else {
         try {
+            if(checkValidSubmit(user) !== 2) {
+                if(checkValidSubmit(user) === 1)
+                    ElNotification({
+                        title: 'Error',
+                        message: 'Password and confirm password do not match!',
+                        type: 'error',
+                    })
+                else 
+                    ElNotification({
+                        title: 'Error',
+                        message: 'Please input all information!',
+                        type: 'error',
+                    })
+                return
+            }
             await registerApi(user)
             router.push({ name: 'login' })
             localStorage.setItem('isAuthPage', true)

@@ -10,7 +10,7 @@ defineProps({
 
 <template> 
     <div class="flex items-start gap-4 pb-2 pt-4 border-b">
-        <img class="w-[30px] h-[30px] rounded-full" :src="feedbackItem?.fromUser.avatar || 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'" alt="user avatar">
+        <img class="w-[30px] h-[30px] rounded-full" :src="feedbackItem?.fromUser?.avatar || 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'" alt="user avatar">
         <div class="flex flex-col gap-1">
             <span>{{ feedbackItem?.fromUser.fullName }}</span>
             <el-rate style="width: 7px;" disabled v-model="feedbackItem.rating" />

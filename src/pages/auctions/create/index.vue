@@ -85,9 +85,9 @@ const validateField = (field, value, errorMessage) => {
         // debugger
         if (parseFloat(currentAuction.startingPrice) > parseFloat(currentAuction.maxPrice)) {
             isValids.value[field] = false
-            if(field === 3)
+            if (field === 3)
                 return new Error('Max Price must be greater than Starting Price')
-            else 
+            else
                 return new Error('Starting Price must be less than Max Price')
         }
         if (value < 0) {
@@ -269,20 +269,19 @@ const upload = async (file) => {
                     </el-form-item>
                 </div>
             </div>
-            <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-                <h2 class="font-bold mb-[10px]">TITLE</h2>
-                <div class="w-full">
+            <div class="px-6 pt-8 flex items-center pb-10 border-b-[1px]">
+                <h2 class="font-bold mb-[10px] w-1/5">TITLE</h2>
+                <div class="w-4/5">
                     <el-form-item prop="productName">
                         <el-input v-model="currentAuction.productName" maxlength="100" placeholder="Please input"
-                            show-word-limit clearable type="text" size="large" style="width: 908px" />
+                            show-word-limit clearable type="text" size="large" style="width: 600px" />
                     </el-form-item>
                 </div>
             </div>
-            <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-                <h2 class="font-bold mb-[10px]">ITEM CATEGORY</h2>
-                <div class="w-full flex gap-10 items-center">
-                    <span class="text-sm">Please select the product's category type!</span>
-                    <el-form-item prop="categoryId" style="margin-bottom: 0; width: 70%;">
+            <div class="px-6 pt-8 flex  pb-10 border-b-[1px]">
+                <h2 class="font-bold mb-[10px] w-1/5">CATEGORY NAME</h2>
+                <div class="w-full flex flex-col gap-10  w-4/5 items-center">
+                    <el-form-item prop="categoryId" style="margin-bottom: 0; width: 100%;">
                         <el-select v-model="currentAuction.categoryId" placeholder="Select" size="large"
                             style="min-width: 600px;">
                             <el-option v-for="item in listCategories" :key="item.id" :label="item.categoryName"
@@ -291,54 +290,64 @@ const upload = async (file) => {
                     </el-form-item>
                 </div>
             </div>
-            <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-                <h2 class="font-bold mb-[10px]">CONDITION</h2>
-                <h3 class="font-semibold mt-4 mb-1">Item condition</h3>
-                <button class="underline w-fit cursor-default hover:opacity-50" @click.prevent="handleSelectCondition">
-                    {{ getConditionText(currentAuction.condition) }}
-                </button>
-                <span class="text-sm mt-4">Disclose all defects to prevent returns and earn better feedback.</span>
+            <div class="px-6 pt-8 flex pb-10 border-b-[1px]">
+                <h2 class="font-bold mb-[10px] w-1/5">CONDITION</h2>
+                <div class="flex flex-col w-4/5 ml-[68px]">
+                    <button class="underline w-fit cursor-default hover:opacity-50 text-[#409eff]"
+                        @click.prevent="handleSelectCondition">
+                        {{ getConditionText(currentAuction.condition) }}
+                    </button>
+                    <span class="text-sm mt-4">Disclose all defects to prevent returns and earn better feedback.</span>
+                </div>
             </div>
-            <div class="mx-6 pt-8 flex flex-col pb-10 border-b-[1px]">
-                <h2 class="font-bold mb-[10px]">DESCRIPTION</h2>
-                <QuillEditor theme="snow" v-model:content="currentAuction.description" contentType="html"
-                    placeholder="Write a detailed description of your item, or save time and let Al draft it for you" />
+            <div class="mx-6 pt-8 flex pb-10 border-b-[1px]">
+                <h2 class="font-bold mb-[10px] w-1/5">DESCRIPTION</h2>
+                <div class="flex flex-col w-4/5 overflow-hidden ml-[65px]">
+                    <QuillEditor theme="snow" v-model:content="currentAuction.description" contentType="html"
+                        style="width: 100%;"
+                        placeholder="Write a detailed description of your item, or save time and let Al draft it for you" />
+                </div>
             </div>
             <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
                 <h2 class="font-bold mb-[10px]">PRICING</h2>
-                <div class="flex gap-5">
-                    <div class="flex flex-col">
-                        <span class="mb-1 font-medium">Starting bid</span>
-                        <el-form-item prop="startingPrice">
+                <div class="flex flex-col gap-5">
+                    <div class="flex">
+                        <span class="mb-1 font-medium w-1/5 text-[#505050] text-sm">Starting bid</span>
+                        <el-form-item prop="startingPrice" style="margin-left: 60px;">
                             <el-input v-model="currentAuction.startingPrice" style="width: 240px"
                                 placeholder="Please input"
-                                :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
+                                :formatter="value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                :parser="value => value.replace(/\$\s?|(,*)/g, '')">
+                            </el-input>
                         </el-form-item>
                     </div>
-                    <div class="flex flex-col">
-                        <span class="mb-1 font-medium">Buy It Now(optional)</span>
-                        <el-form-item prop="maxPrice">
+                    <div class="flex">
+                        <span class="mb-1 font-medium w-1/5 text-[#505050] text-sm">Buy It Now (optional)</span>
+                        <el-form-item prop="maxPrice" style="margin-left: 60px;">
                             <el-input v-model="currentAuction.maxPrice" style="width: 240px" placeholder="Please input"
-                                :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
+                                :formatter="value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                :parser="value => value.replace(/\$\s?|(,*)/g, '')">
+                            </el-input>
                         </el-form-item>
                     </div>
                 </div>
-                <div class="flex flex-col mt-4">
-                    <span class="mb-1 font-medium">Auction End Time</span>
-                    <el-form-item prop="endTime" style="display: flex; flex-direction: row">
+                <div class="flex items-start mt-4">
+                    <span class="mb-1 font-medium w-1/5 text-[#505050] text-sm">Auction End Time</span>
+                    <el-form-item prop="endTime"
+                        style="display: flex; flex-direction: row; width: 80%; margin-left: 65px;">
                         <div class="block">
                             <el-date-picker v-model="currentAuction.endTime" type="datetime"
-                                placeholder="Select date and time" />
+                                placeholder="Select date and time">
+                            </el-date-picker>
                         </div>
                     </el-form-item>
                 </div>
                 <div class="w-full mt-4">
-                    <el-checkbox v-model="currentAuction.canReturn" label="After receipt, returns allowed"
-                        size="large" />
+                    <el-checkbox v-model="currentAuction.canReturn" label="After receipt, returns allowed" size="large">
+                    </el-checkbox>
                 </div>
             </div>
+
             <div class="w-full my-10">
                 <el-form-item style="display: flex; flex-direction: row">
                     <button type="submit"
