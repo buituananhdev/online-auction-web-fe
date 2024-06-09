@@ -249,7 +249,7 @@ const upload = async (file) => {
 </script>
 
 <template>
-    <div class="w-full flex flex-col px-[72px] text-[#191919] z-0">
+    <div class="w-full flex flex-col px-5 text-[#191919] z-0">
         <h1 class="font-bold text-2xl mt-[50px] px-6 w-full flex justify-start">Complete your listing</h1>
         <el-form @submit.prevent="submit" ref="form" :rules="rules" :model="currentAuction" label-width="auto">
             <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
@@ -280,7 +280,7 @@ const upload = async (file) => {
             </div>
             <div class="px-6 pt-8 flex  pb-10 border-b-[1px]">
                 <h2 class="font-bold mb-[10px] w-1/5">CATEGORY NAME</h2>
-                <div class="w-full flex flex-col gap-10  w-4/5 items-center">
+                <div class="flex flex-col gap-10  w-4/5 items-center">
                     <el-form-item prop="categoryId" style="margin-bottom: 0; width: 100%;">
                         <el-select v-model="currentAuction.categoryId" placeholder="Select" size="large"
                             style="min-width: 600px;">
