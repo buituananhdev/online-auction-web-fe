@@ -406,7 +406,7 @@ onBeforeMount(async () => {
                 <div class="cursor-pointer flex items-center gap-2 p-2 border rounded-lg w-full"
                     @click="goToSellerInfor(auction.user.id)">
                     <img class="w-[35px] h-[35px] object-contain rounded-full"
-                        :src="auction.user?.avatar"
+                        :src="auction.user.avatar || 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'"
                         alt="" />
                     <div class="flex flex-col">
                         <span>{{ auction.user && auction.user.fullName }}</span>
