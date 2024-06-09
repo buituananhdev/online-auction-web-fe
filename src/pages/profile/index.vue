@@ -44,7 +44,7 @@
                     <div class="pb-[30px] flex">
                         <span class=" min-w-[30%] text-right"></span>
                         <button
-                            class="px-5 py-2 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-2xl w-full transition-all"
+                            class="px-5 py-2 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-3xl w-[380px] transition-all"
                             type="submit">Save</button>
                     </div>
                 </el-form>

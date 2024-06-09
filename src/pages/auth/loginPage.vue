@@ -4,7 +4,7 @@
             <h1 class="text-center text-5xl font-bold text-gray-800 mb-6">Log in</h1>
             <p class="text-center">
                 Sign in to NhanCute or
-                <a href="/register" class="text-[#409EFF] cursor-pointer underline">create an account</a>
+                <a href="/register" class="text-[#409EFF] cursor-pointer underline">Create an account</a>
             </p>
             <div class="my-4 flex flex-col justify-center items-center gap-4">
                 <el-form ref="userRef" :rules="rules" style="max-width: 600px; margin-bottom: -20px" :model="user"
@@ -159,7 +159,6 @@ const submit = async (formEl) => {
             } else {
                 router.push('/')
             }
-
             ElNotification({
                 title: 'Success',
                 message: 'Log in successfully!',
