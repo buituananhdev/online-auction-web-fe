@@ -38,7 +38,7 @@ const SearchIcon = Search
 const router = useRouter()
 const route = useRoute()
 const searchValue = ref('')
-const status = ref(1)
+const status = ref(0)
 const selectedItem = ref(null)
 
 const meta = ref({
@@ -50,6 +50,7 @@ const meta = ref({
 const listBuyerHistorys = ref([])
 
 const listProductStatus = ref([
+    { value: 0, text: 'All' },
     { value: 1, text: 'Bidding' },
     { value: 2, text: 'Offers' },
     { value: 3, text: 'Didn\'t win' },

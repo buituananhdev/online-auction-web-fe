@@ -159,9 +159,7 @@ const submit = async (formEl) => {
         })
     } else {
         try {
-            await registerApi(user).then((res) => {
-                const data = res.data.data
-            })
+            await registerApi(user)
             router.push({ name: 'login' })
             localStorage.setItem('isAuthPage', true)
             ElNotification({
@@ -170,6 +168,22 @@ const submit = async (formEl) => {
                 type: 'success',
             })
         } catch (error) {
+            console.log('hhhh', error);
+            // if(error.response.status === 400) {
+            //     ElNotification({
+            //         title: 'Error',
+            //         message: 'Email already exists!',
+            //         type: 'error',
+            //     })
+            // }
+            // debugger
+            if(error.response.data.error === 'Email already exists!') {
+                ElNotification({
+                    title: 'Error',
+                    message: 'Email already exists!',
+                    type: 'error',
+                })
+            } else 
             ElNotification({
                 title: 'Error',
                 message: 'Login Failed!',
