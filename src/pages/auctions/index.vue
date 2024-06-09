@@ -190,6 +190,7 @@ const getListProduct = async (
         )
         listProducts.value = res.data.data
         console.log('list', listProducts.length)
+        router.replace({ query: {} });
         meta.value = res.data.meta
         console.log('neta', meta)
     } catch (error) {
@@ -265,8 +266,12 @@ const Search = async () => {
         if (filter.sellPrice.max) {
             query.maxMaxPrice = filter.sellPrice.max
         }
+        console.log('filter.categories.length', filter.categories.length);
         if (filter.categories && filter.categories.length) {
             query.categories = filter.categories.join(',')
+        } else {
+            console.log('delete');
+            delete query.categories
         }
         console.log('query', query)
         router.push({ path: `/auctions`, query })

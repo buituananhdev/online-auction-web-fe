@@ -82,6 +82,8 @@ const bidPopUpTitle = ref('Place your bid')
 const isReviewBid = ref(false)
 
 const handlePlaceBid = (data = false) => {
+    if(auction.value.productStatus !== 1) 
+    return
     if (!auth.isLoggedIn) {
         return router.push('/login')
     }
@@ -175,10 +177,10 @@ async function getExploreAuctionList() {
     try {
         if (auction.value.category) {
             const res = await getListAuctions(1, 15, '', [auction.value.category.id])
-            exploredAuctionList.value = res.data.data
+            exploredAuctionList.value = res.data.data.filter((item) => item.id !== auction.value.id)
         } else {
             const res = await getListAuctions(1, 15)
-            exploredAuctionList.value = res.data.data
+            exploredAuctionList.value = res.data.data.filter((item) => item.id !== auction.value.id)
         }
     } catch (error) {
         console.log(error)
@@ -286,7 +288,7 @@ onBeforeMount(async () => {
     <div class="auction-detail-container">
         <el-page-header style="color: #a2a2a2" title="Back to home page" :icon="ArrowLeft" @back="backtoHome">
             <template #extra>
-                <span class="text-xs text-[#a2a2a2] underline">Add to Watchlist</span>
+                <span @click="addToWatchlist" class="cursor-pointer text-xs text-[#a2a2a2] underline">Add to Watchlist</span>
             </template>
         </el-page-header>
         <el-dialog v-model="dialogFormVisible" :title="bidPopUpTitle" width="500"
@@ -432,11 +434,11 @@ onBeforeMount(async () => {
                     <span class="inline-block text-[#8B96A5] w-1/3">Condition:</span>
                     <span class="text-[#505050]">{{ converConditionText(auction.condition) }}</span>
                 </div>
-                <button v-show="userRole === 'Buyer'" @click="handlePlaceBid"
+                <button v-show="userRole === 'Buyer' || auction.productStatus === 2 || auction.productStatus === 3" @click="handlePlaceBid"
                     class="w-full bg-[#409EFF] text-white font-bold rounded-3xl py-2 text-lg hover:bg-[#3A8EE4] transition-all">
-                    Place bid
+                    {{ auction.productStatus === 2 ? 'Sold' : auction.productStatus === 3 ? 'Canceled' : 'Place bid'}}
                 </button>
-                <div v-show="userRole === 'Buyer'" class="flex items-center w-full gap-2">
+                <div v-show="(userRole === 'Buyer' && auction.productStatus === 1) || (auction.productStatus === 1)" class="flex items-center w-full gap-2">
                     <button
                         class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white transition-all"
                         @click="handlePlaceBid(true)">
@@ -473,7 +475,7 @@ onBeforeMount(async () => {
             </div>
         </div>
         <div class="mt-10 mx-4">
-            <span class="font-bold text-2xl">Explore related Items</span>
+            <span v-show="exploredAuctionList.length" class="font-bold text-2xl">Explore related Items</span>
             <div class="auction-detail-explored-list">
                 <Icon v-show="exploredAuctionList.length > 3" @click="scrollToLeft(scrollBox2)"
                     class="auction-detail-arrow-icon auction-detail-left-icon w-[300px]"
