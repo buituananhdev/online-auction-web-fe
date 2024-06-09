@@ -7,7 +7,7 @@ import { Plus } from '@element-plus/icons-vue'
 import { uploadImage } from "../../../plugins/uploadImage.js";
 
 const listCategories = ref([])
-const isValids = ref([false, false, false, false, false])
+const isValids = ref([false, false, false, false, false, false])
 const isShowSelectCondition = ref(false)
 const router = useRouter()
 const form = ref(null)
@@ -117,6 +117,13 @@ const validateCategoryId = (rule, value, callback) => {
     else callback()
 }
 
+const validateProductImage = (rule, value, callback) => {
+    const errorMessage = 'Product Image is required'
+    const error = validateField(5, value, errorMessage)
+    if (error) callback(error)
+    else callback()
+}
+
 const validateStartingPrice = (rule, value, callback) => {
     const errorMessage = 'Starting Price is required'
     const error = validateField(2, value, errorMessage)
@@ -153,6 +160,7 @@ const rules = reactive({
     startingPrice: [{ validator: validateStartingPrice, trigger: 'blur' }],
     maxPrice: [{ validator: validateMaxPrice, trigger: 'blur' }],
     endTime: [{ validator: validateEndTime, trigger: 'blur' }],
+    productImage: [{ validator: validateProductImage, required: true, trigger: 'blur' }],
 })
 
 const fileList = ref([]);
@@ -247,16 +255,18 @@ const upload = async (file) => {
             <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
                 <h2 class="font-bold mb-[10px]">PHOTOS & VIDEO</h2>
                 <span class="text-sm font-semibold">Buyers want to see all details and angles.</span>
-                <div class="mt-6">
-                    <el-upload v-model:file-list="fileList" action="#" :http-request="upload" list-type="picture-card"
-                        :on-preview="handlePictureCardPreview" :on-remove="handleRemove" class="upload-demo">
-                        <el-icon>
-                            <Plus />
-                        </el-icon>
-                    </el-upload>
-                    <el-dialog v-model="dialogVisible">
-                        <img w-full :src="dialogImageUrl" alt="Preview Image" />
-                    </el-dialog>
+                <div class="mt-6 flex">
+                    <el-form-item prop="productImage">
+                        <el-upload v-model:file-list="fileList" action="#" :http-request="upload" list-type="picture-card"
+                            :on-preview="handlePictureCardPreview" :on-remove="handleRemove" class="upload-demo">
+                            <el-icon>
+                                <Plus />
+                            </el-icon>
+                        </el-upload>
+                        <el-dialog v-model="dialogVisible">
+                            <img w-full :src="dialogImageUrl" alt="Preview Image" />
+                        </el-dialog>
+                    </el-form-item>
                 </div>
             </div>
             <div class="px-6 pt-8 flex items-center pb-10 border-b-[1px]">
