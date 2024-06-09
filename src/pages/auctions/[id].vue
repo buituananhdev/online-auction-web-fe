@@ -441,7 +441,7 @@ onBeforeMount(async () => {
                     class="w-full bg-[#409EFF] text-white font-bold rounded-3xl py-2 text-lg hover:bg-[#3A8EE4] transition-all">
                     {{ auction.productStatus === 2 ? 'Sold' : auction.productStatus === 3 ? 'Canceled' : 'Place bid'}}
                 </button>
-                <div v-show="(userRole === 'Buyer' && auction.productStatus === 1) || (auction.productStatus === 1)" class="flex items-center w-full gap-2">
+                <div v-show="(userRole === 'Buyer' && auction.productStatus === 1)" class="flex items-center w-full gap-2">
                     <button
                         class="w-full text-[#409EFF] rounded-3xl py-2 border-[#409EFF] border hover:bg-[#409EFF] hover:text-white transition-all"
                         @click="handlePlaceBid(true)">
