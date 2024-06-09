@@ -70,7 +70,7 @@
                     </ul>
                     <template #reference>
                         <el-avatar style="cursor: pointer"
-                            :src="useAuth.user.avatar || 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'" />
+                            :src="useAuth.user.avatar || 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'" />
                     </template>
                 </el-popover>
             </div>

@@ -30,7 +30,7 @@
                 <div class="py-3 w-3/5">
                     <div class="flex items-center gap-2 mb-3">
                         <img class="w-[24px] h-[24px] rounded-full"
-                            :src="auction.user.avatar || 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'"
+                            :src="auction.user.avatar || 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'"
                             alt="">
                         <span>{{ auction.user && auction.user.fullName }}</span>
                     </div>
