@@ -8,13 +8,20 @@
             <div class="flex items-center">
                 <button
                     class="px-5 py-1 h-10 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-md transition-all mr-10"
-                    @click="() => { isShowChangePassword = true }">Change Password</button>
+                    @click="
+                        () => {
+                            isShowChangePassword = true
+                        }
+                    "
+                >
+                    Change Password
+                </button>
             </div>
         </div>
         <div class="relative flex pt-[30px] font-normal">
             <div class="flex flex-col text-sm pr-[50px] flex-1 border-r border-gray-200">
                 <!-- <img src="../../assets/icons/edit-icon.svg" alt="edit-icon" -->
-                    <!-- class="w-[24px] h-[24px] absolute top-[10px] right-[31%] cursor-pointer"> -->
+                <!-- class="w-[24px] h-[24px] absolute top-[10px] right-[31%] cursor-pointer"> -->
                 <el-form @submit.prevent="submit" ref="form" :model="currentUser" label-width="auto" :rules="rules">
                     <div class="pb-[30px] flex">
                         <span class="text-[#555555CC] min-w-[30%] text-right">Email</span>
@@ -23,80 +30,137 @@
                     <div class="pb-[30px] flex items-center">
                         <span class="text-[#555555CC] min-w-[30%] text-right">Full Name</span>
                         <el-form-item prop="fullName">
-                            <el-input size="large" v-model="currentUser.fullName"
-                                style="width: 400px; padding-left: 20px; color: #333333;" />
+                            <el-input
+                                size="large"
+                                v-model="currentUser.fullName"
+                                style="width: 400px; padding-left: 20px; color: #333333"
+                            />
                         </el-form-item>
                     </div>
                     <div class="pb-[30px] flex items-center">
                         <span class="text-[#555555CC] min-w-[30%] text-right">Phone Number</span>
                         <el-form-item prop="phone">
-                            <el-input type="number" size="large" v-model="currentUser.phone"
-                                style="padding-left: 20px; color: #333333; width: 400px;" />
+                            <el-input
+                                type="number"
+                                size="large"
+                                v-model="currentUser.phone"
+                                style="padding-left: 20px; color: #333333; width: 400px"
+                            />
                         </el-form-item>
                     </div>
                     <div class="pb-[30px] flex items-center">
                         <span class="text-[#555555CC] min-w-[30%] text-right">Address</span>
                         <el-form-item prop="address">
-                            <el-input size="large" v-model="currentUser.address"
-                                style="padding-left: 20px; color: #333333; width: 400px;" />
+                            <el-input
+                                size="large"
+                                v-model="currentUser.address"
+                                style="padding-left: 20px; color: #333333; width: 400px"
+                            />
                         </el-form-item>
                     </div>
                     <div class="pb-[30px] flex">
-                        <span class=" min-w-[30%] text-right"></span>
+                        <span class="min-w-[30%] text-right"></span>
                         <button
                             class="px-5 py-2 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-3xl w-[380px] transition-all"
-                            type="submit">Save</button>
+                            type="submit"
+                        >
+                            Save
+                        </button>
                     </div>
                 </el-form>
             </div>
             <div class="min-w-[30%] flex flex-col items-center justify-center">
-                <el-upload class="avatar-uploader" v-model="currentUser?.avatar" action="true" :show-file-list="false"
-                    :http-request="upload" :before-upload="beforeAvatarUpload">
-                    <img v-if="currentUser?.avatar" :src="currentUser?.avatar" class="avatar" />
+                <el-upload
+                    class="avatar-uploader"
+                    v-model="currentUser.avatar"
+                    action="true"
+                    :show-file-list="false"
+                    :http-request="upload"
+                    :before-upload="beforeAvatarUpload"
+                >
+                    <img
+                        v-if="currentUser?.avatar"
+                        :src="
+                            currentUser?.avatar ||
+                            'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'
+                        "
+                        class="avatar"
+                    />
                     <el-icon v-else class="avatar-uploader-icon">
                         <Plus />
                     </el-icon>
                 </el-upload>
                 <button
                     class="px-5 mt-10 py-2 border border-gray-300 ml-5 hover:bg-[#409EFF] hover:text-white text-base font-semibold rounded-md transition-all"
-                    @click="changeAvatar">Update Avatar</button>
+                    @click="changeAvatar"
+                >
+                    Update Avatar
+                </button>
             </div>
         </div>
     </div>
-    <el-dialog v-model="isShowChangePassword" width="600" style="border-radius: 16px;">
+    <el-dialog v-model="isShowChangePassword" width="600" style="border-radius: 16px">
         <div class="flex flex-col text-sm h-[65%] items-center justify-center rounded-lg gap-5">
-            <el-form ref="passwordForm" :model="changePasswordForm" @submit.prevent="submitChangePassword"
-                label-width="auto" :rules="rules">
+            <el-form
+                ref="passwordForm"
+                :model="changePasswordForm"
+                @submit.prevent="submitChangePassword"
+                label-width="auto"
+                :rules="rules"
+            >
                 <h1 class="text-3xl flex items-center justify-center mb-10 font-bold">Change Password</h1>
                 <div class="flex flex-col mb-5 gap-2">
                     <span>Current Password</span>
                     <el-form-item prop="currentPassword">
-                        <el-input size="large" type="password" show-password
-                            v-model="changePasswordForm.currentPassword" placeholder="Please input your old password"
-                            style="width: 400px; color: #333333;" />
+                        <el-input
+                            size="large"
+                            type="password"
+                            show-password
+                            v-model="changePasswordForm.currentPassword"
+                            placeholder="Please input your old password"
+                            style="width: 400px; color: #333333"
+                        />
                     </el-form-item>
                 </div>
                 <div class="flex flex-col mb-5 gap-2">
                     <span class="pb-[3px]">New Password</span>
                     <el-form-item prop="newPassword">
-                        <el-input size="large" type="password" show-password v-model="changePasswordForm.newPassword"
-                            placeholder="Please input your new password" style="width: 400px; color: #333333;" />
+                        <el-input
+                            size="large"
+                            type="password"
+                            show-password
+                            v-model="changePasswordForm.newPassword"
+                            placeholder="Please input your new password"
+                            style="width: 400px; color: #333333"
+                        />
                     </el-form-item>
                 </div>
                 <div class="flex flex-col mb-10 gap-2">
                     <span class="pb-[3px]">Confirm Password</span>
                     <el-form-item prop="confirmNewPass">
-                        <el-input size="large" type="password" show-password v-model="changePasswordForm.confirmNewPass"
-                            placeholder="Please confirm your new password" style="width: 400px; color: #333333;" />
+                        <el-input
+                            size="large"
+                            type="password"
+                            show-password
+                            v-model="changePasswordForm.confirmNewPass"
+                            placeholder="Please confirm your new password"
+                            style="width: 400px; color: #333333"
+                        />
                     </el-form-item>
                 </div>
                 <div class="flex pb-8 items-center justify-center gap-4">
                     <button
                         class="hover:bg-[#E23F33] text-[#E23F33] border-gray-300 border rounded-md py-[7px] px-5 hover:text-white transition"
-                        @click.prevent="isShowChangePassword = false">Cancel</button>
+                        @click.prevent="isShowChangePassword = false"
+                    >
+                        Cancel
+                    </button>
                     <button
                         class="border rounded-md py-[7px] px-5 bg-[#409EFF] hover:bg-[#3A8EE4] transition text-white"
-                        type="submit">Confirm</button>
+                        type="submit"
+                    >
+                        Confirm
+                    </button>
                 </div>
             </el-form>
         </div>
@@ -109,8 +173,7 @@ import { authStore } from '../../stores/auth.store'
 import { updateProfile, changePassword, updateAvatar } from '../../services/user.service'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import { uploadImage } from "../../plugins/uploadImage";
-
+import { uploadImage } from '../../plugins/uploadImage'
 
 const form = ref(null)
 const passwordForm = ref(null)
@@ -129,13 +192,12 @@ const beforeAvatarUpload = (rawFile) => {
     return true
 }
 
-
 const currentUser = reactive({
     fullName: userAuth.user.fullName,
     email: userAuth.user.email,
     phone: userAuth.user.phone,
     address: userAuth.user.address,
-    avatar: userAuth.user?.avatar
+    avatar: userAuth.user?.avatar,
 })
 
 const changePasswordForm = reactive({
@@ -145,16 +207,16 @@ const changePasswordForm = reactive({
 })
 
 const upload = async (file) => {
-    console.log(file);
+    console.log(file)
     try {
-        currentUser.avatar = await uploadImage(file.file);
+        currentUser.avatar = await uploadImage(file.file)
         // console.log("Upload successful:", currentUser.avatar);
     } catch (error) {
         ElNotification.error({
             title: 'Upload Error',
             message: 'Failed to upload image!',
-        });
-        console.error("Upload error:", error);
+        })
+        console.error('Upload error:', error)
     }
 }
 
@@ -221,9 +283,8 @@ const rules = reactive({
     address: [{ validator: validateAddress, trigger: 'blur' }],
     currentPassword: [{ validator: validateOldPass, trigger: 'blur' }],
     newPassword: [{ validator: validateNewPass, trigger: 'blur' }],
-    confirmNewPass: [{ validator: validateConfirmNewPass, trigger: 'blur' }]
+    confirmNewPass: [{ validator: validateConfirmNewPass, trigger: 'blur' }],
 })
-
 
 const submit = async () => {
     try {
@@ -232,13 +293,13 @@ const submit = async () => {
             title: 'Update Profile',
             message: 'Update Profile Successfully!',
             type: 'success',
-        });
+        })
     } catch (error) {
         ElNotification({
             title: 'Update Profile',
             message: 'Update Profile Failed!',
             type: 'error',
-        });
+        })
     }
 }
 
@@ -249,13 +310,13 @@ const changeAvatar = async () => {
             title: 'Update Avatar',
             message: 'Update Avatar Successfully!',
             type: 'success',
-        });
+        })
     } catch (error) {
         ElNotification({
             title: 'Update Avatar',
             message: 'Update Avatar Failed!',
             type: 'error',
-        });
+        })
     }
 }
 
@@ -274,15 +335,15 @@ const submitChangePassword = async () => {
             ElNotification({
                 title: 'Change password',
                 message: 'Change password successfully!',
-                type: 'success',    
-            });
+                type: 'success',
+            })
         } else {
             console.log('error submit!')
             ElNotification({
                 title: 'Change password',
                 message: 'Change password failed, please try again!',
                 type: 'error',
-            });
+            })
             return false
         }
     } catch (error) {
@@ -291,7 +352,7 @@ const submitChangePassword = async () => {
             title: 'Change password',
             message: 'Change password failed, please try again!',
             type: 'error',
-        });
+        })
         console.log(error)
     }
 }
