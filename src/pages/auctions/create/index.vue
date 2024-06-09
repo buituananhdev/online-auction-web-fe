@@ -293,7 +293,8 @@ const upload = async (file) => {
             <div class="mx-6 pt-8 flex pb-10 border-b-[1px]">
                 <h2 class="font-bold mb-[10px] w-1/5">DESCRIPTION</h2>
                 <div class="flex flex-col w-4/5 overflow-hidden ml-[65px]">
-                    <QuillEditor theme="snow" v-model:content="currentAuction.description" contentType="html" style="width: 100%;"
+                    <QuillEditor theme="snow" v-model:content="currentAuction.description" contentType="html"
+                        style="width: 100%;"
                         placeholder="Write a detailed description of your item, or save time and let Al draft it for you" />
                 </div>
             </div>
@@ -303,35 +304,40 @@ const upload = async (file) => {
                     <div class="flex">
                         <span class="mb-1 font-medium w-1/5 text-[#505050] text-sm">Starting bid</span>
                         <el-form-item prop="startingPrice" style="margin-left: 60px;">
-                            <el-input v-model="currentAuction.startingPrice" style=" width: 240px"
+                            <el-input v-model="currentAuction.startingPrice" style="width: 240px"
                                 placeholder="Please input"
-                                :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
+                                :formatter="value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                :parser="value => value.replace(/\$\s?|(,*)/g, '')">
+                            </el-input>
                         </el-form-item>
                     </div>
                     <div class="flex">
-                        <span class="mb-1 font-medium w-1/5 text-[#505050] text-sm"">Buy It Now(optional)</span>
+                        <span class="mb-1 font-medium w-1/5 text-[#505050] text-sm">Buy It Now (optional)</span>
                         <el-form-item prop="maxPrice" style="margin-left: 60px;">
                             <el-input v-model="currentAuction.maxPrice" style="width: 240px" placeholder="Please input"
-                                :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
+                                :formatter="value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                :parser="value => value.replace(/\$\s?|(,*)/g, '')">
+                            </el-input>
                         </el-form-item>
                     </div>
                 </div>
                 <div class="flex items-start mt-4">
-                    <span class="mb-1 font-medium w-1/5">Auction End Time</span>
-                    <el-form-item prop="endTime" style="display: flex; flex-direction: row; width: 80%; margin-left: 65px;">
+                    <span class="mb-1 font-medium w-1/5 text-[#505050] text-sm">Auction End Time</span>
+                    <el-form-item prop="endTime"
+                        style="display: flex; flex-direction: row; width: 80%; margin-left: 65px;">
                         <div class="block">
                             <el-date-picker v-model="currentAuction.endTime" type="datetime"
-                                placeholder="Select date and time" />
+                                placeholder="Select date and time">
+                            </el-date-picker>
                         </div>
                     </el-form-item>
                 </div>
                 <div class="w-full mt-4">
-                    <el-checkbox v-model="currentAuction.canReturn" label="After receipt, returns allowed"
-                        size="large" />
+                    <el-checkbox v-model="currentAuction.canReturn" label="After receipt, returns allowed" size="large">
+                    </el-checkbox>
                 </div>
             </div>
+
             <div class="w-full my-10">
                 <el-form-item style="display: flex; flex-direction: row">
                     <button type="submit"

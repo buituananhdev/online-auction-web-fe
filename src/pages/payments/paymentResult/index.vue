@@ -40,6 +40,10 @@ async function getDetailAuction() {
     }
 }
 
+function gotoPage(path) {
+    router.push(path)
+}
+
 async function sendFeedback() {
     try {
         feedback.value.toUserId = auction.value.user.id
@@ -121,7 +125,7 @@ onBeforeMount(async () => {
                     <div class="flex flex-col items-center gap-5">
                         <span>Your order number is <span class="font-semibold text-[#409eff]">{{ number }}</span></span>
                         <div>
-                            <el-button size="large" class="w-[150px]" @click="router.push('/auctions')">Continue
+                            <el-button size="large" class="w-[150px]" @click="gotoPage('/auctions')">Continue
                                 shopping</el-button>
                             <el-button size="large" class="w-[150px]" type="primary"
                                 @click="dialogVisible = isTransactionSuccess">Rate</el-button>
@@ -134,10 +138,10 @@ onBeforeMount(async () => {
                     <div class="flex flex-col items-center gap-5">
                         <span>An error occurred during the transaction, please try again later</span>
                         <div class="flex items-center justify-center gap-2">
-                            <el-button class="w-[150px]" size="large" @click="router.push('/')">Go to home
+                            <el-button class="w-[150px]" size="large" @click="gotoPage('/')">Go to home
                                 page</el-button>
                             <el-button class="w-[150px]" size="large" type="primary"
-                                @click="router.push(`/payments/${auctionId}`)">Try again</el-button>
+                                @click="gotoPage(`/payments/${auctionId}`)">Try again</el-button>
                         </div>
                     </div>
                 </template>
