@@ -50,9 +50,9 @@
                 </el-form>
             </div>
             <div class="min-w-[30%] flex flex-col items-center justify-center">
-                <el-upload class="avatar-uploader" v-model="currentUser.avatar" action="true" :show-file-list="false"
+                <el-upload class="avatar-uploader" v-model="currentUser?.avatar" action="true" :show-file-list="false"
                     :http-request="upload" :before-upload="beforeAvatarUpload">
-                    <img v-if="currentUser.avatar" :src="currentUser.avatar" class="avatar" />
+                    <img v-if="currentUser?.avatar" :src="currentUser?.avatar" class="avatar" />
                     <el-icon v-else class="avatar-uploader-icon">
                         <Plus />
                     </el-icon>
@@ -135,7 +135,7 @@ const currentUser = reactive({
     email: userAuth.user.email,
     phone: userAuth.user.phone,
     address: userAuth.user.address,
-    avatar: userAuth.user.avatar
+    avatar: userAuth.user?.avatar
 })
 
 const changePasswordForm = reactive({
@@ -148,7 +148,7 @@ const upload = async (file) => {
     console.log(file);
     try {
         currentUser.avatar = await uploadImage(file.file);
-        console.log("Upload successful:", currentUser.avatar);
+        // console.log("Upload successful:", currentUser.avatar);
     } catch (error) {
         ElNotification.error({
             title: 'Upload Error',

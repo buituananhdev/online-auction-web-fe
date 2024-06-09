@@ -15,6 +15,7 @@ const feedback = ref({})
 const isTransactionSuccess = ref(true)
 const number = ref(0)
 const dialogVisible = ref(false)
+const transactionInf = ref({})
 
 async function getTransactionStatus(id) {
     switch (id) {
@@ -66,6 +67,17 @@ async function buyItem() {
             auctionId: auctionId.value,
             bidAmount: auction.value.maxPrice,
         })
+    } catch (error) {   
+        console.error(error);
+    }
+}
+
+async function addPayment() {
+    try {
+        const res = await postPayment({
+            auctionId: auctionId.value,
+            amount: auction.value.maxPrice,
+        })
     } catch (error) {
         console.error(error);
     }
@@ -73,7 +85,19 @@ async function buyItem() {
 
 onBeforeMount(async () => {
     if (route.query.vnp_TxnRef) {
-        number.value = route.query.vnp_TxnRef
+        transactionInf.value.number = route.query.vnp_TxnRef
+    }
+    if (route.query.vnp_Amount) {
+        transactionInf.value.amount = route.query.vnp_Amount
+    }
+    if(route.query.vnp_TransactionNo) {
+        transactionInf.value.transactionNumber = route.query.vnp_TransactionNo
+    }
+    if(route.query.vnp_ResponseCode) {
+        transactionInf.value.code = route.query.vnp_ResponseCode
+    }
+    if (route.query.vnp_BankCode) {
+        transactionInf.value.bank = route.query.vnp_BankCode
     }
     auctionId.value = localStorage.getItem('auctionId')
     if (useAuction.watchingAuction.id) {
@@ -84,6 +108,7 @@ onBeforeMount(async () => {
     if (route.query.vnp_TransactionStatus) {
         getTransactionStatus(route.query.vnp_TransactionStatus)
     }
+    transactionInf.bidId = 1
 })
 </script>
 
@@ -93,7 +118,7 @@ onBeforeMount(async () => {
             <el-result v-if="isTransactionSuccess" icon="success" title="Payment success">
                 <template #extra>
                     <div class="flex flex-col items-center gap-5">
-                        <span>Your order number is <span class="font-semibold text-[#409eff]">{{ number }}</span></span>
+                        <span>Your order number is <span class="font-semibold text-[#409eff]">{{ transactionInf.number }}</span></span>
                         <div>
                             <el-button size="large" class="w-[150px]" @click="router.push('/auctions')">Continue
                                 shopping</el-button>

@@ -30,16 +30,16 @@
                 <div class="py-3 w-3/5">
                     <div class="flex items-center gap-2 mb-3">
                         <img class="w-[24px] h-[24px] rounded-full"
-                            :src="auction.user.avatar || 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'"
+                            :src="auction?.user?.avatar || 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'"
                             alt="">
                         <span>{{ auction.user && auction.user.fullName }}</span>
                     </div>
                     <div class="flex items-center gap-3">
                         <img class="w-[45px] h-[45px] rounded"
-                            src="https://s3-alpha.figma.com/hub/file/2785854380/baef8be6-906e-4d6f-b619-6cf457aba1f0-cover.png"
+                            :src="auction.imageUrl"
                             alt="">
                         <div class="flex flex-col gap-0.5">
-                            <el-text truncated class="font-bold text-base">{{ auction &&
+                            <el-text truncated class="font-bold text-base text-start">{{ auction &&
                                 auction.productName }}</el-text>
                             <span class="text-[8px] w-fit text-[red] p-[4px] border border-[red] rounded-lg">{{
                                 auction.canReturn ? 'You can return item' : ' Item cannot return' }}</span>
@@ -197,11 +197,15 @@ async function getDetailAuction() {
     }
 }
 
-onBeforeMount(async () => {
+onMounted(async () => {
     if (useAuction.watchingAuction.id) {
         auction.value = useAuction.watchingAuction
     } else {
         await getDetailAuction()
+    }
+    if(localStorage.getItem('isBuyNow') && useAuction.purchasePrice === 0) {
+        console.log('dddddd',parseFloat(localStorage.getItem('purchasePrice')));
+        useAuction.setPurchasePrice(parseFloat(localStorage.getItem('purchasePrice')))
     }
     localStorage.setItem('auctionId', route.params.id)
 })

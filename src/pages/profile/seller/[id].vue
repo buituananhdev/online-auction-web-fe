@@ -68,7 +68,7 @@ onMounted(async () => {
     <div>
         <div class="flex items-center gap-4 p-[32px] rounded-[20px] bg-[#F6F6F6] mb-[40px]">
             <img class="w-[120px] h-[120px] rounded-full"
-                :src="seller.avatar || 'https://scontent.fsgn2-3.fna.fbcdn.net/v/t39.30808-6/426587256_1430509044210042_7946706195478323343_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGJAwy2cy3ozNO6_7jEhyDyXu52TFDhi9Ve7nZMUOGL1VpuR-3ErXuUitueR_3NPEQEtrYu0xsOzygnsODxm_yg&_nc_ohc=mTwok-KpNkoQ7kNvgHHkIu4&_nc_ht=scontent.fsgn2-3.fna&oh=00_AfCt-oNHFsCC1xjcBfzkXmgyxJZInGuYuKKcA5rZwQDiCQ&oe=66400B10'"
+                :src="seller?.avatar || 'https://scontent.fsgn2-3.fna.fbcdn.net/v/t39.30808-6/426587256_1430509044210042_7946706195478323343_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGJAwy2cy3ozNO6_7jEhyDyXu52TFDhi9Ve7nZMUOGL1VpuR-3ErXuUitueR_3NPEQEtrYu0xsOzygnsODxm_yg&_nc_ohc=mTwok-KpNkoQ7kNvgHHkIu4&_nc_ht=scontent.fsgn2-3.fna&oh=00_AfCt-oNHFsCC1xjcBfzkXmgyxJZInGuYuKKcA5rZwQDiCQ&oe=66400B10'"
                 alt="">
             <div>
                 <span class="text-[32px] font-semibold">{{ seller.fullName }}</span>
