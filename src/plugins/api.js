@@ -54,7 +54,7 @@ axiosApiInstance.interceptors.response.use(
                 // })
                 localStorage.clear()
                 window.location.href = '/login'
-                localStorage.setItem('isAuthPage', true)
+                localStorage.setItem('isAuthPage', true)    
             }
         }
         return Promise.reject(error)

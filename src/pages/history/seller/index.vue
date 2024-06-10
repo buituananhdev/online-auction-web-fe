@@ -32,7 +32,7 @@
                         :key="item.id"
                         class="w-full flex items-center justify-center"
                     >
-                        <history-card :auction="item" @cancel-auction="handleCancelAuction(item)" />
+                        <history-card :auction="item" @cancel-auction="handleCancelAuction(item)" :path="`/profile/${item.user?.id}`"/>
                     </div>
                     <div class="flex justify-end w-full absolute bottom-0 right-0 gap-3">
                         <span class="text-sm underline text-[#409EFF] cursor-pointer" @click="meta.pageSize += size"

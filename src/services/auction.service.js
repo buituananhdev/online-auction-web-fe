@@ -103,3 +103,7 @@ export const getBuyerHistoryList = async (page = 1, pageSize = 10, searchQuery =
 export const updatePredictPrice = async (id, price) => {
     return await axiosApiInstance.patch(`/auctions/${id}/update-predict_avg_price?predictAvgPrice=${price}`)
 }
+
+export const getRevenue = async () => {
+    return axiosApiInstance.get(`/auctions/seller-revenue`)
+}

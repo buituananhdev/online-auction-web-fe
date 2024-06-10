@@ -53,7 +53,7 @@
                                     </template>
                                     <el-menu-item-group>
                                         <template #title><span>Status</span></template>
-                                        <el-menu-item index="1-1" @click="pushToPage('/seller-history')">All sold
+                                        <el-menu-item index="1-1" @click="pushToPage('/seller-history')">All
                                             items</el-menu-item>
                                         <el-menu-item index="1-2"
                                             @click="pushToPage({ path: '/seller-history', query: { status: 1 } })">Inprogress</el-menu-item>
@@ -73,7 +73,7 @@
                                         <el-menu-item index="1-4-1">item one</el-menu-item>
                                     </el-sub-menu> -->
                                 </el-sub-menu>
-                                <el-menu-item index="2"
+                                <el-menu-item index="2" :class="{ 'bg-[#f6f8fc]': activeItem === '2' }" 
                                     v-if="role == 'Seller'" @click="pushToPage('/create-auction')">
                                     <el-icon><document-add /></el-icon>
                                     <template #title>Create Auction</template>
@@ -86,7 +86,7 @@
                                     <template #title>Bids & Offers</template>
                                 </el-menu-item>
                                 <el-menu-item :class="{ 'bg-[#f6f8fc]': activeItem === '3' }" index="3"
-                                    v-if="role == 'Buyer' || 'Seller'" @click="pushToPage('/profile')">
+                                    v-if="role == 'Buyer' || 'Seller'" @click="pushToPage(`/profile/${useAuth.user.id}`)">
                                     <el-icon>
                                         <img src="../assets/icons/user.svg" width="18" alt="" />
                                     </el-icon>
@@ -106,6 +106,11 @@
                                     </el-icon>
                                     <template #title>Watchlist</template>
                                 </el-menu-item>
+                                <el-menu-item index="7" :class="{ 'bg-[#f6f8fc]': activeItem === '7' }" 
+                                    v-if="role == 'Seller'" @click="pushToPage('/revenue')">
+                                    <el-icon><Money /></el-icon>
+                                    <template #title>Revenue</template>
+                                </el-menu-item>
                             </el-menu>
                         </div>
                         <div class="ml-5 flex-auto">
@@ -124,7 +129,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import TheHeader from '../components/Layout/TheHeader.vue'
 import TheFooter from '../components/Layout/TheFooter.vue'
 import { authStore } from '../stores/auth.store'
-import { Search } from '@element-plus/icons-vue'
+import { Search, Money } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
     DocumentAdd,
@@ -141,9 +146,10 @@ const router = useRouter()
 const route = useRoute()
 const role = localStorage.getItem('role')
 const activeItem = ref()
+const useAuth = authStore()
 
 const handleHighLightItem = () => {
-    if (window.location.pathname === '/profile') {
+    if (window.location.pathname === `/profile/${useAuth.user.id}`) {
         activeItem.value = '3'
     } else if (window.location.pathname.startsWith('/seller-history')) {
         activeItem.value = '1-1'
@@ -151,6 +157,10 @@ const handleHighLightItem = () => {
         activeItem.value = '6'
     } else if (window.location.pathname === '/buyer-history') {
         activeItem.value = '5'
+    } else if (window.location.pathname === '/create-auction') {
+        activeItem.value = '2'
+    } else if (window.location.pathname === '/revenue') {
+        activeItem.value = '7'
     }
 }
 

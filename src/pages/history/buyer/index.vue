@@ -22,7 +22,7 @@
             </div>
             <div>
                 <history-product-list :meta="meta" :dataList="listBuyerHistorys" :size="size" :title="getTitle(status)"
-                    :isCollapse="isBiddingCollapse" />
+                    :isCollapse="isBiddingCollapse" :path="'seller'" />
             </div>
         </div>
     </div>

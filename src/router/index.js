@@ -42,15 +42,21 @@ const routes = [
         meta: { layout: 'activity', requiresAuth: true, sellerPermission: true },
     },
     {
+        path: '/revenue',
+        name: 'revenue',
+        component: () => import('../pages/revenue/index.vue'),
+        meta: { layout: 'activity', requiresAuth: true, sellerPermission: true },
+    },
+    {
         path: '/watchlist',
         name: 'watchlist',
         component: () => import('../pages/watchlist/index.vue'),
         meta: { layout: 'activity', requiresAuth: true },
     },
     {
-        path: '/profile',
+        path: '/profile/:id',
         name: 'profile',
-        component: () => import('../pages/profile/index.vue'),
+        component: () => import('../pages/profile/[id].vue'),
         meta: { layout: 'activity', requiresAuth: true },
     },
     {

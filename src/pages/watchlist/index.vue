@@ -20,7 +20,7 @@
                     class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
                     <div v-for="item in watchlist" :key="item.id" class="w-full flex items-center justify-center">
                         <!-- <history-card :auction="item" /> -->
-                        <history-card :auction="item" :isInWatchlist="true" />
+                        <history-card :auction="item" :isInWatchlist="true" :path="`/seller/${item.user?.id}`"/>
                     </div>
                     <div class="flex justify-end w-full absolute bottom-0 right-0 gap-3">
                         <span class="text-sm underline text-[#409EFF] cursor-pointer" @click="meta.pageSize += size"
