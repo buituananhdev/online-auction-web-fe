@@ -7,10 +7,11 @@ import { Plus } from '@element-plus/icons-vue'
 import { uploadImage } from "../../../plugins/uploadImage.js";
 
 const listCategories = ref([])
-const isValids = ref([false, false, false, false, false])
+const isValids = ref([false, false, false, false, false, false])
 const isShowSelectCondition = ref(false)
 const router = useRouter()
 const form = ref(null)
+const fileList = reactive([]);
 
 let currentAuction = reactive({
     productName: '',
@@ -21,7 +22,7 @@ let currentAuction = reactive({
     maxPrice: null,
     endTime: new Date(),
     canReturn: false,
-    mediaUrls: computed(() => fileList.value.map(x => x.url)),
+    mediaUrls: computed(() => fileList.map(x => x.url)),
 })
 
 const meta = ref({
@@ -75,6 +76,10 @@ function getConditionText(id) {
 const validateField = (field, value, errorMessage) => {
     if (!value) {
         isValids.value[field] = false
+        if (field == 5 && fileList?.length > 0) {
+            isValids.value[field] = true
+            return
+        }
         return new Error(errorMessage)
     } else if (field === 2 || field === 3) {
         if (isNaN(Number(value))) {
@@ -117,6 +122,13 @@ const validateCategoryId = (rule, value, callback) => {
     else callback()
 }
 
+const validateProductImage = (rule, value, callback) => {
+    const errorMessage = 'Product Image is required'
+    const error = validateField(5, value, errorMessage)
+    if (error) callback(error)
+    else callback()
+}
+
 const validateStartingPrice = (rule, value, callback) => {
     const errorMessage = 'Starting Price is required'
     const error = validateField(2, value, errorMessage)
@@ -153,9 +165,9 @@ const rules = reactive({
     startingPrice: [{ validator: validateStartingPrice, trigger: 'blur' }],
     maxPrice: [{ validator: validateMaxPrice, trigger: 'blur' }],
     endTime: [{ validator: validateEndTime, trigger: 'blur' }],
+    productImage: [{ validator: validateProductImage, trigger: 'blur' }],
 })
 
-const fileList = ref([]);
 
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
@@ -224,11 +236,15 @@ onBeforeMount(async () => {
 })
 
 const upload = async (file) => {
-    fileList.value = fileList.value.filter(x => x.name !== file.file.name);
+    const index = fileList.findIndex(x => x.name === file.file.name);
+    if (index !== -1) {
+        fileList.splice(index, 1);
+    }
+
     try {
         const imageUrl = await uploadImage(file.file);
-        fileList.value.push({ name: file.file.name, url: imageUrl });
-        console.log("Upload successful:", fileList.value);
+        fileList.push({ name: file.file.name, url: imageUrl });
+        console.log("Upload successful:", fileList);
     } catch (error) {
         ElNotification.error({
             title: 'Upload Error',
@@ -241,19 +257,21 @@ const upload = async (file) => {
 </script>
 
 <template>
-    <div class="w-full flex flex-col px-[72px] text-[#191919] z-0">
+    <div class="w-full flex flex-col px-5 text-[#191919] z-0">
         <h1 class="font-bold text-2xl mt-[50px] px-6 w-full flex justify-start">Complete your listing</h1>
         <el-form @submit.prevent="submit" ref="form" :rules="rules" :model="currentAuction" label-width="auto">
             <div class="px-6 pt-8 flex flex-col pb-10 border-b-[1px]">
                 <h2 class="font-bold mb-[10px]">PHOTOS & VIDEO</h2>
                 <span class="text-sm font-semibold">Buyers want to see all details and angles.</span>
-                <div class="mt-6">
-                    <el-upload v-model:file-list="fileList" action="#" :http-request="upload" list-type="picture-card"
-                        :on-preview="handlePictureCardPreview" :on-remove="handleRemove" class="upload-demo">
-                        <el-icon>
-                            <Plus />
-                        </el-icon>
-                    </el-upload>
+                <div class="mt-6 flex">
+                    <el-form-item prop="productImage">
+                        <el-upload v-model:file-list="fileList" action="#" :http-request="upload" list-type="picture-card"
+                            :on-preview="handlePictureCardPreview" :on-remove="handleRemove" class="upload-demo">
+                            <el-icon>
+                                <Plus />
+                            </el-icon>
+                        </el-upload>
+                    </el-form-item>
                     <el-dialog v-model="dialogVisible">
                         <img w-full :src="dialogImageUrl" alt="Preview Image" />
                     </el-dialog>
@@ -270,7 +288,7 @@ const upload = async (file) => {
             </div>
             <div class="px-6 pt-8 flex  pb-10 border-b-[1px]">
                 <h2 class="font-bold mb-[10px] w-1/5">CATEGORY NAME</h2>
-                <div class="w-full flex flex-col gap-10  w-4/5 items-center">
+                <div class="flex flex-col gap-10  w-4/5 items-center">
                     <el-form-item prop="categoryId" style="margin-bottom: 0; width: 100%;">
                         <el-select v-model="currentAuction.categoryId" placeholder="Select" size="large"
                             style="min-width: 600px;">

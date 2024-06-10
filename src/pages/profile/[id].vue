@@ -8,7 +8,14 @@
             <div class="flex items-center">
                 <button v-if="updateAvatarAvailable"
                     class="px-5 py-1 h-10 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-md transition-all mr-10"
-                    @click="() => { isShowChangePassword = true }">Change Password</button>
+                    @click="
+                        () => {
+                            isShowChangePassword = true
+                        }
+                    "
+                >
+                    Change Password
+                </button>
             </div>
         </div>
         <div class="relative flex pt-[30px] font-normal">
@@ -50,7 +57,10 @@
                         <span class=" min-w-[30%] text-right"></span>
                         <button v-if="editModeAvailable"
                             class="px-5 py-2 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-3xl w-[380px] transition-all"
-                            type="submit">Save</button>
+                            type="submit"
+                        >
+                            Save
+                        </button>
                     </div>
                 </el-form>
             </div>
@@ -72,40 +82,68 @@
             </div>
         </div>
     </div>
-    <el-dialog v-model="isShowChangePassword" width="600" style="border-radius: 16px;">
+    <el-dialog v-model="isShowChangePassword" width="600" style="border-radius: 16px">
         <div class="flex flex-col text-sm h-[65%] items-center justify-center rounded-lg gap-5">
-            <el-form ref="passwordForm" :model="changePasswordForm" @submit.prevent="submitChangePassword"
-                label-width="auto" :rules="rules">
+            <el-form
+                ref="passwordForm"
+                :model="changePasswordForm"
+                @submit.prevent="submitChangePassword"
+                label-width="auto"
+                :rules="rules"
+            >
                 <h1 class="text-3xl flex items-center justify-center mb-10 font-bold">Change Password</h1>
                 <div class="flex flex-col mb-5 gap-2">
                     <span>Current Password</span>
                     <el-form-item prop="currentPassword">
-                        <el-input size="large" type="password" show-password
-                            v-model="changePasswordForm.currentPassword" placeholder="Please input your old password"
-                            style="width: 400px; color: #333333;" />
+                        <el-input
+                            size="large"
+                            type="password"
+                            show-password
+                            v-model="changePasswordForm.currentPassword"
+                            placeholder="Please input your old password"
+                            style="width: 400px; color: #333333"
+                        />
                     </el-form-item>
                 </div>
                 <div class="flex flex-col mb-5 gap-2">
                     <span class="pb-[3px]">New Password</span>
                     <el-form-item prop="newPassword">
-                        <el-input size="large" type="password" show-password v-model="changePasswordForm.newPassword"
-                            placeholder="Please input your new password" style="width: 400px; color: #333333;" />
+                        <el-input
+                            size="large"
+                            type="password"
+                            show-password
+                            v-model="changePasswordForm.newPassword"
+                            placeholder="Please input your new password"
+                            style="width: 400px; color: #333333"
+                        />
                     </el-form-item>
                 </div>
                 <div class="flex flex-col mb-10 gap-2">
                     <span class="pb-[3px]">Confirm Password</span>
                     <el-form-item prop="confirmNewPass">
-                        <el-input size="large" type="password" show-password v-model="changePasswordForm.confirmNewPass"
-                            placeholder="Please confirm your new password" style="width: 400px; color: #333333;" />
+                        <el-input
+                            size="large"
+                            type="password"
+                            show-password
+                            v-model="changePasswordForm.confirmNewPass"
+                            placeholder="Please confirm your new password"
+                            style="width: 400px; color: #333333"
+                        />
                     </el-form-item>
                 </div>
                 <div class="flex pb-8 items-center justify-center gap-4">
                     <button
                         class="hover:bg-[#E23F33] text-[#E23F33] border-gray-300 border rounded-md py-[7px] px-5 hover:text-white transition"
-                        @click.prevent="isShowChangePassword = false">Cancel</button>
+                        @click.prevent="isShowChangePassword = false"
+                    >
+                        Cancel
+                    </button>
                     <button
                         class="border rounded-md py-[7px] px-5 bg-[#409EFF] hover:bg-[#3A8EE4] transition text-white"
-                        type="submit">Confirm</button>
+                        type="submit"
+                    >
+                        Confirm
+                    </button>
                 </div>
             </el-form>
         </div>
@@ -153,7 +191,7 @@ const changePasswordForm = reactive({
 })
 
 const upload = async (file) => {
-    console.log(file);
+    console.log(file)
     try {
         currentUser.value.avatar = await uploadImage(file.file);
         // console.log("Upload successful:", currentUser.avatar);
@@ -161,8 +199,8 @@ const upload = async (file) => {
         ElNotification.error({
             title: 'Upload Error',
             message: 'Failed to upload image!',
-        });
-        console.error("Upload error:", error);
+        })
+        console.error('Upload error:', error)
     }
 }
 
@@ -229,9 +267,8 @@ const rules = reactive({
     address: [{ validator: validateAddress, trigger: 'blur' }],
     currentPassword: [{ validator: validateOldPass, trigger: 'blur' }],
     newPassword: [{ validator: validateNewPass, trigger: 'blur' }],
-    confirmNewPass: [{ validator: validateConfirmNewPass, trigger: 'blur' }]
+    confirmNewPass: [{ validator: validateConfirmNewPass, trigger: 'blur' }],
 })
-
 
 const submit = async () => {
     try {
@@ -240,13 +277,13 @@ const submit = async () => {
             title: 'Update Profile',
             message: 'Update Profile Successfully!',
             type: 'success',
-        });
+        })
     } catch (error) {
         ElNotification({
             title: 'Update Profile',
             message: 'Update Profile Failed!',
             type: 'error',
-        });
+        })
     }
 }
 
@@ -261,13 +298,13 @@ const changeAvatar = async () => {
             title: 'Update Avatar',
             message: 'Update Avatar Successfully!',
             type: 'success',
-        });
+        })
     } catch (error) {
         ElNotification({
             title: 'Update Avatar',
             message: 'Update Avatar Failed!',
             type: 'error',
-        });
+        })
     }
 }
 
@@ -294,7 +331,7 @@ const submitChangePassword = async () => {
                 title: 'Change password',
                 message: 'Change password failed, please try again!',
                 type: 'error',
-            });
+            })
             return false
         }
     } catch (error) {
@@ -303,7 +340,7 @@ const submitChangePassword = async () => {
             title: 'Change password',
             message: 'Change password failed, please try again!',
             type: 'error',
-        });
+        })
         console.log(error)
     }
 }

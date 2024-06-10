@@ -26,7 +26,7 @@
                 <div class="pb-8 flex items-center justify-between">
                     <span class="font-bold text-xl">{{ getTitle(status) }}</span>
                 </div>
-                <div v-if="listSellerHistorys.length" class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
+                <div v-if="listSellerHistorys?.length" class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
                     <div
                         v-for="item in listSellerHistorys"
                         :key="item.id"

@@ -17,7 +17,7 @@
                 <div class="flex items-start justify-between w-full">
                     <div class="flex flex-col gap-2 mt-1 text-sm mr-6">
                         <div class="w-full flex items-center justify-between">
-                            <span class="font-bold text-base mb-1">{{ auction.productName }}</span>
+                            <span class="font-bold text-base mb-1">{{ auction?.productName }}</span>
                             <!-- <div class="flex items-center gap-2">
                             <Icon :icon="icons[auction.productStatus]" />
                             <span :style="{ color: getColor(auction.productStatus) }">{{
@@ -28,7 +28,7 @@
                         <div class="flex w-full items-center justify-between">
                             <div>
                                 <span class="mt-1 text-sm text-[#505050]">Price: </span>
-                                <span class="text-[#505050]">{{ formatNumber(auction.currentPrice) }} VNĐ</span>
+                                <span class="text-[#505050]">{{ formatNumber(auction?.currentPrice) }} VNĐ</span>
                             </div>
                             <!-- <div>
                             <span class="text-[#505050]">Bid count: </span>
@@ -37,12 +37,12 @@
                         </div>
                         <div>
                             <span class="text-[#505050]">Return window closed on: </span>
-                            <span class="text-[#505050]">{{ auction.endTime.split('T')[0] }}</span>
+                            <span class="text-[#505050]">{{ auction?.endTime.split('T')[0] }}</span>
                         </div>
                         <!-- <span class="text-[#505050]">Delivered on Tue 20 Dec</span> -->
                         <div>
                             <span class="text-[#505050]">Condition: </span>
-                            <span class="text-[#505050]">{{ ConditionNames[auction.condition] }}</span>
+                            <span class="text-[#505050]">{{ ConditionNames[auction?.condition] }}</span>
                         </div>
                         <div v-if="auction.user">
                             <span class="text-sm text-[#707070]">{{ isInWatchlist ? 'Seller' : 'Sold by' }}: </span>
@@ -59,7 +59,7 @@
                             </div> -->
                             <div class="flex items-center gap-2">
                                 <span class="inline-block text-sm text-[#505050]">Bid count: </span>
-                                <span class="inline-block text-sm text-[#505050]">{{ auction.bidCount }}</span>
+                                <span class="inline-block text-sm text-[#505050]">{{ auction?.bidCount }}</span>
                             </div>
                         </div>
 
@@ -73,12 +73,12 @@
                             </button>
                             <button
                                 class="bg-white border rounded-xl py-[7px] w-[200px] hover:bg-[#409EFF] hover:text-white transition"
-                                @click="viewDetailAuction(auction.id)"
+                                @click="viewDetailAuction(auction?.id)"
                             >
                                 View Detail
                             </button>
                             <button
-                                v-show="role == 'Seller' && auction.productStatus == 1"
+                                v-show="role == 'Seller' && auction?.productStatus == 1"
                                 class="hover:bg-[#E23F33] text-[#E23F33] border-gray-300 border rounded-xl py-[7px] w-[200px] hover:text-white transition"
                                 @click="$emit('cancelAuction')"
                             >
