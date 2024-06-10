@@ -12,7 +12,7 @@
         <p v-show="!dataList.length" class="text-center font-semibold">{{ title === 'Bidding' ? 'You are not bidding on any items.' : title === 'Offers' ? 'You don\'t have any offers now.' : 'You don\'t have any items to display.' }}</p>
         <div v-show="!isCollapse" class="w-full flex flex-col items-center justify-center gap-4 relative pb-16">
             <div v-for="item in dataList" :key="item.id" class="w-full flex items-center justify-center">
-                <history-card :auction="item" />
+                <history-card :auction="item" :path="`/${props.path}/${item.user?.id}`" />
             </div>
             <div class="flex justify-end w-full absolute bottom-0 right-0 gap-3">
                 <span class="text-sm underline text-[#409EFF] cursor-pointer" @click="meta.pageSize += size"
@@ -25,7 +25,7 @@
 <script setup>
 import { defineProps, ref } from 'vue'
 
-defineProps({
+const props = defineProps({
     dataList: {
         type: Array,
         required: true,
@@ -46,6 +46,10 @@ defineProps({
             totalPages: 1,
             pageSize: 5
         }
+    },
+    path: {
+        type: String,
+        default: 'profile'
     }
 })
 const isCollapse = ref(false)

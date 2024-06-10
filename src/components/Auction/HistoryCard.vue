@@ -44,9 +44,9 @@
                             <span class="text-[#505050]">Condition: </span>
                             <span class="text-[#505050]">{{ ConditionNames[auction?.condition] }}</span>
                         </div>
-                        <div>
+                        <div v-if="auction.user">
                             <span class="text-sm text-[#707070]">{{ isInWatchlist ? 'Seller' : 'Sold by' }}: </span>
-                            <span class="underline text-[#409EFF]">{{ auction?.user?.fullName }}</span>
+                            <span class="underline text-[#409EFF] cursor-pointer" @click="pushToPage(props.path)">{{ auction.user?.fullName }}</span>
                         </div>
                     </div>
                     <div class="flex flex-col gap-2 items-end">
@@ -94,17 +94,19 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { productStatus } from '../../utils/Enums/ProductStatus.js'
-import { cancelAuction} from '../../services/auction.service'
 import { useAuctionStore } from '../../stores/auction.store.js';
 import { formatNumber } from '../../utils'
 
 
-defineProps({
+const props = defineProps({
     auction: Object,
     isInWatchlist: {
         type: Boolean,
         default: false,
+    },
+    path: {
+        type: String,
+        default: '/',
     },
 })
 
@@ -112,36 +114,9 @@ const useAuction = useAuctionStore()
 const router = useRouter()
 const role = localStorage.getItem('role')
 
-const ProductStatusNames = productStatus
 
 const viewDetailAuction = (auctionId) => {
     router.push({ path: `auctions/${auctionId}` })
-}
-
-const handleCancelAuction = async(auction) => {
-    try {
-        await cancelAuction(auction.id)
-        ElNotification({
-            title: 'Cancel Auction',
-            message: 'Cancel Auction Successfully!',
-            type: 'success',
-        })
-        auction.productStatus  = 3
-    } catch (error) {
-        ElNotification({
-            title: 'Cancel Auction',
-            message: 'Cancel Auction Failed!',
-            type: 'error',
-        })
-    }
-}
-
-const icons = {
-    1: 'fluent:presence-available-12-filled',
-    2: 'ep:sold-out',
-    3: 'material-symbols:delete',
-    4: 'fluent:presence-dnd-12-filled',
-    5: 'material-symbols:pending-actions',
 }
 
 const ConditionNames = {
@@ -150,22 +125,12 @@ const ConditionNames = {
     3: 'Used',
 }
 
-const getColor = (status) => {
-    switch (status) {
-        case 1:
-            return '#00CC33'
-        case 2:
-            return '#0099FF'
-        case 3:
-            return '#A52A2A'
-        case 4:
-            return '#FFA500'
-        default:
-            return '#FFA500'
-    }
-}
 const handlePlaceBidAuction = (item) => {
     useAuction.setBidStatus(true)
     router.push(`auctions/${item.id}`)
+}
+
+function pushToPage(path) {
+    router.push(path)
 }
 </script>

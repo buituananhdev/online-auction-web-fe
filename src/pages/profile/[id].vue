@@ -6,7 +6,7 @@
                 <span class="text-sm text-[#555555] mt-[3px]">Manage profile information for account security</span>
             </div>
             <div class="flex items-center">
-                <button
+                <button v-if="updateAvatarAvailable"
                     class="px-5 py-1 h-10 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-md transition-all mr-10"
                     @click="
                         () => {
@@ -20,47 +20,42 @@
         </div>
         <div class="relative flex pt-[30px] font-normal">
             <div class="flex flex-col text-sm pr-[50px] flex-1 border-r border-gray-200">
-                <!-- <img src="../../assets/icons/edit-icon.svg" alt="edit-icon" -->
-                <!-- class="w-[24px] h-[24px] absolute top-[10px] right-[31%] cursor-pointer"> -->
+                <img src="../../assets/icons/edit-icon.svg" alt="edit-icon" @click="toggleEditMode"
+                    class="w-[20px] h-[20px] absolute top-[10px] right-[31%] cursor-pointer">
                 <el-form @submit.prevent="submit" ref="form" :model="currentUser" label-width="auto" :rules="rules">
                     <div class="pb-[30px] flex">
                         <span class="text-[#555555CC] min-w-[30%] text-right">Email</span>
-                        <span class="pl-5 text-[#333333]">{{ currentUser.email }}</span>
+                        <span class="pl-5 text-[#333333] font-semibold">{{ currentUser.email }}</span>
                     </div>
                     <div class="pb-[30px] flex items-center">
                         <span class="text-[#555555CC] min-w-[30%] text-right">Full Name</span>
-                        <el-form-item prop="fullName">
-                            <el-input
-                                size="large"
-                                v-model="currentUser.fullName"
-                                style="width: 400px; padding-left: 20px; color: #333333"
-                            />
+                        <el-form-item v-if="editModeAvailable" prop="fullName">
+                            <el-input size="large" v-model="currentUser.fullName"
+                                style="width: 400px; padding-left: 20px; color: #333333;" />
                         </el-form-item>
+                        <span v-else class="pl-[20px] font-semibold">{{ currentUser.fullName || 'no information'
+                            }}</span>
                     </div>
                     <div class="pb-[30px] flex items-center">
                         <span class="text-[#555555CC] min-w-[30%] text-right">Phone Number</span>
-                        <el-form-item prop="phone">
-                            <el-input
-                                type="number"
-                                size="large"
-                                v-model="currentUser.phone"
-                                style="padding-left: 20px; color: #333333; width: 400px"
-                            />
+                        <el-form-item v-if="editModeAvailable" prop="phone">
+                            <el-input type="number" size="large" v-model="currentUser.phone"
+                                style="padding-left: 20px; color: #333333; width: 400px;" />
                         </el-form-item>
+                        <span v-else class="pl-[20px] font-semibold">{{ currentUser.phone || 'no information' }}</span>
                     </div>
                     <div class="pb-[30px] flex items-center">
                         <span class="text-[#555555CC] min-w-[30%] text-right">Address</span>
-                        <el-form-item prop="address">
-                            <el-input
-                                size="large"
-                                v-model="currentUser.address"
-                                style="padding-left: 20px; color: #333333; width: 400px"
-                            />
+                        <el-form-item v-if="editModeAvailable" prop="address">
+                            <el-input size="large" v-model="currentUser.address"
+                                style="padding-left: 20px; color: #333333; width: 400px;" />
                         </el-form-item>
+                        <span v-else class="pl-[20px] font-semibold">{{ currentUser.address || 'no information'
+                            }}</span>
                     </div>
                     <div class="pb-[30px] flex">
-                        <span class="min-w-[30%] text-right"></span>
-                        <button
+                        <span class=" min-w-[30%] text-right"></span>
+                        <button v-if="editModeAvailable"
                             class="px-5 py-2 border border-gray-300 bg-[#409EFF] ml-5 text-white hover:bg-[#3A8EE4] text-base font-semibold rounded-3xl w-[380px] transition-all"
                             type="submit"
                         >
@@ -70,28 +65,20 @@
                 </el-form>
             </div>
             <div class="min-w-[30%] flex flex-col items-center justify-center">
-                <el-upload
-                    class="avatar-uploader"
-                    v-model="currentUser.avatar"
-                    action="true"
-                    :show-file-list="false"
-                    :http-request="upload"
-                    :before-upload="beforeAvatarUpload"
-                >
-                    <img
-                        :src="
-                            currentUser?.avatar ||
-                            'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'
-                        "
-                        class="avatar"
-                    />
+                <el-upload v-if="updateAvatarAvailable" disable class="avatar-uploader" v-model="currentUser.avatar"
+                    action="true" :show-file-list="false" :http-request="upload" :before-upload="beforeAvatarUpload">
+                    <img v-if="currentUser?.avatar" :src="currentUser?.avatar" class="avatar" />
+                    <el-icon v-else class="avatar-uploader-icon">
+                        <Plus />
+                    </el-icon>
                 </el-upload>
-                <button
-                    class="px-5 mt-10 py-2 border border-gray-300 ml-5 hover:bg-[#409EFF] hover:text-white text-base font-semibold rounded-md transition-all"
-                    @click="changeAvatar"
-                >
-                    Update Avatar
-                </button>
+                <img v-else :src="currentUser?.avatar" class="w-[178px] h-[178px] rounded-full" />
+                <div class="flex flex-col items-center gap-6 pt-4">
+                    <span>Revenue: 1622VNĐ</span>
+                    <button v-if="updateAvatarAvailable"
+                        class="px-5 py-2 border border-gray-300 hover:bg-[#409EFF] hover:text-white text-base font-semibold rounded-md transition-all"
+                        @click="changeAvatar">Update Avatar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -164,18 +151,24 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { authStore } from '../../stores/auth.store'
-import { updateProfile, changePassword, updateAvatar } from '../../services/user.service'
+import { updateProfile, changePassword, updateAvatar, getUserInformation } from '../../services/user.service'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import { uploadImage } from '../../plugins/uploadImage'
+import { uploadImage } from "../../plugins/uploadImage";
+import { useRoute } from 'vue-router'
+
 
 const form = ref(null)
 const passwordForm = ref(null)
 const userAuth = authStore()
 const isValids = ref([false, false, false])
 const isShowChangePassword = ref(false)
+const editModeAvailable = ref(false)
+const updateAvatarAvailable = ref(false)
+const route = useRoute()
+const userId = ref(parseInt(route.params.id))
 
 const beforeAvatarUpload = (rawFile) => {
     if (rawFile.type !== 'image/jpeg') {
@@ -188,13 +181,8 @@ const beforeAvatarUpload = (rawFile) => {
     return true
 }
 
-const currentUser = reactive({
-    fullName: userAuth.user.fullName,
-    email: userAuth.user.email,
-    phone: userAuth.user.phone,
-    address: userAuth.user.address,
-    avatar: userAuth.user?.avatar,
-})
+
+const currentUser = ref({})
 
 const changePasswordForm = reactive({
     currentPassword: '',
@@ -205,7 +193,7 @@ const changePasswordForm = reactive({
 const upload = async (file) => {
     console.log(file)
     try {
-        currentUser.avatar = await uploadImage(file.file)
+        currentUser.value.avatar = await uploadImage(file.file);
         // console.log("Upload successful:", currentUser.avatar);
     } catch (error) {
         ElNotification.error({
@@ -284,7 +272,7 @@ const rules = reactive({
 
 const submit = async () => {
     try {
-        await updateProfile(currentUser)
+        await updateProfile(currentUser.value)
         ElNotification({
             title: 'Update Profile',
             message: 'Update Profile Successfully!',
@@ -299,9 +287,13 @@ const submit = async () => {
     }
 }
 
+function toggleEditMode() {
+    editModeAvailable.value = !editModeAvailable.value
+}
+
 const changeAvatar = async () => {
     try {
-        await updateAvatar(currentUser.avatar)
+        await updateAvatar(currentUser.value.avatar)
         ElNotification({
             title: 'Update Avatar',
             message: 'Update Avatar Successfully!',
@@ -332,7 +324,7 @@ const submitChangePassword = async () => {
                 title: 'Change password',
                 message: 'Change password successfully!',
                 type: 'success',
-            })
+            });
         } else {
             console.log('error submit!')
             ElNotification({
@@ -352,6 +344,27 @@ const submitChangePassword = async () => {
         console.log(error)
     }
 }
+
+async function getInformation() {
+    try {
+        const res = await getUserInformation(userId.value)
+        currentUser.value = res.data
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+onMounted(() => {
+    userId.value = parseInt(route.params.id);
+    if (userId.value && userId.value !== userAuth.user.id) {
+        getInformation()
+    } else {
+        currentUser.value = userAuth.user
+    }
+    if (userAuth.user.email === currentUser.value.email) {
+        updateAvatarAvailable.value = true
+    }
+})
 </script>
 
 <style scoped>
