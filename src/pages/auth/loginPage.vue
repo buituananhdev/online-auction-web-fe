@@ -165,11 +165,24 @@ const submit = async (formEl) => {
                 type: 'success',
             })
         } catch (error) {
-            ElNotification({
-                title: 'Error',
-                message: 'Login Failed!',
-                type: 'error',
-            })
+            if (error.response.data.code === 403) {
+                ElNotification({
+                    title: 'Error',
+                    message: 'User is inactive!',
+                    type: 'error',
+                })
+            } else if (error.response.data.code === 404)
+                ElNotification({
+                    title: 'Error',
+                    message: 'User not found!',
+                    type: 'error',
+                })
+            else
+                ElNotification({
+                    title: 'Error',
+                    message: 'Login Failed!',
+                    type: 'error',
+                })
             console.log(error)
         }
     }

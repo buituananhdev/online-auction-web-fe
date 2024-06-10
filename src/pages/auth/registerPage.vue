@@ -193,15 +193,6 @@ const submit = async (formEl) => {
                 type: 'success',
             })
         } catch (error) {
-            console.log('hhhh', error);
-            // if(error.response.status === 400) {
-            //     ElNotification({
-            //         title: 'Error',
-            //         message: 'Email already exists!',
-            //         type: 'error',
-            //     })
-            // }
-            // debugger
             if(error.response.data.error === 'Email already exists!') {
                 ElNotification({
                     title: 'Error',
