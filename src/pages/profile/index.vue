@@ -79,16 +79,12 @@
                     :before-upload="beforeAvatarUpload"
                 >
                     <img
-                        v-if="currentUser?.avatar"
                         :src="
                             currentUser?.avatar ||
                             'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg'
                         "
                         class="avatar"
                     />
-                    <el-icon v-else class="avatar-uploader-icon">
-                        <Plus />
-                    </el-icon>
                 </el-upload>
                 <button
                     class="px-5 mt-10 py-2 border border-gray-300 ml-5 hover:bg-[#409EFF] hover:text-white text-base font-semibold rounded-md transition-all"
