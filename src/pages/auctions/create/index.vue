@@ -11,6 +11,7 @@ const isValids = ref([false, false, false, false, false, false])
 const isShowSelectCondition = ref(false)
 const router = useRouter()
 const form = ref(null)
+const fileList = reactive([]);
 
 let currentAuction = reactive({
     productName: '',
@@ -21,7 +22,7 @@ let currentAuction = reactive({
     maxPrice: null,
     endTime: new Date(),
     canReturn: false,
-    mediaUrls: computed(() => fileList.value.map(x => x.url)),
+    mediaUrls: computed(() => fileList.map(x => x.url)),
 })
 
 const meta = ref({
@@ -75,6 +76,10 @@ function getConditionText(id) {
 const validateField = (field, value, errorMessage) => {
     if (!value) {
         isValids.value[field] = false
+        if (field == 5 && fileList?.length > 0) {
+            isValids.value[field] = true
+            return
+        }
         return new Error(errorMessage)
     } else if (field === 2 || field === 3) {
         if (isNaN(Number(value))) {
@@ -160,10 +165,9 @@ const rules = reactive({
     startingPrice: [{ validator: validateStartingPrice, trigger: 'blur' }],
     maxPrice: [{ validator: validateMaxPrice, trigger: 'blur' }],
     endTime: [{ validator: validateEndTime, trigger: 'blur' }],
-    productImage: [{ validator: validateProductImage, required: true, trigger: 'blur' }],
+    productImage: [{ validator: validateProductImage, trigger: 'blur' }],
 })
 
-const fileList = ref([]);
 
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
@@ -232,11 +236,15 @@ onBeforeMount(async () => {
 })
 
 const upload = async (file) => {
-    fileList.value = fileList.value.filter(x => x.name !== file.file.name);
+    const index = fileList.findIndex(x => x.name === file.file.name);
+    if (index !== -1) {
+        fileList.splice(index, 1);
+    }
+
     try {
         const imageUrl = await uploadImage(file.file);
-        fileList.value.push({ name: file.file.name, url: imageUrl });
-        console.log("Upload successful:", fileList.value);
+        fileList.push({ name: file.file.name, url: imageUrl });
+        console.log("Upload successful:", fileList);
     } catch (error) {
         ElNotification.error({
             title: 'Upload Error',
@@ -263,10 +271,10 @@ const upload = async (file) => {
                                 <Plus />
                             </el-icon>
                         </el-upload>
-                        <el-dialog v-model="dialogVisible">
-                            <img w-full :src="dialogImageUrl" alt="Preview Image" />
-                        </el-dialog>
                     </el-form-item>
+                    <el-dialog v-model="dialogVisible">
+                        <img w-full :src="dialogImageUrl" alt="Preview Image" />
+                    </el-dialog>
                 </div>
             </div>
             <div class="px-6 pt-8 flex items-center pb-10 border-b-[1px]">
